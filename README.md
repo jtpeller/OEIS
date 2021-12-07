@@ -13,10 +13,18 @@ The ongoing quest to program every sequence in the OEIS database (in Golang)
 ## Notes
 
 Each of the sequence functions (those functions starting with `A...`) will return:
- - The integer sequence (specifically `[]int64`)
- - The offset (aka starting position or starting index)
+ - The integer sequence that is produced. Type: `[]int64`
+ - The offset (aka starting position or starting index). Type: `int64`
 
 The various helper functions are left as public in the event that it will eventually be
 needed elsewhere (which is common in OEIS)
 
 ## Usage
+
+Run the program with `go run main.go` and some options
+
+Use `go run main.go -h` or `go run main.go --help` for more information.
+
+Options:
+ - `-seq` -- Give the sequence ID (A000002 for example)
+ - `-seqlen` -- Give the number of elements to generate. There will be limits on some of the sequences due to overflow.

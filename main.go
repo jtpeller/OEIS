@@ -7,15 +7,33 @@
 package main
 
 import (
-	seq "OEIS/sequences"
+	seq "OEIS/seq"
 	"OEIS/utils"
 	"errors"
+	"flag"
 	"reflect"
+	"strings"
 )
 
 func main() {
-	test, startidx := handler("A000041", int64(25))
-	utils.PrintSequence("", test, startidx)
+	// program initialization (flags)
+	seqid := flag.String("seq", "", "Which sequence to run. Example: -seq A000042")
+	seqlen := flag.Int64("seqlen", 0, "How many elements to generate. Most sequences will have restrictions on the # of elements to generate.")
+
+	flag.Parse()		// remember to parse!
+
+	_, exists := StubStorage[*seqid]
+
+	if *seqid == "" {				// user must specify a sequence to generate
+		utils.HandleError(errors.New("you need to specify a sequence to run! "))
+	} else if *seqlen <= 0 {		// check for invalid lengths
+		utils.HandleError(errors.New("you need to specify a positive sequence length! "))		
+	} else if !exists {				// user must specify a sequence that exists
+		utils.HandleError(errors.New("either this sequence has not been implemented yet, or your id is improper! "))
+	}
+
+	seq, offset := handler(strings.ToUpper(*seqid), *seqlen)
+	utils.PrintSequence("", seq, offset)
 }
 
 // this handles the call and conversion of the returns from call()
@@ -28,13 +46,13 @@ func handler(name string, params ...interface{}) ([]int64, int64) {
 	return seq, idx
 }
 
-// this is based upon: 
+// this is based upon:
 // https://medium.com/@vicky.kurniawan/go-call-a-function-from-string-name-30b41dcb9e12
 func call(name string, params ...interface{}) (result interface{}, arg2 interface{}, err error) {
 	f := reflect.ValueOf(StubStorage[name])
 
 	if len(params) != f.Type().NumIn() {
-		err = errors.New("param count is out of bounds")
+		err = errors.New("error in call(): param count is out of bounds")
 		return
 	}
 
@@ -72,5 +90,19 @@ var StubStorage = map[string]interface{}{
 	"A000040": seq.A000040,
 	"A000041": seq.A000041,
 	"A000042": seq.A000042,
+	"A000043": seq.A000043,
+	"A000044": seq.A000044,
+	"A000045": seq.A000045,
+	"A000058": seq.A000058,
+	"A000059": seq.A000059,
+	"A000062": seq.A000062,
+	"A000064": seq.A000064,
+	"A000065": seq.A000065,
+	"A000068": seq.A000068,
+	"A000069": seq.A000069,
+	"A000070": seq.A000070,
+	"A000071": seq.A000071,
+	"A000073": seq.A000073,
+	"A000120": seq.A000120,
 	"A007947": seq.A007947,
 }
