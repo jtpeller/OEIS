@@ -6,7 +6,10 @@
 
 package utils
 
-import "math"
+import (
+	"errors"
+	"math"
+)
 
 // ########################## CALCULATIONS #############################
 // ### this section calculates some property of a number (factor count,
@@ -103,6 +106,18 @@ func GreatestCommonDivisor(a, b int64) int64 {
 		return a
 	}
 	return GreatestCommonDivisor(b, a % b)
+}
+
+// computes the factorial of num
+func Fact(num int64) int64 {
+	if num < 0 {
+		HandleError(errors.New("factorial of a negative number is undefined"))
+	}
+	prod := int64(1)
+	for i := int64(1); i < num; i++ {
+		prod *= i
+	}
+	return prod
 }
 
 // Computes the factors of num

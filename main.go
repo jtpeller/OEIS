@@ -13,13 +13,15 @@ import (
 	"flag"
 	"reflect"
 	"strings"
+	"time"
 )
 
 func main() {
 	// program initialization (flags)
 	seqid := flag.String("seq", "", "Which sequence to run. Example: -seq A000042")
 	seqlen := flag.Int64("seqlen", 0, "How many elements to generate. Most sequences will have restrictions on the # of elements to generate.")
-
+	comptime := flag.Bool("time", false, "True if you want approximate time-of-computation information printed. False otherwise")
+	
 	flag.Parse()		// remember to parse!
 
 	_, exists := StubStorage[*seqid]
@@ -32,8 +34,13 @@ func main() {
 		utils.HandleError(errors.New("either this sequence has not been implemented yet, or your id is improper! "))
 	}
 
+	start := time.Now()
 	seq, offset := handler(strings.ToUpper(*seqid), *seqlen)
+	duration := time.Since(start)
 	utils.PrintSequence("", seq, offset)
+	if *comptime {
+		utils.PrintInfo("Computed sequence " + *seqid + " in " + duration.String())
+	}
 }
 
 // this handles the call and conversion of the returns from call()
@@ -71,6 +78,7 @@ func call(name string, params ...interface{}) (result interface{}, arg2 interfac
 
 // the following is a (large) mapping from strings to the corresponding function
 var StubStorage = map[string]interface{}{
+	// thru100.go
 	"A000002": seq.A000002,
 	"A000004": seq.A000004,
 	"A000005": seq.A000005,
@@ -103,6 +111,22 @@ var StubStorage = map[string]interface{}{
 	"A000070": seq.A000070,
 	"A000071": seq.A000071,
 	"A000073": seq.A000073,
+	"A000078": seq.A000078,
+	"A000082": seq.A000082,
+	"A000093": seq.A000093,
+	"A000094": seq.A000094,
+	"A000096": seq.A000096,
+	"A000097": seq.A000097,
+	"A000098": seq.A000098,
+	"A000100": seq.A000100,
+	// thru200.go
+	"A000101": seq.A000101,
+	"A000102": seq.A000102,
+	"A000108": seq.A000108,
+	"A000110": seq.A000110,
+	"A000111": seq.A000111,
+	"A000115": seq.A000115,
+	"A000116": seq.A000116,
 	"A000120": seq.A000120,
 	"A007947": seq.A007947,
 }

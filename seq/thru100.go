@@ -25,6 +25,8 @@ const (
 	OVERFLOW_A000045 = 93
 	OVERFLOW_A000058 = 7
 	OVERFLOW_A000073 = 75
+	OVERFLOW_A000078 = 71
+	OVERFLOW_A000100 = 73
 )
 
 /**
@@ -608,3 +610,160 @@ func A000073(seqlen int64) ([]int64, int64) {
 	return a, 0
 }
 
+/**
+ * A000078: Tetranacci #s: a(n) = a(n-1) + a(n-2) + a(n-3) + a(n-4)
+ *  for n >= 4 with a(0) = a(1) = a(2) = 0 and a(3) = 1.
+ * Date: December 07, 2021
+ * Link: https://oeis.org/A000078
+ */
+func A000078(seqlen int64) ([]int64, int64) {
+	if seqlen > OVERFLOW_A000078 {
+		utils.OverflowError("A000078", OVERFLOW_A000078)
+	}
+
+	a := make([]int64, seqlen)
+	a[0], a[1], a[2], a[3] = 0, 0, 0, 1
+	for i := int64(4); i < seqlen; i++ {
+		a[i] = a[i-1] + a[i-2] + a[i-3] + a[i-4]
+	}
+	return a, 0
+}
+
+/**
+ * A000079: Powers of 2: a(n) = 2^n
+ * Date: December 07, 2021
+ * Link: https://oeis.org/A000079
+ */
+func A000079(seqlen int64) ([]int64, int64) {
+	a := make([]int64, seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		a[i] = int64(math.Pow(2, float64(i)))
+	}
+	return a, 0
+}
+
+/**
+ * A000082: a(n) = n^2*Product_{p|n} (1 + 1/p)
+ * Note: There may be some rounding error due to float64 <-> int64 conversions
+ * Date: December 07, 2021
+ * Link: https://oeis.org/A000082
+ */
+func A000082(seqlen int64) ([]int64, int64) {
+	// this computes the Product_{p|n} (1 + 1/p) part
+	gen := func(num int64) float64 {
+		prod := 1.0
+		arr := utils.Factors(num)
+
+		// compute the product
+		for i := 0; i < len(arr); i++ {
+			if utils.IsPrime(arr[i]) {
+				prod *= (1 + float64(1) / float64(arr[i]))
+			}
+		}
+		return prod
+	}
+
+	a := make([]int64, seqlen)
+	for i := int64(1); i <= seqlen; i++ {
+		a[i-1] = int64(math.Round(math.Pow(float64(i), 2) * gen(i)))
+	}
+	return a, 1
+}
+
+
+/**
+ * A000093 calculates a(n) = floor(n^(3/2))
+ * Date: December 07, 2021
+ * Link: https://oeis.org/A000093
+ */
+func A000093(seqlen int64) ([]int64, int64) {
+	a := make([]int64, seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		a[i] = int64(math.Floor(math.Pow(float64(i), 1.5)))
+	}
+	return a, 0
+}
+
+/**
+ * A000094 computes the # of trees of diameter 4
+ *  Or: a(n+1) = A000041(n) - n, n > 0
+ * Date: December 07, 2021
+ * Link: https://oeis.org/A000094
+ */
+func A000094(seqlen int64) ([]int64, int64) {
+	a := make([]int64, seqlen)
+	a41, _ := A000041(seqlen)
+	for i := int64(1); i < seqlen; i++ {
+		a[i] = a41[i] - i
+	}
+	return a, 1
+}
+
+/**
+ * A000096 computes a(n) = n*(n+3)/2
+ * Date: December 07, 2021
+ * Link: https://oeis.org/A000096
+ */
+func A000096(seqlen int64) ([]int64, int64) {
+	a := make([]int64, seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		a[i] = int64(i * (i+3.0) / 2.0)
+	}
+	return a, 0
+}
+
+/**
+ * A000097 computes the # of partitions of n if there are two kinds of 1s and
+ *  two kinds of 2s
+ * Date: December 07, 2021
+ * Link: https://oeis.org/A000097
+ */
+func A000097(seqlen int64) ([]int64, int64) {
+	a := make([]int64, seqlen)
+	a70, _ := A000070(seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		bound := int64(math.Floor(float64(i) / 2.0))
+		for j := int64(0); j <= bound; j++ {
+			a[i] += a70[i-2*j]
+		}
+	}
+	return a, 0
+}
+
+/**
+ * A000098 computes the # of partitions of n if there are two kinds of 1s,
+ *  two kinds of 2s, and two kinds of 3s
+ * Date: December 07, 2021
+ * Link: https://oeis.org/A000098
+ */
+func A000098(seqlen int64) ([]int64, int64) {
+	a := make([]int64, seqlen)
+	a97, _ := A000097(seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		bound := int64(math.Floor(float64(i) / 3.0))
+		for j := int64(0); j <= bound; j++ {
+			a[i] += a97[i-3*j]
+		}
+	}
+	return a, 0
+}
+
+/**
+ * A000100 computes the # of compositions of n in which the maximal part is 3
+ * Date: December 07, 2021
+ * Link: https://oeis.org/A000100
+ */
+func A000100(seqlen int64) ([]int64, int64) {
+	if seqlen > OVERFLOW_A000100 {
+		utils.OverflowError("A000100", OVERFLOW_A000100)
+	}
+
+	a := make([]int64, seqlen)
+	F, _ := A000045(seqlen)
+	a[0], a[1], a[2] = 0, 0, 0
+	a[3], a[4] = 1, 2
+	for i := int64(5); i < seqlen; i++ {
+		a[i] = F[i - 2] + (a[i-3] + a[i-2] + a[i-1])
+	}
+	return a, 0
+}
