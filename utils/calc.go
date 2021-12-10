@@ -9,11 +9,17 @@ package utils
 import (
 	"errors"
 	"math"
+	"math/big"
 )
 
 // ########################## CALCULATIONS #############################
 // ### this section calculates some property of a number (factor count,
 // ### prime factorization, etc.)
+
+// computes the nCr(n, r)
+//func C(n, r int64) int64 {
+//
+//}
 
 // counts the partitions of a given integer n
 func CountParts(n int64) int64 {
@@ -120,31 +126,22 @@ func Fact(num int64) int64 {
 	return prod
 }
 
-// Computes the factors of num
-func Factors(num int64) []int64 {
-	factors := make([]int64, 0)
-	for i := int64(1); i <= num; i++ {
-		if num % i == 0 {
-			factors = append(factors, i)
-		}
+// compute the factorial of a num (big.Int)
+func Factorial(num *big.Int) *big.Int {
+	if num.Cmp(big.NewInt(0)) == 0 || num.Cmp(big.NewInt(0)) == -1 {
+		HandleError(errors.New("factorial of a negative number is undefined"))
 	}
-	return factors
+
+	prod := big.NewInt(1)
+	for i := big.NewInt(1); i.Cmp(num) == -1; i.Add(i, big.NewInt(1)) {
+		prod.Mul(prod, i)
+	}
+	return prod
 }
 
 // Calculate the integer square root of a number
-func Isqrt(num int64) (int64, error) {
-	return int64(math.Floor(math.Sqrt(float64(num)))), nil
-}
-
-// Calculates the isqrt of an array
-func Isqrtarray(arr []int64) []int64 {
-	a := make([]int64, 0)
-	for i := 0; i < len(arr); i++ {
-		val, err := Isqrt(arr[i])
-		HandleError(err)
-		a = append(a, int64(val))
-	}
-	return a
+func Isqrt(num int64) (int64) {
+	return int64(math.Floor(math.Sqrt(float64(num))))
 }
 
 // Generates the Kolakoski sequence of length seqlen

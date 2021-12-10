@@ -11,7 +11,9 @@ import (
 	"OEIS/utils"
 	"errors"
 	"flag"
+	"math/big"
 	"reflect"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -35,22 +37,28 @@ func main() {
 	}
 
 	start := time.Now()
-	seq, offset := handler(strings.ToUpper(*seqid), *seqlen)
+	temp, offset := handler(strings.ToUpper(*seqid), *seqlen)
 	duration := time.Since(start)
-	utils.PrintSequence("", seq, offset)
+
+	// convert & act accordingly
+	if reflect.TypeOf(temp).String() == "[]int64" {
+		utils.PrintSequence(*seqid, temp.([]int64), offset)
+	} else if reflect.TypeOf(temp).String() == "[]*big.Int" {
+		utils.PrintBigSequence(*seqid, temp.([]*big.Int), offset)
+	}
+
+	// output time if requested
 	if *comptime {
-		utils.PrintInfo("Computed sequence " + *seqid + " in " + duration.String())
+		utils.PrintInfo("Computed " + strconv.FormatInt(*seqlen, 10) + " terms of sequence " + *seqid + " in " + duration.String())
 	}
 }
 
-// this handles the call and conversion of the returns from call()
-// to use: seq, idx := handler(seq_name, int64(seq_len_to_generate))
-func handler(name string, params ...interface{}) ([]int64, int64) {
+// this handles the call to make life easier
+func handler(name string, params ...interface{}) (interface{}, int64) {
 	out1, out2, err := call(name, params...)
 	utils.HandleError(err)
-	seq := out1.([]int64)
 	idx := out2.(int64)
-	return seq, idx
+	return out1, idx
 }
 
 // this is based upon:
@@ -112,6 +120,7 @@ var StubStorage = map[string]interface{}{
 	"A000071": seq.A000071,
 	"A000073": seq.A000073,
 	"A000078": seq.A000078,
+	"A000079": seq.A000079,
 	"A000082": seq.A000082,
 	"A000093": seq.A000093,
 	"A000094": seq.A000094,
@@ -127,6 +136,17 @@ var StubStorage = map[string]interface{}{
 	"A000111": seq.A000111,
 	"A000115": seq.A000115,
 	"A000116": seq.A000116,
+	"A000117": seq.A000117,
+	"A000118": seq.A000118,
 	"A000120": seq.A000120,
+	"A000123": seq.A000123,
+	"A000124": seq.A000124,
+	"A000125": seq.A000125,
+	"A000126": seq.A000126,
+	"A000127": seq.A000127,
+	"A000128": seq.A000128,
+	"A000129": seq.A000129,
+	"A000133": seq.A000133,
+	"A000138": seq.A000138,
 	"A007947": seq.A007947,
 }

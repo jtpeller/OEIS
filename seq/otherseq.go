@@ -9,7 +9,7 @@ func A007947(max int64) ([]int64, int64) {
 	a := make([]int64, 0)
 	for i := int64(0); i < max; i++ {
 		// calculate the prime factorization of i
-		pfact := utils.PrimeFactorization(int64(i))
+		pfact := utils.PrimeFactorization(i)
 
 		// strip all non unique elements
 		set := make(map[int64]bool)

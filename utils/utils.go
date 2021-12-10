@@ -12,6 +12,7 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"math/big"
 	"os"
 	"strconv"
 )
@@ -27,7 +28,7 @@ const (
 	reset = "\u001b[0m"
 )
 
-// ############################ ERROR CHECKING ##############################
+// ############################ ERRORS #################################
 // ### this section handles error checking, printing, etc.
 
 // checks and error and panics. Used primarily for debugging
@@ -58,11 +59,34 @@ func OverflowError(seqname string, seqlen int64) {
 	HandleError(errors.New(msg))
 }
 
+// used to issue an error about a seqlen that is too small for the sequence
+// say the sequence is Fibonacci, and the user gives a seqlen of 1. hard coding of sequence numbers
+// will cause golang to issue an error when doing a[1] = 1, for instance
+func TooSmallError(seqname string, seqlen int64) {
+	slen := strconv.FormatInt(seqlen, 10)
+	msg := "error in sequence " + seqname + ": a seqlen < " + slen + " is too small. Exiting..."
+	HandleError(errors.New(msg))
+}
+
+// ############################ WARNINGS ###########################
 // used to issue a warning about sequence lengths that will take a long time to compute
 // a "long time" is typically more than 5 seconds (which isn't that long, but users are impatient)
 func LongCalculationWarning(seqname string, seqlen int64) {
 	slen := strconv.FormatInt(seqlen, 10)
 	msg := "Warning: Sequence " + seqname + " with a seqlen > " + slen + " will take time to compute"
+	PrintWarning(msg)
+}
+
+// used to issue a warning about a sequence that uses big.Int fields instead of int64
+func BigIntWarning(seqid string, seqlen int64) {
+	slen := strconv.FormatInt(seqlen, 10)
+	msg := "Warning: Sequence " + seqid + " has big.Int fields instead of int64. This *MAY* lead to accuracy issues, especially for seqlen > " + slen + "."
+	PrintWarning(msg)
+}
+
+// used to issue a warning about the accuracy of a sequence using big.Float fields
+func BigFloatWarning(seqid string) {
+	msg := "Warning: Calculation for sequence " + seqid + " uses big.Float fields, which will probably lead to accuracy issues"
 	PrintWarning(msg)
 }
 
@@ -85,15 +109,30 @@ func PrintError(msg string) {
 	fmt.Println(red + msg + reset)
 }
 
-func PrintSequence(title string, a []int64, startidx int64) {
+func PrintSequence(seqid string, a []int64, startidx int64) {
 	// ensure startidx isn't negative
 	if startidx < 0 {
-		panic("startidx cannot be negative")
+		HandleError(errors.New("startidx cannot be negative"))
 	}
 
-	// convert uint 
-	if title != "" {
-		fmt.Println(title)
+	if seqid != "" {
+		PrintInfo("~~~~~ SEQUENCE " + seqid + " ~~~~~")
+	}
+	fmt.Println("n\ta(n)")
+	for i := 0; i < len(a); i++ {
+		fmt.Printf("%d\t%d\n", startidx, a[i])
+		startidx++
+	}
+}
+
+func PrintBigSequence(seqid string, a []*big.Int, startidx int64) {
+	// ensure startidx isn't negative
+	if startidx < 0 {
+		HandleError(errors.New("startidx cannot be negative"))
+	}
+
+	if seqid != "" {
+		PrintInfo("~~~~~ SEQUENCE " + seqid + " ~~~~~")
 	}
 	fmt.Println("n\ta(n)")
 	for i := 0; i < len(a); i++ {

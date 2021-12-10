@@ -16,7 +16,12 @@ import (
 
 // IsPrime returns true if num is prime. False otherwise.
 func IsPrime(num int64) bool {
-	return big.NewInt(num).ProbablyPrime(0)
+	return big.NewInt(num).ProbablyPrime(20)
+}
+
+// IsBigPrime returns true if num is prime. False otherwise.
+func IsBigPrime(num *big.Int) bool {
+	return num.ProbablyPrime(20)
 }
 
 // Checks if the given number n is a prime power of k
