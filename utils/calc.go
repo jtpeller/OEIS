@@ -16,10 +16,25 @@ import (
 // ### this section calculates some property of a number (factor count,
 // ### prime factorization, etc.)
 
-// computes the nCr(n, r)
-//func C(n, r int64) int64 {
-//
-//}
+// computes the nCr(n, r) (binomial coefficient)
+func Binomial(n, r int64) int64 {
+	// C(n,r) = n!/((n-r)!r!), but this is inefficient
+	if n < 0 || r < 0 {
+		HandleError(errors.New("can't be negative"))
+	} else if n < r {
+		HandleError(errors.New("n cannot be less than r"))
+	}
+
+	// do the shortcut, where you can modify r based on n
+	if r > n/2 {
+		r = n - r
+	}
+	c := int64(1)
+	for i := int64(1); i <= r; i++ {
+		c = (n - r + i) * c / i
+	}
+	return c
+}
 
 // counts the partitions of a given integer n
 func CountParts(n int64) int64 {
@@ -128,12 +143,12 @@ func Fact(num int64) int64 {
 
 // compute the factorial of a num (big.Int)
 func Factorial(num *big.Int) *big.Int {
-	if num.Cmp(big.NewInt(0)) == 0 || num.Cmp(big.NewInt(0)) == -1 {
+	if num.Cmp(big.NewInt(0)) == -1 {
 		HandleError(errors.New("factorial of a negative number is undefined"))
 	}
 
 	prod := big.NewInt(1)
-	for i := big.NewInt(1); i.Cmp(num) == -1; i.Add(i, big.NewInt(1)) {
+	for i := big.NewInt(1); i.Cmp(num) == -1 || i.Cmp(num) == 0; i.Add(i, big.NewInt(1)) {
 		prod.Mul(prod, i)
 	}
 	return prod
@@ -261,6 +276,15 @@ func PrimeFloor(arr []int64, n int64) int64 {
 	}
 }
 
+// computes the product of the terms in the array, like Sum(), but for multiplication
+func Prod(a []*big.Int) *big.Int {
+	prod := big.NewInt(1)
+	for i := 0; i < len(a); i++ {
+		prod.Mul(prod, a[i])
+	}
+	return prod
+}
+
 // calculates the sum of a given array; essentially,
 // this computes Sigma(a_i), 0 <= i < len(a)
 func Sum(a []int64) int64 {
@@ -270,3 +294,4 @@ func Sum(a []int64) int64 {
 	}
 	return sum
 }
+

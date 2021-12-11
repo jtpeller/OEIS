@@ -30,3 +30,10 @@ func IsPrimePower(n int64, k int64) bool {
 	kf := float64(k)
 	return (math.Log(nf) / math.Log(kf) == math.Floor(math.Log(nf) / math.Log(kf)))
 }
+
+// IsSquare returns true if the num is a perfect square. False otherwise.
+func IsSquare(n int64) bool {
+	nf := float64(n)
+	sr := math.Sqrt(nf)
+	return ((sr - math.Floor(sr)) == 0)
+}

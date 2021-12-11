@@ -69,6 +69,9 @@ func DivFloat(a, b *big.Float) *big.Float {
 }
 
 func PowFloat(a *big.Float, e int64) *big.Float {
+	if e == 0 {
+		return NewFloat(1)
+	}
 	r := ZeroFloat().Copy(a)
 	for i := int64(0); i < e-1; i++ {
 		r = MulFloat(r, a)
@@ -76,19 +79,19 @@ func PowFloat(a *big.Float, e int64) *big.Float {
 	return r
 }
 
-func Truncate(a *big.Float) *big.Int {
+func Floor(a *big.Float) *big.Int {
 	f, _ := a.Int(nil)
 	return f
 }
 
-func BigIntToBigFloat(a *big.Int) *big.Float {
+func ToBigFloat(a *big.Int) *big.Float {
 	r := new(big.Float)
 	r.SetInt(a)
 	r.SetPrec(256)
 	return r
 }
 
-func RoundFloat(a *big.Float) *big.Int {
+func Round(a *big.Float) *big.Int {
 	a.Add(a, NewFloat(0.5))
 	r, _ := a.Int(nil)
 	return r

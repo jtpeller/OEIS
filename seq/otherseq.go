@@ -3,7 +3,22 @@ package seq
 import (
 	"OEIS/utils"
 	"math"
+	"math/big"
 )
+
+/**
+ * A003048 computes a[n+1]=n*a[n] - (-1)^n
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A003048
+ */
+func A003048(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
+	a[0] = New(1)
+	for i := int64(1); i < seqlen; i++ {
+		a[i] = Sub(Mul(New(i), a[i - 1]), Pow(New(-1), New(i)))
+	}
+	return a, 0
+}
 
 func A007947(max int64) ([]int64, int64) {
 	a := make([]int64, 0)

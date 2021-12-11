@@ -18,6 +18,9 @@ const (
 	OVERFLOW_A000126 = 89
 	OVERFLOW_A000133 = 7
 	OVERFLOW_A000138 = 21
+	LONG_A000158 = 37
+	LONG_A000160 = 18
+	LONG_A000174 = 50
 )
 
 /**
@@ -154,17 +157,17 @@ func A000110(seqlen int64) ([]*big.Int, int64) {
  */
 func A000111(seqlen int64) ([]*big.Int, int64) {
 	// warn the user about inaccuracies
-	utils.BigFloatWarning("A000111")
+	utils.AccuracyWarning("A000111")
 
 	a := utils.CreateSlice(seqlen)
 	for i := int64(1); i <= seqlen; i++ {
 		temp := utils.Factorial(big.NewInt(i))
-		ifact := BigIntToBigFloat(temp)
+		ifact := ToBigFloat(temp)
 		frac := DivFloat(NewFloat(2), NewFloat(math.Pi))
 		pow := PowFloat(frac, i)			// (2/pi)^i
 		prod := MulFloat(NewFloat(2), pow)	// 2 * (2/pi)^i
 		fin := MulFloat(prod, ifact)		// 2 * (2/pi)^i * i!
-		a[i-1] = RoundFloat(fin)
+		a[i-1] = Round(fin)
 	}
 	return a, 0
 }
@@ -172,7 +175,7 @@ func A000111(seqlen int64) ([]*big.Int, int64) {
 /**
  * A000115 computes the denumerants (expansion of 1/((1-x)*(1-x^2)*(1-x^5)))
  *  Or: a(n) = round((n+4)^2/20)
- * Date: December 07, 2021
+ * Date: December 07, 2021	Confirmed working: December 10, 2021
  * Link: https://oeis.org/A000115
  */
 func A000115(seqlen int64) ([]int64, int64) {
@@ -185,42 +188,15 @@ func A000115(seqlen int64) ([]int64, int64) {
 
 /**
  * A000116 computes the # of even sequences with period 2n. Also the bisection of A000013
- * Note: A000013 is currently incomplete
  * Date: December 07, 2021
  * Link: https://oeis.org/A000116
  */
-func A000116(seqlen int64) ([]int64, int64) {
-	if seqlen > OVERFLOW_A000116 {
-		utils.OverflowError("A000116", OVERFLOW_A000116)
-	}
-	a := make([]int64, seqlen)
-	euler := make([]int64, seqlen*5)
+func A000116(seqlen int64) ([]*big.Int, int64) {
+	// warn the user about inaccuracies
+	utils.AccuracyWarning("A000111 (which computes the bisection of A000013)")
 
-	// populate euler with the euler totient of i
-	for i := int64(1); i < seqlen*5; i++ {
-		euler[i - 1] = utils.EulerTotient(i)
-	}
-
-	// populate a
-	a[0] = 1
-	for i := int64(1); i < seqlen; i++ {
-		var eidx int64	// euler index
-		var b int64		// temp value
-
-		// compute divisors of 2*i
-		divisors := utils.Factors(2*i)
-		fcount := len(divisors)
-
-		// use these divisors to calculate a
-		for j := 0; j < fcount; j++ {
-			if (2 * i) % divisors[j] == 0 {
-				eidx = 2 * divisors[j] - 1
-				b = int64(math.Pow(2.0, float64(2 * i) / float64(divisors[j])))
-				a[i] += euler[eidx] * b
-			}
-		}
-		a[i] = a[i] / (4.0 * i)
-	}
+	a13, _ := A000013(seqlen*2)
+	a := utils.BigBisection(a13)
 	return a, 0
 }
 
@@ -456,3 +432,371 @@ func A000138(seqlen int64) ([]int64, int64) {
 	return a, 0
 }
 
+/**
+ * A000139 computes a(n) = 2*(3*n)!/((2*n+1)!*((n+1)!)). 
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000139
+ */
+func A000139(seqlen int64) ([]*big.Int, int64) {
+	// a(n) = 2(3n)!/((2n+1)!*(n+1)!)
+	a := utils.CreateSlice(seqlen)
+	for n := int64(0); n < seqlen; n++ {
+		nplus1 := utils.Factorial(big.NewInt(n+1))		// (n+1)!
+		twonplus1 := utils.Factorial(big.NewInt(2*n+1))	// (2n+1)!
+		threen := utils.Factorial(big.NewInt(3*n))		// (3n)!
+		numer := Mul(New(2), threen)					// 2(3n)!
+		denom := Mul(twonplus1, nplus1)
+		a[n] = Floor(DivFloat(ToBigFloat(numer), ToBigFloat(denom)))
+	}
+	return a, 0
+}
+
+/**
+ * A000142 generates the sequence of factorials
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000142
+ */
+func A000142(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
+	a[0] = utils.Factorial(New(0))
+	for i := int64(1); i < seqlen; i++ {
+		a[i] = Mul(a[i-1], New(i))
+	}
+	return a, 0
+}
+
+/**
+ * A000149 computes the seq where a(n) = floor(e^n)
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000149
+ */
+func A000149(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		a[i] = Floor(PowFloat(NewFloat(math.E), i))
+	}
+	return a, 0
+}
+
+/**
+ * A000153 computes a(n) = n*a(n-1) + (n-2)*a(n-2), a(0)=0, a(1)=1
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000153
+ */
+func A000153(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
+	a[0] = New(0)
+	a[1] = New(1)
+
+	for i := int64(2); i < seqlen; i++ {
+		j := New(i)
+		a[i] = Add(Mul(j, a[i-1]), Mul(Sub(j, New(2)), a[i-2]))
+	}
+	return a, 0
+}
+
+/**
+ * A000158 computes the # of partitions into non-integral powers
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000158
+ */
+func A000158(seqlen int64) ([]int64, int64) {
+	if seqlen > LONG_A000158 {
+		utils.LongCalculationWarning("A000158", LONG_A000158)
+	}
+	check := func(x1, x2, x3, n int64) bool {
+		twothirds := 2.0/3.0
+		return int64(math.Ceil(math.Pow(float64(x1), twothirds) +
+				math.Pow(float64(x2), twothirds) +
+				math.Pow(float64(x3), twothirds))) <= n
+	}
+	a := make([]int64, seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		// count the # of solutions to the inequality x1^(2/3)+x2^(2/3)+x3^(2/3)<=n
+		count := int64(0)
+		for x3 := int64(1); x3 <= int64(math.Ceil(math.Pow(float64(i+3), 1.5))); x3++ {
+			for x2 := int64(1); x2 <= x3; x2++ {
+				for x1 := int64(1); x1 <= x2; x1++ {
+					if check(x1, x2, x3, i+3) {
+						count++
+					}
+				}
+			}
+		}
+		a[i] = count
+	}
+	return a, 3
+}
+
+/**
+ * A000160 is similar to A000158, except there are 4 terms
+ *  i.e. this counts the # of solutions to the inequality x1^(2/3)+x2^(2/3)+x3^(2/3)+x4^(2/3)<=n
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000160
+ */
+func A000160(seqlen int64) ([]int64, int64) {
+	if seqlen > LONG_A000160 {
+		utils.LongCalculationWarning("A000160", LONG_A000160)
+	}
+	check := func(x1, x2, x3, x4, n int64) bool {
+		twothirds := 2.0/3.0
+		return int64(math.Ceil(math.Pow(float64(x1), twothirds) +
+				math.Pow(float64(x2), twothirds) +
+				math.Pow(float64(x3), twothirds) +
+				math.Pow(float64(x4), twothirds))) <= n
+	}
+	a := make([]int64, seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		// count the # of solutions to the inequality x1^(2/3)+x2^(2/3)+x3^(2/3)<=n
+		count := int64(0)
+		for x4 := int64(1); x4 <= int64(math.Ceil(math.Pow(float64(i+4), 1.5))); x4++ {
+			for x3 := int64(1); x3 <= x4; x3++ {
+				for x2 := int64(1); x2 <= x3; x2++ {
+					for x1 := int64(1); x1 <= x2; x1++ {
+						if check(x1, x2, x3, x4, i+4) {
+							count++
+						}
+					}
+				}
+			}
+		}
+		a[i] = count
+	}
+	return a, 4
+}
+
+/**
+ * A000161 computes the # of partitions of n into 2 squares
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000161
+ */
+func A000161(seqlen int64) ([]int64, int64) {
+	a := make([]int64, seqlen)
+	for n := int64(0); n < seqlen; n++ {
+		count := int64(0)
+		for i := int64(0); i <= n; i++ {
+			fi := float64(i)
+			for j := int64(0); j <= i; j++ {
+				fj := float64(j)
+				if int64(math.Pow(fi, 2) + math.Pow(fj,2)) == n {
+					count++
+				}
+			}
+		}
+		a[n] = count
+	}
+	return a, 0
+}
+
+/**
+ * A000164 computes the # of partitions of n into 3 squares (allowing part zero)
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000164
+ */
+func A000164(seqlen int64) ([]int64, int64) {
+	getCounts := func(n int64) int64 {	// computes the # of partitions of n
+		count := int64(0)
+		for x := 0; ; x++ {
+			xf := float64(x)
+			xsq := int64(math.Pow(xf, 2))
+			if 3*xsq > n {
+				return count
+			}
+			for y := x; ; y++ {
+				yf := float64(y)
+				ysq := int64(math.Pow(yf, 2))
+				if xsq + 2*ysq > n {
+					break
+				}
+				z2 := n - xsq - ysq;
+				if utils.IsSquare(z2) {
+					z := math.Sqrt(float64(z2))
+					if z >= yf {
+						count++
+					}
+				}
+			}
+		}
+	}
+
+	// generate sequence
+	a := make([]int64, seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		a[i] = getCounts(i)
+	}
+	return a, 0
+}
+
+/**
+ * A000165 computes the double factorial of even #s; (2n)!! = 2^n*n!
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000165
+ */
+func A000165(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		a[i] = Mul(Pow(New(2), New(i)), utils.Factorial(New(i)))
+	}
+	return a, 0
+}
+
+/**
+ * A000166 computes the subfactorial or rencontres #s (or derangements)
+ *  # of permutations of n elements w/ no fixed points
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000166
+ */
+func A000166(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
+	a[0] = New(1)
+
+	for i := int64(1); i < seqlen; i++ {
+		a[i] = Add(Mul(New(i), a[i - 1]), Pow(New(-1), New(i)))
+	}
+
+	return a, 0
+}
+
+/**
+ * A000168 computes a[n] = 2*3^n*(2n)!/(n!*(n+2)!)
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000168
+ */
+func A000168(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		twon := utils.Factorial(Mul(New(2), New(i)))	// (2n)!
+		threen := Pow(New(3), New(i))					// 3^n
+		numer := Mul(New(2), Mul(twon, threen))			// 2*3^n*(2n)!
+		nplus2 := utils.Factorial(Add(New(i), New(2)))	// (n+2)!
+		denom := Mul(utils.Factorial(New(i)), nplus2)	// n!*(n+2)!
+		a[i] = Div(numer, denom)						// 2*3^n*(2n)!/(n!*(n+2)!)
+	}
+	return a, 0
+}
+
+/**
+ * A000169 computes a[n]=n^(n-1)
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000169
+ */
+func A000169(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
+	for i := int64(1); i <= seqlen; i++ {
+		a[i-1] = Pow(New(i), Sub(New(i), New(1)))
+	}
+	return a, 1
+}
+
+/**
+ * A000172 computes the Franel #s; a[n] = sum_{k=0..n} binomial(n,k)^3
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000172
+ */
+func A000172(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		for j := int64(0); j <= i; j++ {
+			a[i] = Add(a[i], Pow(New(utils.Binomial(New(i).Int64(), New(j).Int64())), New(3)))
+		}
+	}
+	return a, 0
+}
+
+/**
+ * A000174 computes the # of partitions of n into 5 squares
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000174
+ */
+func A000174(seqlen int64) ([]int64, int64) {
+	if seqlen > LONG_A000174 {
+		utils.LongCalculationWarning("A000174", LONG_A000174)
+	}
+
+	a := make([]int64, seqlen)
+	for n := int64(0); n < seqlen; n++ {
+		count := int64(0)
+		for x5 := int64(0); x5 <= n; x5++ {
+			xf5 := float64(x5)
+			for x4 := int64(0); x4 <= x5; x4++ {
+				xf4 := float64(x4)
+				for x3 := int64(0); x3 <= x4; x3++ {
+					xf3 := float64(x3)
+					for x2 := int64(0); x2 <= x3; x2++ {
+						xf2 := float64(x2)
+						for x1 := int64(0); x1 <= x2; x1++ {
+							xf1 := float64(x1)
+							if int64(math.Pow(xf1, 2) +
+									math.Pow(xf2, 2) +
+									math.Pow(xf3, 2) +
+									math.Pow(xf4, 2) +
+									math.Pow(xf5, 2)) == n {
+								count++
+							}
+						}
+					}
+				}
+			}
+		}
+		a[n] = count
+	}
+	return a, 0
+}
+
+/**
+ * A000177 computes the # of partitions of n into 6 squares
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000177
+ */
+func A000177(seqlen int64) ([]int64, int64) {
+	if seqlen > LONG_A000174 {
+		utils.LongCalculationWarning("A000174", LONG_A000174)
+	}
+
+	// this is a really nasty algorithm
+	a := make([]int64, seqlen)
+	for n := int64(0); n < seqlen; n++ {
+		count := int64(0)
+		for x6 := int64(0); x6 <= n; x6++ {
+			for x5 := int64(0); x5 <= x6; x5++ {
+				xf5 := float64(x5)
+				for x4 := int64(0); x4 <= x5; x4++ {
+					xf4 := float64(x4)
+					for x3 := int64(0); x3 <= x4; x3++ {
+						xf3 := float64(x3)
+						for x2 := int64(0); x2 <= x3; x2++ {
+							xf2 := float64(x2)
+							for x1 := int64(0); x1 <= x2; x1++ {
+								xf1 := float64(x1)
+								if int64(math.Pow(xf1, 2) +
+										math.Pow(xf2, 2) +
+										math.Pow(xf3, 2) +
+										math.Pow(xf4, 2) +
+										math.Pow(xf5, 2)) == n {
+									count++
+								}
+							}
+						}
+					}
+				}
+			}
+		}		
+		a[n] = count
+	}
+	return a, 0
+}
+
+/**
+ * A000178 computes the superfactorials, or the product of the first n factorials
+ * Date: December 10, 2021	Confirmed working: December 10, 2021
+ * Link: https://oeis.org/A000178
+ */
+func A000178(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
+	a[0] = utils.Factorial(New(0))
+	facts, _ := A000142(seqlen)
+	for i := int64(1); i < seqlen; i++ {
+		a[i] = Mul(a[i-1], facts[i])
+	}
+	return a, 0
+}

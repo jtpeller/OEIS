@@ -175,6 +175,37 @@ func A000012(seqlen int64) ([]int64, int64) {
 	return a, 0
 }
 
+/**
+ * A000013 computes # of n-bead binary necklaces with beads of 2 colors where 
+ *  the colors may be swapped but turning over is not allowed. 
+ * Date: December 10, 2021	Confirmed working:
+ * Link: https://oeis.org/A000013
+ */
+func A000013(seqlen int64) ([]*big.Int, int64) {
+	// warn the user about inaccuracies
+	utils.AccuracyWarning("A000013")
+
+	a := utils.CreateSlice(seqlen)
+	a[0] = big.NewInt(1)
+	phi, _ := A000010(seqlen*2)
+	for n := int64(1); n < seqlen; n++ {
+		// calculate the sum
+		for d := int64(1); d <= n; d++ {
+			if n % d == 0 {		// d divides n
+				temp := big.NewInt(phi[2*(d-1)])
+				div := Div(big.NewInt(n), big.NewInt(d))
+				pow := Pow(big.NewInt(2), div)
+				numer := Mul(temp, pow)
+				n2 := Mul(big.NewInt(2), big.NewInt(n))
+				bigDiv := Floor(DivFloat(ToBigFloat(numer), ToBigFloat(n2)))
+				// the following computes a[n] = Sum_{d divides n} (phi(2*d)*2^(n/d))/(2*n)
+				a[n].Add(a[n], bigDiv)
+			}
+		}
+	}
+	return a, 0
+}
+
 /** 
  * A000027 returns a seq of positive integers, of len seqlen
  * Date: October 09, 2021	Confirmed working: December 09, 2021
