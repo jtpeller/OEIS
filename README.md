@@ -4,11 +4,11 @@ The ongoing quest to program every sequence in the OEIS database (in Golang)
 
 ## Content
 
-- sequences -- The folder containing the seq package, which contains all programmed sequences
-- utils -- Contains any and all utility functions that are very common (say, a PrintSequence function). Also includes any common calculations or generator functions for common sequences (such as primes or the factors of a number).
-- go.mod -- Handles the OEIS module
-- main.go -- The file containing main
-- README.md -- The file you're reading right now
+- `sequences` -- The folder containing the seq package, which contains all programmed sequences
+- `utils` -- Contains any and all utility functions that are very common (say, a PrintSequence function). Also includes any common calculations or generator functions for common sequences (such as primes or the factors of a number).
+- `go.mod` -- Handles the OEIS module
+- `main.go` -- The file containing main
+- `README.md` -- The file you're reading right now
 
 ## Notes
 
