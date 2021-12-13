@@ -6,7 +6,10 @@
 
 package utils
 
-import "math/big"
+import (
+	"math"
+	"math/big"
+)
 
 // ########################## GENERATOR FUNCTIONS #############################
 // ### given a number, it will generate a sequence with some quality up to that
@@ -29,7 +32,7 @@ func BigBisection(seq []*big.Int) []*big.Int {
 	return a
 }
 
-// Computes the factors of num
+// Computes the factors (divisors) of num
 func Factors(num int64) []int64 {
 	factors := make([]int64, 0)
 	for i := int64(1); i <= num; i++ {
@@ -40,6 +43,14 @@ func Factors(num int64) []int64 {
 	return factors
 }
 
+// generates the Gamma function output, which is just factorials shifted over by 1 idx
+func Gamma(seqlen int64) ([]*big.Int, int64) {
+	a := CreateSlice(seqlen+1)
+	for i := int64(0); i < seqlen; i++ {
+		a[i+1] = Fact(big.NewInt(i))
+	}
+	return a, 1		// Gamma "starts" at 1
+}
 
 // Calculates the isqrt of an array
 func Isqrtarray(arr []int64) []int64 {
@@ -73,4 +84,22 @@ func Primes(seqlen int64) []int64 {
 		num++
 	}
 	return primes
+}
+
+// generates a sequence calculating the # of positive integers <= 2^n 
+// of the form px^2 + qy^2 
+func Repr(seqlen, p, q, init int64) []*big.Int {
+	a := CreateSlice(seqlen)
+	a[0] = big.NewInt(init)
+	for n := int64(1); n < seqlen; n++ {
+		nf := float64(n)
+		count := a[n-1]
+		for k := int64(math.Pow(2, nf-1) + 1); k <= int64(math.Pow(2, nf)); k++ {
+			if IsRepr(k, p, q) {
+				count = big.NewInt(0).Add(count, big.NewInt(1))
+			}
+		}
+		a[n] = count
+	}
+	return a
 }

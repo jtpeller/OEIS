@@ -1,3 +1,10 @@
+// ============================================================================
+// = otherseq.go															  =
+// = 	Description: Any sequences that don't yet have a file				  =
+// = 	Date: October 08, 2021												  =
+// = 	Last Update: December 12, 2021										  =
+// ============================================================================
+
 package seq
 
 import (
@@ -40,6 +47,32 @@ func A007947(max int64) ([]int64, int64) {
 		a = append(a, radical)
 	}
 	return a, 1
+}
+
+/**
+ * A027641 computes the numerator of Bernoulli number B_n
+ * Date: December 12, 2021	Confirmed working: December 12, 2021
+ * Link: https://oeis.org/A027641
+ */
+func A027641(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		a[i] = utils.Bernoulli(i).Num()
+	}
+	return a, 0
+}
+
+/**
+ * A027642 computes the denominator of Bernoulli number B_n
+ * Date: December 12, 2021	Confirmed working: December 
+ * Link: https://oeis.org/A027642
+ */
+ func A027642(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		a[i] = utils.Bernoulli(i).Denom()
+	}
+	return a, 0
 }
 
 /**
@@ -86,7 +119,7 @@ func A007947(max int64) ([]int64, int64) {
 func A088218(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	for i := int64(0); i < seqlen; i++ {
-		a[i] = utils.Fact(2*i)/(utils.Fact(i) * utils.Fact(i+1))
+		a[i] = utils.IFact(2*i)/(utils.IFact(i) * utils.IFact(i+1))
 	}
 	return a, 0
 }
@@ -100,7 +133,7 @@ func A137590 (seqlen int64) ([]int64, int64) {
 	
 	a := make([]int64, seqlen)
 	for i := int64(0); i < seqlen; i++ {
-		a[i] = int64(math.Round(2.0 * math.Pow(2.0 / math.Pi, float64(i + 1)) * float64(utils.Fact(i))))
+		a[i] = int64(math.Round(2.0 * math.Pow(2.0 / math.Pi, float64(i + 1)) * float64(utils.IFact(i))))
 	}
 	return a, 0
 }

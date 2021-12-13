@@ -19,6 +19,10 @@ func New(i int64) *big.Int {
 	return r
 }
 
+func Abs(a *big.Int) *big.Int {
+	return Zero().Abs(a)
+}
+
 func Add(a, b *big.Int) *big.Int {
 	return Zero().Add(a, b)
 }
@@ -39,6 +43,14 @@ func Pow(a *big.Int, e *big.Int) *big.Int {
 	return Zero().Exp(a, e, big.NewInt(0))
 }
 
+func Sqrt(a *big.Int) *big.Int {
+	return Zero().Sqrt(a)
+}
+
+func Lsh(a *big.Int, e int) *big.Int {
+	return Zero().Lsh(a, uint(e))
+}
+
 // BIG.FLOAT CALCULATIONS
 func ZeroFloat() *big.Float {
 	r := big.NewFloat(0.0)
@@ -50,6 +62,10 @@ func NewFloat(a float64) *big.Float {
 	r := big.NewFloat(a)
 	r.SetPrec(256)
 	return r
+}
+
+func AbsFloat(a *big.Float) *big.Float {
+	return ZeroFloat().Abs(a)
 }
 
 func AddFloat(a, b *big.Float) *big.Float {
@@ -76,7 +92,14 @@ func PowFloat(a *big.Float, e int64) *big.Float {
 	for i := int64(0); i < e-1; i++ {
 		r = MulFloat(r, a)
 	}
+	if e < 0 {		// negative exponents are reciprocals of positives
+		return DivFloat(NewFloat(1), r)
+	}
 	return r
+}
+
+func SqrtFloat(a *big.Float) *big.Float {
+	return ZeroFloat().Sqrt(a)
 }
 
 func Floor(a *big.Float) *big.Int {
@@ -84,7 +107,7 @@ func Floor(a *big.Float) *big.Int {
 	return f
 }
 
-func ToBigFloat(a *big.Int) *big.Float {
+func ToFloat(a *big.Int) *big.Float {
 	r := new(big.Float)
 	r.SetInt(a)
 	r.SetPrec(256)

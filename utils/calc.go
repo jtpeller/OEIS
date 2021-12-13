@@ -12,9 +12,67 @@ import (
 	"math/big"
 )
 
-// ########################## CALCULATIONS #############################
-// ### this section calculates some property of a number (factor count,
-// ### prime factorization, etc.)
+// ####################### COMMON CALCULATIONS #########################
+// ### this section contains any common calculations
+// ### Examples: Summation, Product, Factorials etc.
+
+// compute the factorial of a num (big.Int)
+func Fact(num *big.Int) *big.Int {
+	if num.Cmp(big.NewInt(0)) == -1 {
+		HandleError(errors.New("factorial of a negative number is undefined"))
+	}
+
+	prod := big.NewInt(1)
+	for i := big.NewInt(1); i.Cmp(num) == -1 || i.Cmp(num) == 0; i.Add(i, big.NewInt(1)) {
+		prod.Mul(prod, i)
+	}
+	return prod
+}
+
+// computes the factorial of num (int64)
+func IFact(num int64) int64 {
+	if num < 0 {
+		HandleError(errors.New("factorial of a negative number is undefined"))
+	}
+	prod := int64(1)
+	for i := int64(1); i < num; i++ {
+		prod *= i
+	}
+	return prod
+}
+
+// calculate the integer log of a number & the given base
+func ILog(num int64, base int64) int64 {
+	return int64(math.Log(float64(num)) / math.Log(float64(base)))
+}
+
+// Calculate the integer square root of a number
+func Isqrt(num int64) (int64) {
+	return int64(math.Floor(math.Sqrt(float64(num))))
+}
+
+// computes the product of the terms in the array, like Sum(), but for multiplication
+func Prod(a []*big.Int) *big.Int {
+	prod := big.NewInt(1)
+	for i := 0; i < len(a); i++ {
+		prod.Mul(prod, a[i])
+	}
+	return prod
+}
+
+// calculates the sum of a given array; essentially,
+// this computes Sigma(a_i), 0 <= i < len(a)
+func Sum(a []int64) int64 {
+	sum := int64(0)
+	for i := 0; i < len(a); i++ {
+		sum += a[i]
+	}
+	return sum
+}
+
+// ================= PROBABILITY & COMBINATIONS =================
+// ### Any computations related to probability/combinations
+// ### Examples: Binomial, permutations, combinations
 
 // computes the nCr(n, r) (binomial coefficient)
 func Binomial(n, r int64) int64 {
@@ -36,62 +94,77 @@ func Binomial(n, r int64) int64 {
 	return c
 }
 
-// counts the partitions of a given integer n
-func CountParts(n int64) int64 {
-	if n == 0 {
-		return 1
+// computes all combinations of n (0 <= k <= n)
+func Combinations(n *big.Int) []*big.Int {
+	a := CreateSlice(0)
+	for k := big.NewInt(0); k.Cmp(n) == -1 || k.Cmp(n) == 0; k.Add(k, big.NewInt(1)) {
+		a = append(a, KCombinations(n, k))
+	}
+	return a
+}
+
+// performs the same calculation as Binomial(n, k), except
+// this uses big.Int instead of int64
+func KCombinations(n, k *big.Int) *big.Int {
+	// C(n,r) = n!/((n-r)!r!)
+	if n.Cmp(big.NewInt(0)) == -1 || k.Cmp(big.NewInt(0)) == -1 {
+		HandleError(errors.New("can't be negative"))
+	} else if n.Cmp(k) == -1 {
+		HandleError(errors.New("n cannot be less than k"))
 	}
 
-	// initializations
-	parts := make([]int64, n)
-	k := 0
-	parts[k] = n
-
-	// loop to generate partitions
-	partcount := int64(0)
-	for {
-		// update partition count
-		partcount++
-
-		// find rightmost non-one value
-		remval := int64(0)			// holds how much val can be changed
-		for k >= 0 && parts[k] == 1 {
-			remval += parts[k]
-			k--
-		}
-
-		// if k < 0, all vals = 1; no more partitions
-		if k < 0 {
-			return partcount
-		}
-		
-		// update values
-		parts[k]--
-		remval++
-
-		// resort array. modify remval based on sort
-		for remval > parts[k] {
-			parts[k+1] = parts[k]
-			remval -= parts[k]
-			k++
-		}
-
-		// copy remval to next position & increment k
-		parts[k+1] = remval
-		k++
+	// do the shortcut, where you can modify k based on n
+	if k.Cmp(big.NewInt(0).Div(n, big.NewInt(2))) == 1 {
+		k = big.NewInt(0).Sub(n, k)	// k = n - k
 	}
+	c := big.NewInt(1)
+	for i := big.NewInt(1); i.Cmp(k) == -1 || i.Cmp(k) == 0; i.Add(i, big.NewInt(1)) {
+		// c = (n - k + i) * c / i
+		foo := big.NewInt(0).Sub(n, k)
+		foo.Add(foo, i)
+		c.Mul(c, foo)
+		c.Div(c, i)
+	}
+	return c
+}
+
+// computes k-permutations of n (P(n, k) or nPr(n, r))
+func KPermutation(n, k *big.Int) *big.Int {
+	if k.Cmp(n) == 1 {
+		return big.NewInt(0)
+	}
+	// returns n!/(n-k)!
+	return big.NewInt(0).Div(Fact(n), Fact(big.NewInt(0).Sub(n, k)))
+}
+
+// computes all permutations of n (0 <= k <= n)
+func Permutation(n *big.Int) []*big.Int {
+	a := CreateSlice(0)
+	for k := big.NewInt(0); k.Cmp(n) == -1 || k.Cmp(n) == 0; k.Add(k, big.NewInt(1)) {
+		a = append(a, KPermutation(n, k))
+	}
+	return a
 }
 
 
+// ##################### DIVISORS & FACTORS #########################
 // given a number num, it will compute Euler's Totient of the number
 func EulerTotient(num int64) int64 {
 	val := int64(0)
 	for i := int64(0); i < num; i++ {
-		if GreatestCommonDivisor(i, num) == 1 {
+		if GCD(i, num) == 1 {
 			val++
 		}
 	}
 	return val
+}
+
+// given two numbers, it will calculate the greatest common divisor
+func GCD(a, b int64) int64 {
+	if b == 0 {
+		return a
+	}
+	return GCD(b, a % b)
 }
 
 // Compute the number of digits of the given number
@@ -102,11 +175,6 @@ func GetDigits(n int64) int64 {
 		n /= 10
 	}
 	return count
-}
-
-// finds the first digit of the number
-func GetFirstDigit(n int64) int64 {
-	return int64(float64(n) / math.Pow(10, float64(GetDigits(n) - 1)))
 }
 
 // Calculate the number of factors of num
@@ -121,42 +189,141 @@ func GetFactorCount(num int64) int64 {
 	return count
 }
 
-// given two numbers, it will calculate the greatest common divisor
-func GreatestCommonDivisor(a, b int64) int64 {
-	if b == 0 {
-		return a
-	}
-	return GreatestCommonDivisor(b, a % b)
+// finds the first digit of the number
+func GetFirstDigit(n int64) int64 {
+	return int64(float64(n) / math.Pow(10, float64(GetDigits(n) - 1)))
 }
 
-// computes the factorial of num
-func Fact(num int64) int64 {
-	if num < 0 {
-		HandleError(errors.New("factorial of a negative number is undefined"))
+// ##################### PRIME CALCULATIONS #########################
+// ### Any calculations related to prime numbers
+// ### Examples: prime factorization, prime floor, etc.
+
+// Calculates the prime factorization of num
+func PrimeFactorization(num int64) []int64 {
+	// initialize array
+	primefact := make([]int64, 0)
+
+	// the number of 2s
+	for num % 2 == 0 {
+		primefact = append(primefact, 2)
+		num /= 2
 	}
-	prod := int64(1)
-	for i := int64(1); i < num; i++ {
-		prod *= i
+
+	// num is now odd. check 3s and beyond
+	for i := int64(3); i * i <= num; i += 2 {
+		// get factors until n is zero
+		for num % i == 0 {
+			primefact = append(primefact, i)
+			num /= i
+		}
 	}
-	return prod
+
+	// what if num is prime?
+	if num > 2 {
+		primefact = append(primefact, num)
+	}
+
+	return primefact
 }
 
-// compute the factorial of a num (big.Int)
-func Factorial(num *big.Int) *big.Int {
-	if num.Cmp(big.NewInt(0)) == -1 {
-		HandleError(errors.New("factorial of a negative number is undefined"))
+// computes the prime floor of a given number
+func PrimeFloor(arr []int64, n int64) int64 {
+	// lazy case
+	if n == 1 {
+		return n
 	}
 
-	prod := big.NewInt(1)
-	for i := big.NewInt(1); i.Cmp(num) == -1 || i.Cmp(num) == 0; i.Add(i, big.NewInt(1)) {
-		prod.Mul(prod, i)
+	// loop thru k (counter for exponent)
+	foo := int64(0)
+	found := false
+	for k := int64(2); k < n; k++ {
+		// check if k is a valid prime power
+		for i := int64(0); i <= k; i++ {
+			if arr[i] == k {
+				found = true
+				break
+			}
+			found = false
+		}
+
+		// if k is a valid prime power, perform the algo
+		if found {
+			foo = n
+			if IsPrimePower(n, k) {
+				return foo
+			}
+		} else {
+			continue
+		}
 	}
-	return prod
+	// leaving the loop means it isn't a prime power of k > 1
+	// check for prime power k == 1
+	if IsPrime(n) {
+		return n
+	} else {
+		return PrimeFloor(arr, n + 1)
+	}
 }
 
-// Calculate the integer square root of a number
-func Isqrt(num int64) (int64) {
-	return int64(math.Floor(math.Sqrt(float64(num))))
+// ################### MISCELLANEOUS CALCULATIONS ###################
+// ### Any calculations that don't fit in the other sections
+
+// Computes the Bernoulli Numbers using an explicit definition
+// uses big.Rat b/c OEIS has a sequence of the numerators & of the denominators
+// plus, there's no nonsense about float precision
+func Bernoulli(n int64) *big.Rat {
+	var f big.Rat
+	a := make([]big.Rat, n+1)
+	for m := range a {
+		a[m].SetFrac64(1, int64(m+1))
+		for j := m; j >= 1; j-- {
+			d := &a[j-1]
+			d.Mul(f.SetInt64(int64(j)), d.Sub(d, &a[j]))
+		}
+	}
+	return f.Set(&a[0])
+}
+
+// counts the partitions of a given integer n
+func CountParts(n int64) int64 {
+	if n == 0 {
+		return 1
+	}
+
+	// init
+	p := make([]int64, n)	// stores the partitions
+	k := 0					// index of last element in a partition
+	p[k] = n				// first partition is n
+
+	// loop to compute
+	count := int64(0)
+	for {
+		// update count
+		count++
+		remval := int64(0)		// holds how much val can be changed
+
+		for k >= 0 && p[k] == 1 {
+			remval += p[k]
+			k--
+		}
+
+		if k < 0 {	// all vals = 1 if k < 0; no more parts
+			return count
+		}
+		p[k]--			// decr; found non-one value
+		remval++		// adjust remval
+
+		// resort array & modify remval based on the sort
+		for remval > p[k] {
+			p[k+1] = p[k]
+			remval = remval - p[k]
+			k++
+		}
+
+		// copy remval to next position
+		p[k+1] = remval
+		k++
+	}
 }
 
 // Generates the Kolakoski sequence of length seqlen
@@ -196,7 +363,6 @@ func Kolakoski(seqlen int64, numcount int64) []int64 {
 	return a
 }
 
-
 // calculates the change given len (# of coins), val (the value to make change for),
 // and denom, the array of coin values, e.g. {1, 2, 5, 10}
 func MakeChange(len int64, val int64, denom []int64) int64 {
@@ -209,89 +375,3 @@ func MakeChange(len int64, val int64, denom []int64) int64 {
 	}
 	return MakeChange(len - 1, val, denom) + MakeChange(len, val - denom[len - 1], denom)
 }
-
-// Calculates the prime factorization of num
-func PrimeFactorization(num int64) []int64 {
-	// initialize array
-	primefact := make([]int64, 0)
-
-	// the number of 2s
-	for num % 2 == 0 {
-		primefact = append(primefact, 2)
-		num /= 2
-	}
-
-	// num is now odd. check 3s and beyond
-	for i := int64(3); i * i <= num; i += 2 {
-		// get factors until n is zero
-		for num % i == 0 {
-			primefact = append(primefact, i)
-			num /= i
-		}
-	}
-
-	// what if num is prime?
-	if num > 2 {
-		primefact = append(primefact, num)
-	}
-
-	return primefact
-}
-
-func PrimeFloor(arr []int64, n int64) int64 {
-	// lazy case
-	if n == 1 {
-		return n
-	}
-
-	// loop thru k (counter for exponent)
-	foo := int64(0)
-	found := false
-	for k := int64(2); k < n; k++ {
-		// check if k is a valid prime power
-		for i := int64(0); i <= k; i++ {
-			if arr[i] == k {
-				found = true
-				break
-			}
-			found = false
-		}
-
-		// if k is a valid prime power, perform the algo
-		if found {
-			foo = n
-			if IsPrimePower(n, k) {
-				return foo
-			}
-		} else {
-			continue
-		}
-	}
-	// leaving the loop means it isn't a prime power of k > 1
-	// check for prime power k == 1
-	if IsPrime(n) {
-		return n
-	} else {
-		return PrimeFloor(arr, n + 1)
-	}
-}
-
-// computes the product of the terms in the array, like Sum(), but for multiplication
-func Prod(a []*big.Int) *big.Int {
-	prod := big.NewInt(1)
-	for i := 0; i < len(a); i++ {
-		prod.Mul(prod, a[i])
-	}
-	return prod
-}
-
-// calculates the sum of a given array; essentially,
-// this computes Sigma(a_i), 0 <= i < len(a)
-func Sum(a []int64) int64 {
-	sum := int64(0)
-	for i := 0; i < len(a); i++ {
-		sum += a[i]
-	}
-	return sum
-}
-

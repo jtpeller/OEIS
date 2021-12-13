@@ -37,3 +37,18 @@ func IsSquare(n int64) bool {
 	sr := math.Sqrt(nf)
 	return ((sr - math.Floor(sr)) == 0)
 }
+
+// IsRepr checks if num k can be represented in the form ax^2+by^2
+func IsRepr(k, a, b int64) bool {
+	for x := int64(0); x <= k; x++ {
+		xf := float64(x)
+		for y := int64(0); y <= k; y++ {
+			yf := float64(y)
+			if k == a*int64(math.Pow(xf, 2)) + b*int64(math.Pow(yf, 2)) {
+				return true
+			}
+		}
+	}
+	//fmt.Println("k =", k, "cannot be represented")
+	return false
+}

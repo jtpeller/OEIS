@@ -3,7 +3,7 @@
 // = 	Description: All OEIS sequences from A000001-A000100				  =
 // = 	Note: Not all sequences in this range have been programmed			  =
 // = 	Date: October 08, 2021												  =
-// = 	Last Update: December 09, 2021										  =
+// = 	Last Update: December 12, 2021										  =
 // ============================================================================
 
 package seq
@@ -19,6 +19,9 @@ import (
 const (
 	LONG_A000008 = 350
 	OVERFLOW_A000011 = 63
+	LONG_A000018 = 10
+	LONG_A000021 = 10
+	LONG_A000024 = 10
 	OVERFLOW_A000032 = 91
 	LONG_A000041 = 90
 	OVERFLOW_A000042 = 19
@@ -26,6 +29,10 @@ const (
 	OVERFLOW_A000043 = 9
 	OVERFLOW_A000044 = 92
 	OVERFLOW_A000045 = 93
+	LONG_A000047 = 10
+	LONG_A000049 = 10
+	LONG_A000050 = 10
+	OVERFLOW_A000051 = 64
 	OVERFLOW_A000058 = 7
 	OVERFLOW_A000073 = 75
 	OVERFLOW_A000078 = 71
@@ -197,12 +204,54 @@ func A000013(seqlen int64) ([]*big.Int, int64) {
 				pow := Pow(big.NewInt(2), div)
 				numer := Mul(temp, pow)
 				n2 := Mul(big.NewInt(2), big.NewInt(n))
-				bigDiv := Floor(DivFloat(ToBigFloat(numer), ToBigFloat(n2)))
+				bigDiv := Floor(DivFloat(ToFloat(numer), ToFloat(n2)))
 				// the following computes a[n] = Sum_{d divides n} (phi(2*d)*2^(n/d))/(2*n)
 				a[n].Add(a[n], bigDiv)
 			}
 		}
 	}
+	return a, 0
+}
+
+/**
+ * A000018 computes the # of positive integers <= 2^n of form x^2 + 16y^2
+ * Date: December 12, 2021	Confirmed working: December 12, 2021
+ * Link: https://oeis.org/A000018
+ */
+func A000018(seqlen int64) ([]*big.Int, int64) {
+	if seqlen > LONG_A000018 {
+		utils.LongCalculationWarning("A000018", LONG_A000018)
+	}
+
+	a := utils.Repr(seqlen, 1, 16, 1)
+	return a, 0
+}
+
+/**
+ * A000021 computes the # of positive integers <= 2^n of form x^2 + 12y^2
+ * Date: December 12, 2021	Confirmed working: December 12, 2021
+ * Link: https://oeis.org/A000021
+ */
+func A000021(seqlen int64) ([]*big.Int, int64) {
+	if seqlen > LONG_A000021 {
+		utils.LongCalculationWarning("A000021", LONG_A000021)
+	}
+
+	a := utils.Repr(seqlen, 1, 12, 1)
+	return a, 0
+}
+
+/**
+ * A000024 computes the # of positive integers <= 2^n of form x^2 + 10y^2
+ * Date: December 12, 2021	Confirmed working: December 12, 2021
+ * Link: https://oeis.org/A000024
+ */
+func A000024(seqlen int64) ([]*big.Int, int64) {
+	if seqlen > LONG_A000024 {
+		utils.LongCalculationWarning("A000024", LONG_A000024)
+	}
+
+	a := utils.Repr(seqlen, 1, 10, 1)
 	return a, 0
 }
 
@@ -454,6 +503,65 @@ func A000045(seqlen int64) ([]*big.Int, int64) {
 }
 
 /**
+ * A000047 computes the # of positive integers <= 2^n of form x^2 + 2y^2
+ * Date: December 12, 2021	Confirmed working: December 12, 2021
+ * Link: https://oeis.org/A000047
+ */
+func A000047(seqlen int64) ([]*big.Int, int64) {
+	if seqlen > LONG_A000047 {
+		utils.LongCalculationWarning("A000047", LONG_A000047)
+	}
+
+	a := utils.Repr(seqlen, 1, -2, 1)
+	return a, 0
+}
+
+/**
+ * A000049 computes the # of positive integers <= 2^n of form 3x^2 + 4y^2
+ * Date: December 12, 2021	Confirmed working: December 12, 2021
+ * Link: https://oeis.org/A000049
+ */
+ func A000049(seqlen int64) ([]*big.Int, int64) {
+	if seqlen > LONG_A000049 {
+		utils.LongCalculationWarning("A000049", LONG_A000049)
+	}
+
+	a := utils.Repr(seqlen, 3, 4, 0)
+	return a, 0
+}
+
+/**
+ * A000050 computes the # of positive integers <= 2^n of form x^2 + y^2
+ * Date: December 12, 2021	Confirmed working: December 12, 2021
+ * Link: https://oeis.org/A000050
+ */
+func A000050(seqlen int64) ([]*big.Int, int64) {
+	if seqlen > LONG_A000050 {
+		utils.LongCalculationWarning("A000050", LONG_A000050)
+	}
+
+	a := utils.Repr(seqlen, 1, 1, 1)
+	return a, 0
+}
+
+/**
+ * A000051 computes a(n)=2^n + 1
+ * Date: December 12, 2021	Confirmed working: December 12, 2021
+ * Link: https://oeis.org/A000051
+ */
+func A000051(seqlen int64) ([]*big.Int, int64) {
+	if seqlen > OVERFLOW_A000051 {
+		utils.BigIntWarning("A000051", OVERFLOW_A000051)
+	}
+
+	a, _ := A000079(seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		a[i] = Add(a[i], New(1))
+	}
+	return a, 0
+}
+
+/**
  * A000058 returns Sylvester's sequence: a(n+1) = a(n)^2 - a(n) + 1
  * Date: December 07, 2021	Confirmed working: December 09, 2021
  * Link: https://oeis.org/A000058
@@ -694,6 +802,26 @@ func A000082(seqlen int64) ([]int64, int64) {
 	return a, 1
 }
 
+/**
+ * A000086 returns the # of solutions to x^2 - x + 1 == 0 (mod n)
+ * Date: December 12, 2021	Confirmed working: December 12, 2021
+ * Link: https://oeis.org/A000086
+ */
+func A000086(seqlen int64) ([]int64, int64) {
+	a := make([]int64, seqlen)
+	for n := int64(1); n < seqlen; n++ {
+		// count soln's to x^2 - x + 1 == 0
+		count := int64(0)
+		for x := int64(1); x <= n; x++ {
+			out := int64(math.Pow(float64(x), 2)) - x + 1
+			if out % n == 0 {
+				count++
+			}
+		}
+		a[n-1] = count
+	}
+	return a, 1
+}
 
 /**
  * A000093 calculates a(n) = floor(n^(3/2))
