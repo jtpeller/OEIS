@@ -1,121 +1,105 @@
 // ============================================================================
 // = bignum.go																  =
-// = 	Description: VERY helpful wrapper functions for big.Int and big.Float =
+// = 	Description: uses my custom gobig package to handle big nums. I use	  =
+// =			wrappers for readability	 								  =
+// = 			e.g. big.NewInt(0) vs gb.New(0) vs New(0)					  =
 // = 	Date: December 09, 2021												  =
 // ============================================================================
 
 package seq
 
-import "math/big"
+import (
+	"math/big"
+
+	gb "github.com/jtpeller/gobig"
+)
 
 // BIG.INT CALCULATIONS
 func Zero() *big.Int {
-	r := big.NewInt(0)
-	return r
+	return gb.Zero()
 }
 
 func New(i int64) *big.Int {
-	r := big.NewInt(i)
-	return r
+	return gb.New(i)
 }
 
 func Abs(a *big.Int) *big.Int {
-	return Zero().Abs(a)
+	return gb.Abs(a)
 }
 
 func Add(a, b *big.Int) *big.Int {
-	return Zero().Add(a, b)
+	return gb.Add(a, b)
 }
 
 func Sub(a, b *big.Int) *big.Int {
-	return Zero().Sub(a, b)
+	return gb.Sub(a, b)
 }
 
 func Mul(a, b *big.Int) *big.Int {
-	return Zero().Mul(a,b)
+	return gb.Mul(a, b)
 }
 
 func Div(a, b *big.Int) *big.Int {
-	return Zero().Div(a, b)
+	return gb.Div(a, b)
 }
 
 func Pow(a *big.Int, e *big.Int) *big.Int {
-	return Zero().Exp(a, e, big.NewInt(0))
+	return gb.Pow(a, e)
 }
 
 func Sqrt(a *big.Int) *big.Int {
-	return Zero().Sqrt(a)
+	return gb.Sqrt(a)
 }
 
 func Lsh(a *big.Int, e int) *big.Int {
-	return Zero().Lsh(a, uint(e))
+	return gb.Lsh(a, e)
 }
 
 // BIG.FLOAT CALCULATIONS
 func ZeroFloat() *big.Float {
-	r := big.NewFloat(0.0)
-	r.SetPrec(256)
-	return r
+	return gb.ZeroFloat()
 }
 
 func NewFloat(a float64) *big.Float {
-	r := big.NewFloat(a)
-	r.SetPrec(256)
-	return r
+	return gb.NewFloat(a)
 }
 
 func AbsFloat(a *big.Float) *big.Float {
-	return ZeroFloat().Abs(a)
+	return gb.AbsFloat(a)
 }
 
 func AddFloat(a, b *big.Float) *big.Float {
-	return ZeroFloat().Add(a, b)
+	return gb.AddFloat(a, b)
 }
 
 func SubFloat(a, b *big.Float) *big.Float {
-	return ZeroFloat().Sub(a, b)
+	return gb.SubFloat(a, b)
 }
 
 func MulFloat(a, b *big.Float) *big.Float {
-	return ZeroFloat().Mul(a,b)
+	return gb.MulFloat(a, b)
 }
 
 func DivFloat(a, b *big.Float) *big.Float {
-	return ZeroFloat().Quo(a, b)
+	return gb.DivFloat(a, b)
 }
 
 func PowFloat(a *big.Float, e int64) *big.Float {
-	if e == 0 {
-		return NewFloat(1)
-	}
-	r := ZeroFloat().Copy(a)
-	for i := int64(0); i < e-1; i++ {
-		r = MulFloat(r, a)
-	}
-	if e < 0 {		// negative exponents are reciprocals of positives
-		return DivFloat(NewFloat(1), r)
-	}
-	return r
+	return gb.PowFloat(a, e)
 }
 
 func SqrtFloat(a *big.Float) *big.Float {
-	return ZeroFloat().Sqrt(a)
+	return gb.SqrtFloat(a)
 }
 
 func Floor(a *big.Float) *big.Int {
-	f, _ := a.Int(nil)
-	return f
+	return gb.Floor(a)
 }
 
 func ToFloat(a *big.Int) *big.Float {
-	r := new(big.Float)
-	r.SetInt(a)
-	r.SetPrec(256)
-	return r
+	return gb.ToFloat(a)
 }
 
 func Round(a *big.Float) *big.Int {
-	a.Add(a, NewFloat(0.5))
-	r, _ := a.Int(nil)
-	return r
+	return gb.Round(a)
 }
