@@ -10,6 +10,8 @@ import (
 	"errors"
 	"math"
 	"math/big"
+
+	gb "github.com/jtpeller/gobig"
 )
 
 // ####################### COMMON CALCULATIONS #########################
@@ -18,12 +20,12 @@ import (
 
 // compute the factorial of a num (big.Int)
 func Fact(num *big.Int) *big.Int {
-	if num.Cmp(big.NewInt(0)) == -1 {
+	if gb.Less(num, gb.Zero()) {
 		HandleError(errors.New("factorial of a negative number is undefined"))
 	}
 
-	prod := big.NewInt(1)
-	for i := big.NewInt(1); i.Cmp(num) == -1 || i.Cmp(num) == 0; i.Add(i, big.NewInt(1)) {
+	prod := gb.New(1)
+	for i := gb.New(1); i.Cmp(num) == -1 || i.Cmp(num) == 0; i.Add(i, gb.New(1)) {
 		prod.Mul(prod, i)
 	}
 	return prod
@@ -53,21 +55,43 @@ func Isqrt(num int64) (int64) {
 
 // computes the product of the terms in the array, like Sum(), but for multiplication
 func Prod(a []*big.Int) *big.Int {
-	prod := big.NewInt(1)
+	prod := gb.New(1)
 	for i := 0; i < len(a); i++ {
 		prod.Mul(prod, a[i])
 	}
 	return prod
 }
 
-// calculates the sum of a given array; essentially,
-// this computes Sigma(a_i), 0 <= i < len(a)
+// calculates the sum of a given array
 func Sum(a []int64) int64 {
 	sum := int64(0)
 	for i := 0; i < len(a); i++ {
 		sum += a[i]
 	}
 	return sum
+}
+
+// computes Sum(), except with *big.Int
+func SumBig(a []*big.Int) *big.Int {
+	sum := gb.New(0)
+	for i := 0; i < len(a); i++ {
+		sum.Add(sum, a[i])
+	}
+	return sum
+}
+
+// this computes Sigma_e(n), which computes the sum of the divisors of n
+// where the divisors are raised to the power of e
+func Sigma(n, e int64) *big.Int {
+	divisors := Factors(n)
+	bigdiv := CreateSlice(int64(len(divisors)))
+	
+	// raise each divisor to the power of e
+	for i := 0; i < len(divisors); i++ {
+		bigdiv[i] = gb.Pow(gb.New(divisors[i]), gb.New(e))
+	}
+
+	return SumBig(bigdiv)
 }
 
 // ================= PROBABILITY & COMBINATIONS =================
@@ -97,30 +121,30 @@ func Binomial(n, r int64) int64 {
 // computes all combinations of n (0 <= k <= n)
 func Combinations(n *big.Int) []*big.Int {
 	a := CreateSlice(0)
-	for k := big.NewInt(0); k.Cmp(n) == -1 || k.Cmp(n) == 0; k.Add(k, big.NewInt(1)) {
-		a = append(a, KCombinations(n, k))
+	for k := gb.New(0); k.Cmp(n) == -1 || k.Cmp(n) == 0; k.Add(k, gb.New(1)) {
+		a = append(a, C(n, k))
 	}
 	return a
 }
 
 // performs the same calculation as Binomial(n, k), except
 // this uses big.Int instead of int64
-func KCombinations(n, k *big.Int) *big.Int {
+func C(n, k *big.Int) *big.Int {
 	// C(n,r) = n!/((n-r)!r!)
-	if n.Cmp(big.NewInt(0)) == -1 || k.Cmp(big.NewInt(0)) == -1 {
+	if gb.Less(n, gb.New(0)) || gb.Less(k, gb.New(0)) {
 		HandleError(errors.New("can't be negative"))
-	} else if n.Cmp(k) == -1 {
+	} else if gb.Less(n, k) {
 		HandleError(errors.New("n cannot be less than k"))
 	}
 
 	// do the shortcut, where you can modify k based on n
-	if k.Cmp(big.NewInt(0).Div(n, big.NewInt(2))) == 1 {
-		k = big.NewInt(0).Sub(n, k)	// k = n - k
+	if gb.Greater(k, gb.Div(n, gb.New(2))) {	// k > n/2
+		k = gb.New(0).Sub(n, k)	// k = n - k
 	}
-	c := big.NewInt(1)
-	for i := big.NewInt(1); i.Cmp(k) == -1 || i.Cmp(k) == 0; i.Add(i, big.NewInt(1)) {
+	c := gb.New(1)
+	for i := gb.New(1); i.Cmp(k) == -1 || i.Cmp(k) == 0; i.Add(i, gb.New(1)) {
 		// c = (n - k + i) * c / i
-		foo := big.NewInt(0).Sub(n, k)
+		foo := gb.New(0).Sub(n, k)
 		foo.Add(foo, i)
 		c.Mul(c, foo)
 		c.Div(c, i)
@@ -129,23 +153,22 @@ func KCombinations(n, k *big.Int) *big.Int {
 }
 
 // computes k-permutations of n (P(n, k) or nPr(n, r))
-func KPermutation(n, k *big.Int) *big.Int {
-	if k.Cmp(n) == 1 {
-		return big.NewInt(0)
+func P(n, k *big.Int) *big.Int {
+	if gb.Greater(k, n) {
+		return gb.New(0)
 	}
 	// returns n!/(n-k)!
-	return big.NewInt(0).Div(Fact(n), Fact(big.NewInt(0).Sub(n, k)))
+	return gb.Div(Fact(n), Fact(gb.Sub(n, k)))
 }
 
 // computes all permutations of n (0 <= k <= n)
 func Permutation(n *big.Int) []*big.Int {
 	a := CreateSlice(0)
-	for k := big.NewInt(0); k.Cmp(n) == -1 || k.Cmp(n) == 0; k.Add(k, big.NewInt(1)) {
-		a = append(a, KPermutation(n, k))
+	for k := gb.New(0); gb.LessEqual(k, n); k.Add(k, gb.New(1)) {
+		a = append(a, P(n, k))
 	}
 	return a
 }
-
 
 // ##################### DIVISORS & FACTORS #########################
 // given a number num, it will compute Euler's Totient of the number

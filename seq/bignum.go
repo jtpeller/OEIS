@@ -15,91 +15,108 @@ import (
 )
 
 // BIG.INT CALCULATIONS
-func Zero() *big.Int {
+func zero() *big.Int {
 	return gb.Zero()
 }
 
-func New(i int64) *big.Int {
+func inew(i int64) *big.Int {
 	return gb.New(i)
 }
 
-func Abs(a *big.Int) *big.Int {
+func abs(a *big.Int) *big.Int {
 	return gb.Abs(a)
 }
 
-func Add(a, b *big.Int) *big.Int {
+func add(a, b *big.Int) *big.Int {
 	return gb.Add(a, b)
 }
 
-func Sub(a, b *big.Int) *big.Int {
+func sub(a, b *big.Int) *big.Int {
 	return gb.Sub(a, b)
 }
 
-func Mul(a, b *big.Int) *big.Int {
+func mul(a, b *big.Int) *big.Int {
 	return gb.Mul(a, b)
 }
 
-func Div(a, b *big.Int) *big.Int {
+func div(a, b *big.Int) *big.Int {
 	return gb.Div(a, b)
 }
 
-func Pow(a *big.Int, e *big.Int) *big.Int {
+func pow(a *big.Int, e *big.Int) *big.Int {
 	return gb.Pow(a, e)
 }
 
-func Sqrt(a *big.Int) *big.Int {
+func sqrt(a *big.Int) *big.Int {
 	return gb.Sqrt(a)
 }
 
-func Lsh(a *big.Int, e int) *big.Int {
-	return gb.Lsh(a, e)
+// ### comparisons
+func equals(a, b *big.Int) bool {
+	return gb.Equals(a, b)
+}
+
+func lt(a, b *big.Int) bool {
+	return gb.Less(a, b)
+}
+
+func lteq(a, b *big.Int) bool {
+	return gb.LessEqual(a, b)
+}
+
+func gt(a, b *big.Int) bool {
+	return gb.Greater(a, b)
+}
+
+func gteq(a, b *big.Int) bool {
+	return gb.GreaterEqual(a, b)
 }
 
 // BIG.FLOAT CALCULATIONS
-func ZeroFloat() *big.Float {
+func fzero() *big.Float {
 	return gb.ZeroFloat()
 }
 
-func NewFloat(a float64) *big.Float {
+func fnew(a float64) *big.Float {
 	return gb.NewFloat(a)
 }
 
-func AbsFloat(a *big.Float) *big.Float {
+func fabs(a *big.Float) *big.Float {
 	return gb.AbsFloat(a)
 }
 
-func AddFloat(a, b *big.Float) *big.Float {
+func fadd(a, b *big.Float) *big.Float {
 	return gb.AddFloat(a, b)
 }
 
-func SubFloat(a, b *big.Float) *big.Float {
+func fsub(a, b *big.Float) *big.Float {
 	return gb.SubFloat(a, b)
 }
 
-func MulFloat(a, b *big.Float) *big.Float {
+func fmul(a, b *big.Float) *big.Float {
 	return gb.MulFloat(a, b)
 }
 
-func DivFloat(a, b *big.Float) *big.Float {
+func fdiv(a, b *big.Float) *big.Float {
 	return gb.DivFloat(a, b)
 }
 
-func PowFloat(a *big.Float, e int64) *big.Float {
+func fpow(a *big.Float, e int64) *big.Float {
 	return gb.PowFloat(a, e)
 }
 
-func SqrtFloat(a *big.Float) *big.Float {
+func fsqrt(a *big.Float) *big.Float {
 	return gb.SqrtFloat(a)
 }
 
-func Floor(a *big.Float) *big.Int {
+func floor(a *big.Float) *big.Int {
 	return gb.Floor(a)
 }
 
-func ToFloat(a *big.Int) *big.Float {
+func tofloat(a *big.Int) *big.Float {
 	return gb.ToFloat(a)
 }
 
-func Round(a *big.Float) *big.Int {
+func round(a *big.Float) *big.Int {
 	return gb.Round(a)
 }

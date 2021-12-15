@@ -7,7 +7,7 @@
 package main
 
 import (
-	seq "OEIS/seq"
+	"OEIS/seq"
 	"OEIS/utils"
 	"errors"
 	"flag"
@@ -33,7 +33,7 @@ func main() {
 	} else if *seqlen <= 0 {		// check for invalid lengths
 		utils.HandleError(errors.New("you need to specify a positive sequence length! "))		
 	} else if !exists {				// user must specify a sequence that exists
-		utils.HandleError(errors.New("either this sequence has not been implemented yet, or your id is improper! "))
+		utils.HandleError(errors.New("either this sequence has not been implemented yet, or your id is invalid! "))
 	}
 
 	start := time.Now()
@@ -185,11 +185,63 @@ var StubStorage = map[string]interface{}{
 	"A000195": seq.A000195,
 	"A000196": seq.A000196,
 	"A000197": seq.A000197,
+	// thru300.go
 	"A000201": seq.A000201,
 	"A000202": seq.A000202,
 	"A000203": seq.A000203,
 	"A000204": seq.A000204,
 	"A000205": seq.A000205,
+	"A000207": seq.A000207,
+	"A000208": seq.A000208,
+	"A000209": seq.A000209,
+	"A000210": seq.A000210,
+	"A000211": seq.A000211,
+	"A000212": seq.A000212,
+	"A000213": seq.A000213,
+	"A000215": seq.A000215,
+	"A000216": seq.A000216,
+	"A000217": seq.A000217,
+	"A000218": seq.A000218,
+	"A000219": seq.A000219,
+	"A000221": seq.A000221,
+	"A000225": seq.A000225,
+	"A000227": seq.A000227,
+	"A000230": seq.A000230,
+	"A000231": seq.A000231,
+	"A000240": seq.A000240,
+	"A000244": seq.A000244,
+	"A000245": seq.A000245,
+	"A000246": seq.A000246,
+	"A000247": seq.A000247,
+	"A000248": seq.A000248,
+	"A000252": seq.A000252,
+	"A000253": seq.A000253,
+	"A000254": seq.A000254,
+	"A000255": seq.A000255,
+	"A000256": seq.A000256,
+	"A000257": seq.A000257,
+	"A000259": seq.A000259,
+	"A000260": seq.A000260,
+	"A000261": seq.A000261,
+	"A000262": seq.A000262,
+	"A000263": seq.A000263,
+	"A000265": seq.A000265,
+	"A000266": seq.A000266,
+	"A000267": seq.A000267,
+	"A000270": seq.A000270,
+	"A000271": seq.A000271,
+	"A000272": seq.A000272,
+	"A000274": seq.A000274,
+	"A000275": seq.A000275,
+	"A000276": seq.A000276,
+	"A000277": seq.A000277,
+	"A000278": seq.A000278,
+	"A000279": seq.A000279,
+	"A000280": seq.A000280,
+	"A000283": seq.A000283,
+	"A000284": seq.A000284,
+	"A000285": seq.A000285,
+	// otherseq.go
 	"A007947": seq.A007947,
 	"A027641": seq.A027641,
 	"A027642": seq.A027642,

@@ -1,2 +1,4 @@
-github.com/jtpeller/gobig v0.0.0-20211213215848-05be1cf85a1e h1:f41R19WnKPfmacQ5IhmfR2Q4jj+5fGDioxmsNXgwpsQ=
-github.com/jtpeller/gobig v0.0.0-20211213215848-05be1cf85a1e/go.mod h1:fTnqaGWE90tMjP0iPBSavA1aY46X30vci8PO4/ICe8Q=
+github.com/jtpeller/gobig v0.0.0-20211213222130-5be16345ad25 h1:IoOZhwS814z2wNgyjpH0FgpOy1BK/AXEhsVjrx9/zm4=
+github.com/jtpeller/gobig v0.0.0-20211213222130-5be16345ad25/go.mod h1:fTnqaGWE90tMjP0iPBSavA1aY46X30vci8PO4/ICe8Q=
+github.com/jtpeller/gobig v1.0.0 h1:woGgNBk5MmdjiGGZuybFNwVVBa3SmQDM9gu05Eh3l7E=
+github.com/jtpeller/gobig v1.0.0/go.mod h1:fTnqaGWE90tMjP0iPBSavA1aY46X30vci8PO4/ICe8Q=

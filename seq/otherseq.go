@@ -20,9 +20,9 @@ import (
  */
 func A003048(seqlen int64) ([]*big.Int, int64) {
 	a := utils.CreateSlice(seqlen)
-	a[0] = New(1)
+	a[0] = inew(1)
 	for i := int64(1); i < seqlen; i++ {
-		a[i] = Sub(Mul(New(i), a[i - 1]), Pow(New(-1), New(i)))
+		a[i] = sub(mul(inew(i), a[i - 1]), pow(inew(-1), inew(i)))
 	}
 	return a, 0
 }

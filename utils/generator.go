@@ -9,6 +9,8 @@ package utils
 import (
 	"math"
 	"math/big"
+
+	gb "github.com/jtpeller/gobig"
 )
 
 // ########################## GENERATOR FUNCTIONS #############################
@@ -32,6 +34,33 @@ func BigBisection(seq []*big.Int) []*big.Int {
 	return a
 }
 
+// counts the digits of a given number
+func countDigits(num int64) int64 {
+	a := num
+	count := int64(0)
+	for a != 0 {
+		a /= 10
+		count++
+	}
+	return count
+}
+
+// grab the digit at a specific place. Helper for Digits()
+func digit(num, idx int64) int64 {
+    r := num % int64(math.Pow(10, float64(idx)))
+    return r / int64(math.Pow(10, float64(idx-1)))
+}
+
+// separates a number into its digits
+func Digits(num int64) []int64 {
+	a := make([]int64, 0)
+	ndigits := countDigits(num)
+	for i := int64(1); i <= ndigits; i++ {
+		a = append(a, digit(num, i))
+	}
+	return a
+}
+
 // Computes the factors (divisors) of num
 func Factors(num int64) []int64 {
 	factors := make([]int64, 0)
@@ -50,6 +79,36 @@ func Gamma(seqlen int64) ([]*big.Int, int64) {
 		a[i+1] = Fact(big.NewInt(i))
 	}
 	return a, 1		// Gamma "starts" at 1
+}
+
+// initializes a slice with a set of nums 
+func InitIslice (seqlen int64, init []int64) []int64 {
+	a := make([]int64, seqlen)
+	bound := int64(len(init))
+	if seqlen < bound {
+		bound = seqlen
+	}
+
+	// init
+	for n := int64(0); n < bound; n++ {
+		a[n] = init[n]
+	}
+	return a
+}
+
+// initializes a slice of *big.Int
+func InitBslice(seqlen int64, init []*big.Int) []*big.Int {
+	a := CreateSlice(seqlen)
+	bound := int64(len(init))
+	if seqlen < bound {
+		bound = seqlen
+	}
+
+	// init
+	for n := int64(0); n < bound; n++ {
+		a[n] = init[n]
+	}
+	return a
 }
 
 // Calculates the isqrt of an array
@@ -86,6 +145,20 @@ func Primes(seqlen int64) []int64 {
 	return primes
 }
 
+// performs Primes(), but with big.Int instead
+func PrimesBig(seqlen int64) []*big.Int {
+	primes := CreateSlice(0)
+	num := gb.New(0)
+	for i := int64(0); i < seqlen; {
+		if IsBigPrime(num) {
+			primes = append(primes, num)
+			i++
+		}
+		num = gb.Add(num, gb.New(1))
+	}
+	return primes
+}
+
 // generates a sequence calculating the # of positive integers <= 2^n 
 // of the form px^2 + qy^2 
 func Repr(seqlen, p, q, init int64) []*big.Int {
@@ -102,4 +175,32 @@ func Repr(seqlen, p, q, init int64) []*big.Int {
 		a[n] = count
 	}
 	return a
+}
+
+// shifts an array over by some amount
+func Shift(a []int64, amt int) []int64 {
+	out := make([]int64, len(a)+amt)
+	for i, v := range a {
+		out[i+amt] = v
+	}
+	return out
+}
+
+// performs Shift(), but with []*big.Int
+func ShiftBig(a []*big.Int, amt int) []*big.Int {
+	out := CreateSlice(int64(len(a)+amt))
+	for i, v := range a {
+		out[i+amt] = v
+	}
+	return out
+}
+
+// calculates the sum of squares of the digits of num
+func SumSquares(num int64) int64 {
+	sum := int64(0)
+	digits := Digits(num)
+	for _, d := range digits {
+		sum += int64(math.Pow(float64(d), 2))
+	}
+	return sum
 }
