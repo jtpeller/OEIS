@@ -1168,3 +1168,4 @@ func A000297(seqlen int64) ([]int64, int64) {
 	}
 	return a, -1
 }
+

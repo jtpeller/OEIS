@@ -1,5 +1,7 @@
 # OEIS
 
+## Overview
+
 The ongoing quest to program every sequence in the OEIS database (in Golang)
 
 ## Content
@@ -16,8 +18,7 @@ Each of the sequence functions (those functions starting with `A...`) will retur
  - The integer sequence that is produced. Type: `[]int64 || *big.Int`
  - The offset (aka starting position or starting index). Type: `int64`
 
-The various helper functions are left as public in the event that it will eventually be
-needed elsewhere (which is common in OEIS)
+My strategy is not completing 100% of every sequence in order, but rather program as many of the OEIS sequences as possible. There's ~350 *thousand* sequences so my goal is to just get as many programmed as possible.
 
 ## Usage
 
