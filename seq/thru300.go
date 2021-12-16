@@ -988,3 +988,183 @@ func A000285(seqlen int64) ([]*big.Int, int64) {
 	return a, 0
 }
 
+/**
+ * A000286 computes the # of positive integers <= 2^n of form 2 x^2 + 5 y^2
+ * Date: December 15, 2021
+ * Link: https://oeis.org/A000286
+ */
+func A000286(seqlen int64) ([]*big.Int, int64) {
+	a := utils.Repr(seqlen, 2, 5, 0)
+	return a, 0
+}
+
+/**
+ * A000287 computes the # of rooted polyhedral graphs with n edges
+ * Date: December 15, 2021
+ * Link: https://oeis.org/A000287
+ */
+func A000287(seqlen int64) ([]*big.Int, int64) {
+	// b(n) = ( 2*(2*n)!/(n!)^2 - (27*n^2+9*n-2)*b(n-1) ) / (54*n^2-90*n+32)
+	b := utils.CreateSlice(seqlen+10)
+	b[0] = inew(2)
+	for n := 1; n < len(b); n++ {
+		ni := int64(n) + 3
+		nf := float64(n) + 3
+		num1 := fmul(fnew(2), tofloat(utils.Fact(inew(2*ni))))	// 2*(2n)!
+		den1 := fpow(tofloat(utils.Fact(inew(ni))), 2)		// (n!)^2
+		frac1 := fdiv(num1, den1)							// 2*(2n)!/(n!)^2
+		poly := fsub(fadd(fmul(fnew(27), fpow(fnew(nf), 2)), fmul(fnew(9), fnew(nf))), fnew(2))
+		num2 := fsub(frac1, fmul(poly, tofloat(b[n-1])))	
+		den2 := fadd(fsub(fmul(fnew(54), fpow(fnew(nf), 2)), fmul(fnew(90), fnew(nf))), fnew(32))
+		b[n] = floor(fdiv(num2, den2))
+	}
+
+	// a(n) = b(n-1) + 2*(-1)^n
+	a := utils.InitBslice(seqlen, []*big.Int{inew(1), inew(0), inew(4), inew(6)})
+	for n := int64(9); n <= seqlen+4; n++ {
+		fmt.Println("using", b[n-3], "for n =", n)
+		a[n-5] = add(b[n-3], mul(inew(2), pow(inew(-1), inew(n-5))))
+	}
+
+	return a, 6
+}
+
+/**
+ * A000288 compute the Tetranacci #s: a(n) = a(n-1) + a(n-2) + a(n-3) + a(n-4)
+ *  w/ a(0) = a(1) = a(2) = a(3) = 1. 
+ * Date: December 15, 2021
+ * Link: https://oeis.org/A000288
+ */
+func A000288(seqlen int64) ([]*big.Int, int64) {
+	a := utils.InitBslice(seqlen, []*big.Int{big.NewInt(1), big.NewInt(1), big.NewInt(1), big.NewInt(1)})
+	for i := int64(4); i < seqlen; i++ {
+		a[i].Add(a[i-1], a[i-2])
+		a[i].Add(a[i], a[i-3])
+		a[i].Add(a[i], a[i-4])
+	}
+	return a, 0
+}
+
+/**
+ * A000289 computes a nonlinear recurrence: a(n) = a(n-1)^2 - 3*a(n-1) + 3 (for n>1). 
+ * Date: December 15, 2021
+ * Link: https://oeis.org/A000289
+ */
+func A000289(seqlen int64) ([]*big.Int, int64) {
+	a := utils.InitBslice(seqlen, []*big.Int{inew(1), inew(4)})
+	for n := int64(2); n < seqlen; n++ {
+		a[n] = add(sub(pow(a[n-1], inew(2)), mul(inew(3), a[n-1])), inew(3))
+	}
+	return a, 0
+}
+
+/**
+ * A000290 computes the squares; a[n] = n^2
+ * Date: December 15, 2021
+ * Link: https://oeis.org/A000290
+ */
+func A000290(seqlen int64) ([]*big.Int, int64) {
+	a := utils.Power(seqlen, inew(2))
+	return a, 0
+}
+
+/**
+ * A000291 computes # of bipartite partitions of n white objects and 2 black ones
+ * Date: December 15, 2021
+ * Link: https://oeis.org/A000291
+ */
+func A000291(seqlen int64) ([]int64, int64) {
+	a := make([]int64, seqlen)
+	a70, _ := A000070(seqlen)
+	a97, _ := A000097(seqlen)
+	for n := int64(0); n < seqlen; n++ {
+		a[n] = a70[n] + a97[n]
+	}
+	return a, 0
+}
+
+/**
+ * A000292 computes tetrahedral (or triangular pyramidal) #s:
+ *  a(n) = C(n+2,3) = n*(n+1)*(n+2)/6. 
+ * Date: December 15, 2021
+ * Link: https://oeis.org/A000292
+ */
+func A000292(seqlen int64) ([]int64, int64) {
+	a := make([]int64, seqlen)
+	for n := int64(0); n < seqlen; n++ {
+		a[n] = n * (n+1) * (n+2)/6
+	}
+	return a, 0
+}
+
+/**
+ * A000294 expansion of g.f. Product_{k >= 1} (1 - x^k)^(-k*(k+1)/2). 
+ * Date: December 15, 2021
+ * Link: https://oeis.org/A000294
+ */
+func A000294(seqlen int64) ([]*big.Int, int64) {
+	// a(n) = (1/(2*n))*Sum_{k=1..n} (sigma[2](k)+sigma[3](k))*a(n-k)
+	a := utils.CreateSlice(seqlen)
+	a[0] = inew(1)
+	for n := int64(1); n < seqlen; n++ {
+		nf := float64(n)
+		sum := inew(0)
+		for k := int64(1); k <= n; k++ {
+			sum = add(sum, mul(add(utils.Sigma(k, 2), utils.Sigma(k, 3)), a[n-k]))
+		}
+		a[n] = floor(fmul(tofloat(sum), fdiv(fnew(1), fnew(2.0*nf))))
+	}
+	return a, 0
+}
+
+/**
+ * A000295 computes the Eulerian numbers (Euler's triangle: column k=2 of A008292, column k=1 of A173018). 
+ * Date: December 15, 2021
+ * Link: https://oeis.org/A000295
+ */
+func A000295(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
+	for n := int64(0); n < seqlen; n++ {
+		a[n] = sub(pow(inew(2), inew(n)), inew(n+1))
+	}
+	return a, 0
+}
+
+/**
+ * A000296 computes set partitions without singletons: number of partitions of an n-set into blocks of size > 1. Also number of cyclically spaced (or feasible) partitions. 
+ * Date: December 15, 2021
+ * Link: https://oeis.org/A000296
+ */
+func A000296(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
+	for n := int64(0); n < seqlen; n++ {
+		ksum := fnew(0)
+		for k := int64(0); k <= n; k++ {
+			jsum := fnew(0)
+			for j := int64(0); j <= k; j++ {
+				jf := float64(j)
+				p1 := fpow(fnew(-1), j)
+				p2 := tofloat(utils.C(inew(k), inew(j)))
+				p3 := fpow(fnew(1-jf), n)
+				num := fmul(fmul(p1, p2), p3)
+				jsum = fadd(jsum, fdiv(num, tofloat(utils.Fact(inew(k)))))
+			}
+			ksum = fadd(ksum, fmul(fpow(fnew(-1), n-k), jsum))
+		}
+		a[n] = floor(ksum)
+	}
+	return a, 0
+}
+
+/**
+ * A000297 computes a(n) = (n+1)*(n+3)*(n+8)/6. 
+ * Date: December 15, 2021
+ * Link: https://oeis.org/
+ */
+func A000297(seqlen int64) ([]int64, int64) {
+	a := make([]int64, seqlen)
+	for n := int64(0); n < seqlen-1; n++ {
+		a[n+1] = (n+1)*(n+3)*(n+8)/6
+	}
+	return a, -1
+}

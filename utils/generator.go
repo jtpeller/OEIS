@@ -131,6 +131,15 @@ func Multiples(n int64, seqlen int64) []int64 {
 	return a
 }
 
+// powers
+func Power(seqlen int64, e *big.Int) []*big.Int {
+	a := CreateSlice(seqlen)
+	for i := int64(0); i < seqlen; i++ {
+		a[i] = gb.Pow(gb.New(i), e)
+	}
+	return a
+}
+
 // generates the sequence of primes; count = num
 func Primes(seqlen int64) []int64 {
 	primes := make([]int64, 0)

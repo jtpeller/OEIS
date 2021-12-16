@@ -746,8 +746,7 @@ func A000078(seqlen int64) ([]*big.Int, int64) {
 		utils.BigIntWarning("A000078", OVERFLOW_A000078)
 	}
 
-	a := utils.CreateSlice(seqlen)
-	a[0], a[1], a[2], a[3] = big.NewInt(0), big.NewInt(0), big.NewInt(0), big.NewInt(1)
+	a := utils.InitBslice(seqlen, []*big.Int{big.NewInt(0), big.NewInt(0), big.NewInt(0), big.NewInt(1)})
 	for i := int64(4); i < seqlen; i++ {
 		a[i].Add(a[i-1], a[i-2])
 		a[i].Add(a[i], a[i-3])

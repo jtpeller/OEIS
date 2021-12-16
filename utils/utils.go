@@ -110,11 +110,6 @@ func PrintError(msg string) {
 }
 
 func PrintSequence(seqid string, a []int64, startidx int64) {
-	// ensure startidx isn't negative
-	if startidx < 0 {
-		HandleError(errors.New("startidx cannot be negative"))
-	}
-
 	if seqid != "" {
 		PrintInfo("~~~~~ SEQUENCE " + seqid + " ~~~~~")
 	}
@@ -126,11 +121,6 @@ func PrintSequence(seqid string, a []int64, startidx int64) {
 }
 
 func PrintBigSequence(seqid string, a []*big.Int, startidx int64) {
-	// ensure startidx isn't negative
-	if startidx < 0 {
-		HandleError(errors.New("startidx cannot be negative"))
-	}
-
 	if seqid != "" {
 		PrintInfo("~~~~~ SEQUENCE " + seqid + " ~~~~~")
 	}
