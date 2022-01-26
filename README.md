@@ -28,4 +28,4 @@ Use `go run main.go -h` or `go run main.go --help` for more information.
 
 Options:
  - `-seq` -- Give the sequence ID (A000002 for example)
- - `-seqlen` -- Give the number of elements to generate. There will be limits on some of the sequences due to overflow.
+ - `-seqlen` -- Give the number of elements to generate. There may be limits on some of the sequences due to overflow or warnings due to rounding inaccuracies or lengthy computations.

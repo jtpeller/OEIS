@@ -29,7 +29,7 @@ func main() {
 	_, exists := StubStorage[*seqid]
 
 	if *seqid == "" {				// user must specify a sequence to generate
-		utils.HandleError(errors.New("you need to specify a sequence to run! "))
+		utils.HandleError(errors.New("you need to specify a sequence to generate! "))
 	} else if *seqlen <= 0 {		// check for invalid lengths
 		utils.HandleError(errors.New("you need to specify a positive sequence length! "))		
 	} else if !exists {				// user must specify a sequence that exists
