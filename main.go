@@ -85,6 +85,7 @@ func call(name string, params ...interface{}) (result interface{}, arg2 interfac
 }
 
 // the following is a (large) mapping from strings to the corresponding function
+// there has to be a better way to do this...
 var StubStorage = map[string]interface{}{
 	// thru100.go
 	"A000002": seq.A000002,
@@ -252,6 +253,8 @@ var StubStorage = map[string]interface{}{
 	"A000295": seq.A000295,
 	"A000296": seq.A000296,
 	"A000297": seq.A000297,
+	// thru400.go
+	"A000301": seq.A000301,
 	// otherseq.go
 	"A001065": seq.A001065,
 	"A001223": seq.A001223,

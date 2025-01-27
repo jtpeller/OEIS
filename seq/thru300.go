@@ -1,5 +1,5 @@
 // ============================================================================
-// = thru200.go																  =
+// = thru300.go																  =
 // = 	Description: All OEIS sequences from A000201-A000300				  =
 // = 	Note: Not all sequences in this range have been programmed			  =
 // = 	Date: December 12, 2021												  =
