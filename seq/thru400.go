@@ -37,3 +37,19 @@ const (
 
 	return a, 0
 }
+
+/**
+ * A000302 Powers of 4: a(n) = 4^n.
+ * Date: 2025.01.26
+ * Link: https://oeis.org/A000302
+ */
+ func A000302(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
+
+	// compute a
+	for n := int64(0); n < seqlen; n++ {
+		a[n] = pow(big.NewInt(4), big.NewInt(n))
+	}
+
+	return a, 0
+}

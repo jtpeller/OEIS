@@ -1,6 +1,6 @@
 # Sequences
 
-## Contents 
+## Contents
 
 This folder contains all the sequences that have been programmed.
 

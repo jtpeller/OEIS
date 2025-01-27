@@ -255,6 +255,7 @@ var StubStorage = map[string]interface{}{
 	"A000297": seq.A000297,
 	// thru400.go
 	"A000301": seq.A000301,
+	"A000302": seq.A000302,
 	// otherseq.go
 	"A001065": seq.A001065,
 	"A001223": seq.A001223,
