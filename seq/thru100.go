@@ -193,17 +193,17 @@ func A000013(seqlen int64) ([]*big.Int, int64) {
 	utils.AccuracyWarning("A000013")
 
 	a := utils.CreateSlice(seqlen)
-	a[0] = big.NewInt(1)
+	a[0] = inew(1)
 	phi, _ := A000010(seqlen*2)
 	for n := int64(1); n < seqlen; n++ {
 		// calculate the sum
 		for d := int64(1); d <= n; d++ {
 			if n % d == 0 {		// d divides n
-				temp := big.NewInt(phi[2*(d-1)])
-				div := div(big.NewInt(n), big.NewInt(d))
-				pow := pow(big.NewInt(2), div)
+				temp := inew(phi[2*(d-1)])
+				div := div(inew(n), inew(d))
+				pow := pow(inew(2), div)
 				numer := mul(temp, pow)
-				n2 := mul(big.NewInt(2), big.NewInt(n))
+				n2 := mul(inew(2), inew(n))
 				bigDiv := floor(fdiv(tofloat(numer), tofloat(n2)))
 				// the following computes a[n] = Sum_{d divides n} (phi(2*d)*2^(n/d))/(2*n)
 				a[n].Add(a[n], bigDiv)
@@ -303,8 +303,8 @@ func A000032(seqlen int64) ([]*big.Int, int64) {
 	}
 
 	a := utils.CreateSlice(seqlen)
-	a[0] = big.NewInt(2)	// a(0)=2
-	a[1] = big.NewInt(1)	// a(1)=1
+	a[0] = inew(2)	// a(0)=2
+	a[1] = inew(1)	// a(1)=1
 	for i := int64(2); i < seqlen; i++ {
 		a[i].Add(a[i - 2], a[i - 1])
 	}
@@ -441,8 +441,8 @@ func A000043(seqlen int64) ([]int64, int64) {
 	for i < seqlen {
 		//mersenne := int64(math.Pow(2, float64(prime))) - 1
 		merprime := new(big.Int)
-		merprime.Exp(big.NewInt(2), big.NewInt(prime), big.NewInt(0))
-		merprime.Sub(merprime, big.NewInt(1))
+		merprime.Exp(inew(2), inew(prime), inew(0))
+		merprime.Sub(merprime, inew(1))
 		if merprime.ProbablyPrime(20) && utils.IsPrime(prime) {
 			a[i] = prime
 			i++
@@ -465,11 +465,11 @@ func A000044(seqlen int64) ([]*big.Int, int64) {
 		utils.BigIntWarning("A000044", OVERFLOW_A000044)
 	}
 	a := utils.CreateSlice(seqlen+1)
-	a[0] = big.NewInt(1)
+	a[0] = inew(1)
 
 	// for [1:12], a(n) = Fibonacci(n)
-	a[1] = big.NewInt(1)
-	a[2] = big.NewInt(1)
+	a[1] = inew(1)
+	a[2] = inew(1)
 	bound := int64(12)
 	if seqlen <= 12 {
 		bound = seqlen
@@ -494,8 +494,8 @@ func A000044(seqlen int64) ([]*big.Int, int64) {
  */
 func A000045(seqlen int64) ([]*big.Int, int64) {
 	a := utils.CreateSlice(seqlen)
-	a[0] = big.NewInt(0)
-	a[1] = big.NewInt(1)
+	a[0] = inew(0)
+	a[1] = inew(1)
 	for i := int64(2); i < seqlen; i++ {
 		a[i].Add(a[i-1], a[i-2])
 	}
@@ -572,11 +572,11 @@ func A000058(seqlen int64) ([]*big.Int, int64) {
 	}
 
 	a := utils.CreateSlice(seqlen)
-	a[0] = big.NewInt(2)
+	a[0] = inew(2)
 	for i := int64(0); i < seqlen - 1; i++ {
-		a[i+1].Exp(a[i], big.NewInt(2), big.NewInt(0))
+		a[i+1].Exp(a[i], inew(2), inew(0))
 		a[i+1].Sub(a[i+1], a[i])
-		a[i+1].Add(a[i+1], big.NewInt(1))
+		a[i+1].Add(a[i+1], inew(1))
 	}
 	return a, 0
 }
@@ -710,7 +710,7 @@ func A000071(seqlen int64) ([]*big.Int, int64) {
 	a := utils.CreateSlice(seqlen)
 	F, _ := A000045(seqlen+1)
 	for i := int64(1); i <= seqlen; i++ {
-		a[i-1].Sub(F[i], big.NewInt(1))
+		a[i-1].Sub(F[i], inew(1))
 	}
 	return a, 1
 }
@@ -727,7 +727,7 @@ func A000073(seqlen int64) ([]*big.Int, int64) {
 	}
 
 	a := utils.CreateSlice(seqlen)
-	a[0], a[1], a[2] = big.NewInt(0), big.NewInt(0), big.NewInt(1)
+	a[0], a[1], a[2] = inew(0), inew(0), inew(1)
 	for i := int64(3); i < seqlen; i++ {
 		a[i].Add(a[i-1], a[i-2])
 		a[i].Add(a[i], a[i-3])
@@ -746,7 +746,7 @@ func A000078(seqlen int64) ([]*big.Int, int64) {
 		utils.BigIntWarning("A000078", OVERFLOW_A000078)
 	}
 
-	a := utils.InitBslice(seqlen, []*big.Int{big.NewInt(0), big.NewInt(0), big.NewInt(0), big.NewInt(1)})
+	a := utils.InitBslice(seqlen, []*big.Int{inew(0), inew(0), inew(0), inew(1)})
 	for i := int64(4); i < seqlen; i++ {
 		a[i].Add(a[i-1], a[i-2])
 		a[i].Add(a[i], a[i-3])
@@ -766,7 +766,7 @@ func A000079(seqlen int64) ([]*big.Int, int64) {
 	}
 
 	a := utils.CreateSlice(seqlen)
-	a[0] = big.NewInt(1)
+	a[0] = inew(1)
 	for i := int64(1); i < seqlen; i++ {
 		a[i].Lsh(a[i-1], 1)
 	}

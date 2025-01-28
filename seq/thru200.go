@@ -129,10 +129,10 @@ func A000110(seqlen int64) ([]*big.Int, int64) {
 
 	// init
 	a := utils.CreateSlice(seqlen+1)	// the seq
-	a[0] = big.NewInt(1)
+	a[0] = inew(1)
 	old := utils.CreateSlice(seqlen)	// last row
 	new := utils.CreateSlice(seqlen)	// new row
-	old[0] = big.NewInt(1)
+	old[0] = inew(1)
 
 	// compute each row & store into a
 	row, col := int64(0), int64(0)
@@ -148,7 +148,7 @@ func A000110(seqlen int64) ([]*big.Int, int64) {
 		if col > 0 {
 			for i := int64(0); i < col + 1; i++ {
 				old[i] = new[i]
-				new[i] = big.NewInt(0)		// erase new row
+				new[i] = inew(0)		// erase new row
 			}
 		}
 
@@ -170,7 +170,7 @@ func A000111(seqlen int64) ([]*big.Int, int64) {
 
 	a := utils.CreateSlice(seqlen)
 	for i := int64(1); i <= seqlen; i++ {
-		temp := utils.Fact(big.NewInt(i))
+		temp := utils.Fact(inew(i))
 		ifact := tofloat(temp)
 		frac := fdiv(fnew(2), fnew(math.Pi))
 		pow := fpow(frac, i)			// (2/pi)^i
@@ -470,9 +470,9 @@ func A000139(seqlen int64) ([]*big.Int, int64) {
 	// a(n) = 2(3n)!/((2n+1)!*(n+1)!)
 	a := utils.CreateSlice(seqlen)
 	for n := int64(0); n < seqlen; n++ {
-		nplus1 := utils.Fact(big.NewInt(n+1))		// (n+1)!
-		twonplus1 := utils.Fact(big.NewInt(2*n+1))	// (2n+1)!
-		threen := utils.Fact(big.NewInt(3*n))		// (3n)!
+		nplus1 := utils.Fact(inew(n+1))		// (n+1)!
+		twonplus1 := utils.Fact(inew(2*n+1))	// (2n+1)!
+		threen := utils.Fact(inew(3*n))		// (3n)!
 		numer := mul(inew(2), threen)					// 2(3n)!
 		denom := mul(twonplus1, nplus1)
 		a[n] = floor(fdiv(tofloat(numer), tofloat(denom)))

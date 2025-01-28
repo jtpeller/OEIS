@@ -1036,7 +1036,7 @@ func A000287(seqlen int64) ([]*big.Int, int64) {
  * Link: https://oeis.org/A000288
  */
 func A000288(seqlen int64) ([]*big.Int, int64) {
-	a := utils.InitBslice(seqlen, []*big.Int{big.NewInt(1), big.NewInt(1), big.NewInt(1), big.NewInt(1)})
+	a := utils.InitBslice(seqlen, []*big.Int{inew(1), inew(1), inew(1), inew(1)})
 	for i := int64(4); i < seqlen; i++ {
 		a[i].Add(a[i-1], a[i-2])
 		a[i].Add(a[i], a[i-3])

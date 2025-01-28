@@ -2,7 +2,7 @@
 // = bignum.go																  =
 // = 	Description: uses my custom gobig package to handle big nums. I use	  =
 // =			wrappers for readability	 								  =
-// = 			e.g. big.NewInt(0) vs gb.New(0) vs New(0)					  =
+// = 			e.g. inew(0) vs gb.New(0) vs New(0)					  =
 // = 	Date: December 09, 2021												  =
 // ============================================================================
 

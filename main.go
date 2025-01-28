@@ -32,6 +32,8 @@ func main() {
 		utils.HandleError(errors.New("you need to specify a sequence to generate! "))
 	} else if *seqlen <= 0 {		// check for invalid lengths
 		utils.HandleError(errors.New("you need to specify a positive sequence length! "))		
+	} else if *seqlen < 5 {
+		utils.HandleError(errors.New("sequence length should be at least 5. "))
 	} else if !exists {				// user must specify a sequence that exists
 		utils.HandleError(errors.New("either this sequence has not been implemented yet, or your id is invalid! "))
 	}
@@ -256,6 +258,14 @@ var StubStorage = map[string]interface{}{
 	// thru400.go
 	"A000301": seq.A000301,
 	"A000302": seq.A000302,
+	"A000304": seq.A000304,
+	"A000308": seq.A000308,
+	"A000309": seq.A000309,
+	"A000312": seq.A000312,
+	"A000313": seq.A000313,
+	"A000317": seq.A000317,
+	"A000318": seq.A000318,
+	"A000319": seq.A000319,
 	// otherseq.go
 	"A001065": seq.A001065,
 	"A001223": seq.A001223,
