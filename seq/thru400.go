@@ -9,7 +9,6 @@ package seq
 
 import (
 	"OEIS/utils"
-	"fmt"
 	"math"
 	"math/big"
 )
@@ -192,14 +191,14 @@ const (
  * Link: https://oeis.org/A000319
  */
  func A000319(seqlen int64) ([]int64, int64) {
+	utils.PrintWarning("Due to the implementation of tan() in Go, this sequence is inaccurate for n > 14. More precision is necessary, but tan is not available for arbitrary precision floats.")
+
 	// first generate b
 	b := make([]float64, seqlen+1)
 	b[0] = 1
 	for n := int64(1); n <= seqlen; n++ {
 		b[n] = math.Tan(b[n-1])
 	}
-	fmt.Println(b)
-	// TODO: I think b needs to be big float.
 
 	// then compute a
 	a := make([]int64, seqlen)
