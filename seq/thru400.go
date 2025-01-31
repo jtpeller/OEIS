@@ -209,3 +209,64 @@ const (
 	return a, 1
 }
 
+/**
+ * A000321 H_n(-1/2), where H_n(x) is Hermite polynomial of degree n.
+ * Date: 2025.01.30
+ * Link: https://oeis.org/A000321
+ */
+ func A000321(seqlen int64) ([]*big.Int, int64) {
+	// init
+	a := utils.CreateSlice(seqlen)
+	a[0] = inew(1)
+	a[1] = inew(-1)
+
+	// compute a
+	for n := int64(2); n < seqlen; n++ {
+		t1 := sub(zero(), a[n-1])
+		t2:= mul( mul(inew(2), inew(n-1)), a[n-2])
+		a[n] = sub(t1, t2)
+	}
+
+	return a, 0
+}
+
+/**
+ * A000322 Pentanacci numbers: a(n) = a(n-1) + a(n-2) + a(n-3) + a(n-4) + a(n-5) with a(0) = a(1) = a(2) = a(3) = a(4) = 1.
+ * Date: 2025.01.30
+ * Link: https://oeis.org/A000322
+ */
+ func A000322(seqlen int64) ([]*big.Int, int64) {
+	// init
+	a := utils.CreateSlice(seqlen)
+	a[0] = inew(1)
+	a[1] = inew(1)
+	a[2] = inew(1)
+	a[3] = inew(1)
+	a[4] = inew(1)
+
+	// compute a
+	for n := int64(5); n < seqlen; n++ {
+		a[n] = add(add(add(add(a[n-1], a[n-2]), a[n-3]), a[n-4]), a[n-5])
+	}
+
+	return a, 0
+}
+
+/**
+ * A000324 A nonlinear recurrence: a(0) = 1, a(1) = 5, a(n) = a(n-1)^2 - 4*a(n-1) + 4 for n>1.
+ * Date: 2025.01.30
+ * Link: https://oeis.org/A000324
+ */
+ func A000324(seqlen int64) ([]*big.Int, int64) {
+	// init
+	a := utils.CreateSlice(seqlen)
+	a[0] = inew(1)
+	a[1] = inew(5)
+
+	// compute a
+	for n := int64(2); n < seqlen; n++ {
+		a[n] = add(sub(pow(a[n-1], inew(2)), mul(inew(4), a[n-1])), inew(4))
+	}
+
+	return a, 0
+}

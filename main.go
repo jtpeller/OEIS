@@ -18,6 +18,10 @@ import (
 	"time"
 )
 
+// TODO: make variadic versions of some bignum functions (e.g., add, sub, mul, div)
+// TODO: use the variadic versions.
+// TODO: simplify printing framework / LONG_A###### consts
+
 func main() {
 	// program initialization (flags)
 	seqid := flag.String("seq", "", "Which sequence to run. Example: -seq A000042")
@@ -28,6 +32,7 @@ func main() {
 
 	_, exists := StubStorage[*seqid]
 
+	// check for invalid inputs
 	if *seqid == "" {				// user must specify a sequence to generate
 		utils.HandleError(errors.New("you need to specify a sequence to generate! "))
 	} else if *seqlen <= 0 {		// check for invalid lengths
@@ -36,6 +41,11 @@ func main() {
 		utils.HandleError(errors.New("sequence length should be at least 5. "))
 	} else if !exists {				// user must specify a sequence that exists
 		utils.HandleError(errors.New("either this sequence has not been implemented yet, or your id is invalid! "))
+	}
+
+	// warn about long computation times if seqlen is greater than 500
+	if *seqlen >= 500 {
+		utils.PrintWarning("Depending on your system, this large of a sequence length will probably take a while to compute.")
 	}
 
 	start := time.Now()
@@ -266,6 +276,9 @@ var StubStorage = map[string]interface{}{
 	"A000317": seq.A000317,
 	"A000318": seq.A000318,
 	"A000319": seq.A000319,
+	"A000321": seq.A000321,
+	"A000322": seq.A000322,
+	"A000324": seq.A000324,
 	// otherseq.go
 	"A001065": seq.A001065,
 	"A001223": seq.A001223,

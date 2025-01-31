@@ -14,6 +14,7 @@ import (
 	"strconv"
 )
 
+// TODO: go through all "overflow" and use math/big.
 const (
 	LONG_A000101 = 17
 	OVERFLOW_A000102 = 68
