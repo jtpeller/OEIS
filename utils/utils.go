@@ -1,7 +1,7 @@
 // ============================================================================
-// = utils.go																  =
-// = 	Description		Utility functions like printing, errors, etc. 		  =
-// = 	Date			October 08, 2021									  =
+// = utils.go
+// = 	Description		Utility functions like printing, errors, etc.
+// = 	Date			October 08, 2021
 // ============================================================================
 
 package utils
