@@ -1,7 +1,7 @@
 // ============================================================================
-// = generator.go															  =
-// = 	Description		Generator functions like primes.					  =
-// = 	Date			December 07, 2021									  =
+// = generator.go
+// = 	Description		Generator functions like primes.
+// = 	Date			December 07, 2021
 // ============================================================================
 
 package utils
