@@ -1,7 +1,7 @@
 // ============================================================================
-// = builder.go																  =
-// = 	Description: builds/converts things for big.Int.					  =
-// = 	Date: December 09, 2021												  =
+// = builder.go
+// = 	Description		Builds/converts things for big.Int.
+// = 	Date			December 09, 2021
 // ============================================================================
 
 package utils

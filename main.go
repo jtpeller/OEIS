@@ -1,7 +1,7 @@
 // ============================================================================
-// = main.go																  =
-// = 	Description: The file from which to run any of the sequences		  =
-// = 	Date: October 08, 2021												  =
+// = main.go
+// = 	Description		The file from which to run any of the sequences
+// = 	Date			October 08, 2021
 // ============================================================================
 
 package main

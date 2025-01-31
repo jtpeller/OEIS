@@ -1,10 +1,7 @@
 // ============================================================================
 // = utils.go																  =
-// = 	Description: Useful utility functions like reverse, divisors,		  =
-// = 		greatest common divisor, etc.		 							  =
-// = 	Notes: OEIS often handles a lot of big numbers, so int64 is the data  =
-// = 		type i used (unless something needed to be a decimal)			  =
-// = 	Date: October 08, 2021												  =
+// = 	Description		Utility functions like printing, errors, etc. 		  =
+// = 	Date			October 08, 2021									  =
 // ============================================================================
 
 package utils

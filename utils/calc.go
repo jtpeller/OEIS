@@ -1,7 +1,7 @@
 // ============================================================================
-// = calc.go																  =
-// = 	Description: Useful calculation functions like divisors, GCD, etc.	  =
-// = 	Date: December 07, 2021												  =
+// = calc.go
+// = 	Description		Functions like divisors, GCD, etc.
+// = 	Date 			December 07, 2021
 // ============================================================================
 
 package utils

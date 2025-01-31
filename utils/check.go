@@ -1,7 +1,7 @@
 // ============================================================================
-// = check.go																  =
-// = 	Description: Useful checker functions like isPrime.					  =
-// = 	Date: December 07, 2021												  =
+// = check.go
+// = 	Description		Checker functions like isPrime.
+// = 	Date			December 07, 2021
 // ============================================================================
 
 package utils

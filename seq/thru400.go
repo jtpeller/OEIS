@@ -1,9 +1,8 @@
 // ============================================================================
-// = thru400.go																  =
-// = 	Description		All OEIS sequences from A000301-A000400				  =
-// = 	Note			Not all sequences in this range have been programmed  =
-// = 	Date: 			2025.01.26											  =
-// = 	Last Update		2025.01.26											  =
+// = thru400.go
+// = 	Description		OEIS sequences from A000301-A000400
+// = 	Note			Not all sequences in this range have been programmed
+// = 	Date 			2025.01.26
 // ============================================================================
 
 package seq

@@ -1,9 +1,8 @@
 // ============================================================================
-// = thru100.go																  =
-// = 	Description: All OEIS sequences from A000001-A000100				  =
-// = 	Note: Not all sequences in this range have been programmed			  =
-// = 	Date: October 08, 2021												  =
-// = 	Last Update: December 12, 2021										  =
+// = thru100.go
+// = 	Description		OEIS sequences from A000001-A000100
+// = 	Note			Not all sequences in this range have been programmed
+// = 	Date			October 08, 2021
 // ============================================================================
 
 package seq
