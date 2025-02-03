@@ -26,7 +26,7 @@ func Bisection(seq []int64) []int64 {
 	return a
 }
 
-func BigBisection(seq []*big.Int) []*big.Int {
+func BisectionBig(seq []*big.Int) []*big.Int {
 	a := CreateSlice(0)
 	for i := 0; i < len(seq); i+=2 {
 		a = append(a, seq[i])

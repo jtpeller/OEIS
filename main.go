@@ -25,8 +25,8 @@ import (
 func main() {
 	// program initialization (flags)
 	seqid := flag.String("seq", "", "Which sequence to run. Example: -seq A000042")
-	seqlen := flag.Int64("seqlen", 0, "How many elements to generate. Most sequences will have restrictions on the # of elements to generate.")
-	comptime := flag.Bool("time", false, "True if you want approximate time-of-computation information printed. False otherwise")
+	seqlen := flag.Int64("seqlen", 5, "How many elements to generate. Most sequences will have restrictions on the # of elements to generate.")
+	comptime := flag.Bool("time", true, "True if you want approximate time-of-computation information printed. False otherwise")
 	
 	flag.Parse()		// remember to parse!
 

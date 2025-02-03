@@ -9,41 +9,15 @@ package seq
 
 import (
 	"OEIS/utils"
-	"errors"
 	"math"
 	"math/big"
 	"strconv"
 )
 
-// TODO: go through all "overflow" and use math/big.
-const (
-	LONG_A000008 = 350
-	OVERFLOW_A000011 = 63
-	LONG_A000018 = 10
-	LONG_A000021 = 10
-	LONG_A000024 = 10
-	OVERFLOW_A000032 = 91
-	LONG_A000041 = 90
-	OVERFLOW_A000042 = 19
-	LONG_A000043 = 18
-	OVERFLOW_A000043 = 9
-	OVERFLOW_A000044 = 92
-	OVERFLOW_A000045 = 93
-	LONG_A000047 = 10
-	LONG_A000049 = 10
-	LONG_A000050 = 10
-	OVERFLOW_A000051 = 64
-	OVERFLOW_A000058 = 7
-	OVERFLOW_A000073 = 75
-	OVERFLOW_A000078 = 71
-	OVERFLOW_A000079 = 64
-	OVERFLOW_A000100 = 73
-)
-
 /**
  * A000002 returns the Kolakoski sequence, given a sequence length
- * Date: October 08, 2021	
- * Link: https://oeis.org/A000002
+ * Date		October 08, 2021
+ * Link		https://oeis.org/A000002
  */
 func A000002(seqlen int64) ([]int64, int64) {
 	return utils.Kolakoski(seqlen+1, 2)[:seqlen], 1
@@ -51,8 +25,8 @@ func A000002(seqlen int64) ([]int64, int64) {
 
 /**
  * A000004 returns a slice of length seqlen (default init'd to 0)
- * Date: October 08, 2021	
- * Link: https://oeis.org/A000004
+ * Date		October 08, 2021	
+ * Link		https://oeis.org/A000004
  */
 func A000004(seqlen int64) ([]int64, int64) {
 	return make([]int64, seqlen), 0
@@ -60,8 +34,8 @@ func A000004(seqlen int64) ([]int64, int64) {
 
 /**
  * A000005 returns the # of divisors of n, given a seq len
- * Date: October 08, 2021	
- * Link: https://oeis.org/A000005
+ * Date		October 08, 2021	
+ * Link		https://oeis.org/A000005
  */
 func A000005(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -74,8 +48,8 @@ func A000005(seqlen int64) ([]int64, int64) {
 
 /**
  * A000006 returns the isqrt of numbers, given a seq len
- * Date: October 08, 2021	
- * Link: https://oeis.org/A000006
+ * Date		October 08, 2021	
+ * Link		https://oeis.org/A000006
  */
 func A000006(seqlen int64) ([]int64, int64) {
 	primes := utils.Primes(seqlen)
@@ -85,8 +59,8 @@ func A000006(seqlen int64) ([]int64, int64) {
 
 /**
  * A000007 returns a sequence of len seqlen, where a(n) = 0^n
- * Date: October 08, 2021	
- * Link: https://oeis.org/A000007
+ * Date		October 08, 2021	
+ * Link		https://oeis.org/A000007
  */
 func A000007(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -96,13 +70,11 @@ func A000007(seqlen int64) ([]int64, int64) {
 
 /** 
  * A000008 returns the # of ways of making change for n cents using coins of 1, 2, 5, 10 cents.
- * Date: October 08, 2021	
- * Link: https://oeis.org/A000008
+ * Date		October 08, 2021	
+ * Link		https://oeis.org/A000008
  */
 func A000008(seqlen int64) ([]int64, int64) {
-	if seqlen > LONG_A000008 {
-		utils.LongCalculationWarning("A000008", LONG_A000008)
-	}
+	utils.LongCalculationWarning("A000008")
 
 	denoms := []int64{1, 2, 5, 10}
 	a := make([]int64, 0)
@@ -117,8 +89,8 @@ func A000008(seqlen int64) ([]int64, int64) {
 /**
  * A000010 computes the Euler totient function phi(n): 
  * 		count numbers <= n and prime to n.
- * Date: October 08, 2021	
- * Link: https://oeis.org/A000010
+ * Date		October 08, 2021	
+ * Link		https://oeis.org/A000010
  */
 func A000010(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -130,49 +102,48 @@ func A000010(seqlen int64) ([]int64, int64) {
 
 /**
  * A000011 returns the # of n-bead necklaces where turning over is allowed.
- * Note: this implementation is slightly inaccurate due to rounding errors
- * Date: October 08, 2021	
- * Link: https://oeis.org/A000011
+ * Date 	October 08, 2021	
+ * Fixed  	2025.02.01
+ * Link 	https://oeis.org/A000011
  */
-func A000011(seqlen int64) ([]int64, int64) {
-	// TODO: POTENTIAL CANDIDATE FOR *BIG.INT
-	if seqlen > OVERFLOW_A000011 {
-		utils.OverflowError("A000011", OVERFLOW_A000011)
-	}
-
+func A000011(seqlen int64) ([]*big.Int, int64) {
 	// generate euler phi
-	eulerlen := seqlen * 2
-	euler := make([]int64, eulerlen)
-	for i := int64(0); i < eulerlen; i++ {
-		euler[i] = utils.EulerTotient(i)
-	}
+	euler, _ := A000010(seqlen*2)
 
 	// generate a sequence
-	a := make([]int64, seqlen)
-	a[0] = 1
-	for i := int64(1); i < seqlen; i++ {
-		divisors := utils.Factors(int64(i))
-		euleridx := int64(0)
+	a := utils.CreateSlice(seqlen)
+	a[0] = inew(1)
+	for n := int64(1); n < seqlen; n++ {
+		divisors := utils.Factors(n)
+		sum := fpow(fnew(2), int64(n/2))
 
 		// use the divisors to calculate the sequence
-		factorcount := len(divisors)
-		for j := 0; j < factorcount; j++ {
-			euleridx = 2 * divisors[j] - 1
-			b := math.Pow(2, float64(i) / float64(divisors[j]))
-			a[i] += int64(float64(euler[euleridx]) * b)
+		for _, d := range divisors {
+			// phi(2*d) (-1 for 0 indexing)
+			phi := tofloat(inew(euler[2 * d - 1]))
+			
+			// 2^(n/d)
+			b := fnew(math.Pow(2, float64(n)/float64(d)))
+
+			// (phi*b) / (2*n)
+			numer := fmul(phi, b)
+			frac := fdiv(numer, fmul(fnew(2), tofloat(inew(n))))
+
+			// sum += frac
+			sum = fadd(sum, frac)
 		}
-		a[i] /= 2.0 * i
-		foo := math.Pow(2, float64(i / 2))
-		a[i] += int64(foo)
-		a[i] = a[i] / 2
+
+		// return s/2
+		a[n] = round(fdiv(sum, fnew(2)))
+
 	}
 	return a, 0
 }
 
 /**
  * A000012 returns a seq of all 1s, of len seqlen
- * Date: October 08, 2021	
- * Link: https://oeis.org/A000012
+ * Date		October 08, 2021	
+ * Link		https://oeis.org/A000012
  */
 func A000012(seqlen int64) ([]int64, int64) {
 	a := make([]int64, 0)
@@ -185,86 +156,72 @@ func A000012(seqlen int64) ([]int64, int64) {
 /**
  * A000013 computes # of n-bead binary necklaces with beads of 2 colors where 
  *  the colors may be swapped but turning over is not allowed. 
- * Date: December 10, 2021	Confirmed working:
- * Link: https://oeis.org/A000013
+ * Date		December 10, 2021
+ * Fix		2025.02.01
+ * Link		https://oeis.org/A000013
  */
 func A000013(seqlen int64) ([]*big.Int, int64) {
-	// warn the user about inaccuracies
-	utils.AccuracyWarning("A000013")
-
 	a := utils.CreateSlice(seqlen)
 	a[0] = inew(1)
 	phi, _ := A000010(seqlen*2)
 	for n := int64(1); n < seqlen; n++ {
 		// calculate the sum
+		sum := fnew(0)
 		for d := int64(1); d <= n; d++ {
 			if n % d == 0 {		// d divides n
-				temp := inew(phi[2*(d-1)])
-				div := div(inew(n), inew(d))
-				pow := pow(inew(2), div)
-				numer := mul(temp, pow)
+				temp := tofloat(inew(phi[2*d-1]))
+				pow := math.Pow(2, float64(n)/float64(d))
+				numer := fmul(temp, fnew(pow))
 				n2 := mul(inew(2), inew(n))
-				bigDiv := floor(fdiv(tofloat(numer), tofloat(n2)))
+				bigDiv := fdiv(numer, tofloat(n2))
 				// the following computes a[n] = Sum_{d divides n} (phi(2*d)*2^(n/d))/(2*n)
-				a[n].Add(a[n], bigDiv)
+				sum = fadd(sum, bigDiv)
 			}
 		}
+		a[n] = round(sum)
 	}
 	return a, 0
 }
 
 /**
  * A000018 computes the # of positive integers <= 2^n of form x^2 + 16y^2
- * Date: December 12, 2021	Confirmed working: December 12, 2021
- * Link: https://oeis.org/A000018
+ * Date		December 12, 2021	Confirmed working: December 12, 2021
+ * Link		https://oeis.org/A000018
  */
 func A000018(seqlen int64) ([]*big.Int, int64) {
-	if seqlen > LONG_A000018 {
-		utils.LongCalculationWarning("A000018", LONG_A000018)
-	}
-
+	utils.LongCalculationWarning("A000018")
 	a := utils.Repr(seqlen, 1, 16, 1)
 	return a, 0
 }
 
 /**
  * A000021 computes the # of positive integers <= 2^n of form x^2 + 12y^2
- * Date: December 12, 2021	Confirmed working: December 12, 2021
- * Link: https://oeis.org/A000021
+ * Date		December 12, 2021	Confirmed working: December 12, 2021
+ * Link		https://oeis.org/A000021
  */
 func A000021(seqlen int64) ([]*big.Int, int64) {
-	if seqlen > LONG_A000021 {
-		utils.LongCalculationWarning("A000021", LONG_A000021)
-	}
-
+	utils.LongCalculationWarning("A000021")
 	a := utils.Repr(seqlen, 1, 12, 1)
 	return a, 0
 }
 
 /**
  * A000024 computes the # of positive integers <= 2^n of form x^2 + 10y^2
- * Date: December 12, 2021	Confirmed working: December 12, 2021
- * Link: https://oeis.org/A000024
+ * Date		December 12, 2021	Confirmed working: December 12, 2021
+ * Link		https://oeis.org/A000024
  */
 func A000024(seqlen int64) ([]*big.Int, int64) {
-	if seqlen > LONG_A000024 {
-		utils.LongCalculationWarning("A000024", LONG_A000024)
-	}
-
+	utils.LongCalculationWarning("A000024")
 	a := utils.Repr(seqlen, 1, 10, 1)
 	return a, 0
 }
 
 /** 
  * A000027 returns a seq of positive integers, of len seqlen
- * Date: October 09, 2021	
- * Link: https://oeis.org/
+ * Date		October 09, 2021	
+ * Link		https://oeis.org/
  */
 func A000027(seqlen int64) ([]int64, int64) {
-	if seqlen <= 0 {
-		utils.PositiveError("A000027")
-	}
-
 	a := make([]int64, 0)
 	for i := int64(0); i < seqlen + 1; i++ {
 		a = append(a, i+1)
@@ -274,14 +231,10 @@ func A000027(seqlen int64) ([]int64, int64) {
 
 /**
  * A000030 returns the sequence of the first digit of n, of len seqlen
- * Date: October 09, 2021	
- * Link: https://oeis.org/A000030
+ * Date		October 09, 2021	
+ * Link		https://oeis.org/A000030
  */
 func A000030(seqlen int64) ([]int64, int64) {
-	if seqlen <= 0 {
-		utils.PositiveError("A000030")
-	}
-
 	a := make([]int64, 0)
 	for i := int64(0); i < seqlen; i++ {
 		a = append(a, utils.GetFirstDigit(i))
@@ -292,16 +245,10 @@ func A000030(seqlen int64) ([]int64, int64) {
 /**
  * A000032 computes the Lucas numbers, beginning at 2: L(n) = L(n-1) + L(n-2),
  * 		L(0) = 2, L(1) = 1.
- * Date: October 09, 2021	
- * Link: https://oeis.org/A000032
+ * Date		October 09, 2021	
+ * Link		https://oeis.org/A000032
  */
 func A000032(seqlen int64) ([]*big.Int, int64) {
-	if seqlen < 2 {
-		utils.TooSmallError("A000032", 2)
-	} else if seqlen > OVERFLOW_A000032 {
-		utils.BigIntWarning("A000032", OVERFLOW_A000032)
-	}
-
 	a := utils.CreateSlice(seqlen)
 	a[0] = inew(2)	// a(0)=2
 	a[1] = inew(1)	// a(1)=1
@@ -313,8 +260,8 @@ func A000032(seqlen int64) ([]*big.Int, int64) {
 
 /**
  * A000034 returns a(n) = 1 + (n mod 2), or 1 + A000035(n)
- * Date: October 08, 2021	
- * Link: https://oeis.org/A000034
+ * Date		October 08, 2021	
+ * Link		https://oeis.org/A000034
  */
 func A000034(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -326,8 +273,8 @@ func A000034(seqlen int64) ([]int64, int64) {
 
 /**
  * A000035 computes the parity of n (basically, n mod 2)
- * Date: October 09, 2021	
- * Link: https://oeis.org/A000035
+ * Date		October 09, 2021	
+ * Link		https://oeis.org/A000035
  */
 func A000035(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -339,8 +286,8 @@ func A000035(seqlen int64) ([]int64, int64) {
 
 /**
  * A000037 computes the nonsquares
- * Date: October 09, 2021	
- * Link: https://oeis.org/A000037
+ * Date		October 09, 2021	
+ * Link		https://oeis.org/A000037
  */
 func A000037(seqlen int64) ([]int64, int64) {
 	a := make([]int64, 0)
@@ -353,8 +300,8 @@ func A000037(seqlen int64) ([]int64, int64) {
 
 /**
  * A000038 computes 2*A000007
- * Date: October 09, 2021	
- * Link: https://oeis.org/A000038
+ * Date		October 09, 2021	
+ * Link		https://oeis.org/A000038
  */
 func A000038(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -364,8 +311,8 @@ func A000038(seqlen int64) ([]int64, int64) {
 
 /**
  * A000040 computes prime numbers using Golang's built-in
- * Date: October 09, 2021	
- * Link: https://oeis.org/A000040
+ * Date		October 09, 2021	
+ * Link		https://oeis.org/A000040
  */
 func A000040(seqlen int64) ([]int64, int64) {
 	a := make([]int64, 0)
@@ -382,13 +329,11 @@ func A000040(seqlen int64) ([]int64, int64) {
 
 /**
  * A000041 generates the # of partitions of n
- * Date: October 09, 2021	
- * Link: https://oeis.org/A000041
+ * Date		October 09, 2021	
+ * Link		https://oeis.org/A000041
  */
 func A000041(seqlen int64) ([]int64, int64) {
-	if seqlen > LONG_A000041 {
-		utils.LongCalculationWarning("A000041", LONG_A000041)
-	}
+	utils.LongCalculationWarning("A000041")
 
 	a := make([]int64, seqlen)
 	for i := int64(0); i < seqlen; i++ {
@@ -399,42 +344,26 @@ func A000041(seqlen int64) ([]int64, int64) {
 
 /**
  * A000042 generates the unary representation of the natural numbers
- * Date: October 09, 2021 	
- * Link: https://oeis.org/A000042
+ * Date		October 09, 2021 	
+ * Link		https://oeis.org/A000042
  */
 func A000042(seqlen int64) ([]*big.Int, int64) {
-	if seqlen >= OVERFLOW_A000042 {
-		utils.BigIntWarning("A000042", OVERFLOW_A000042)
-	}
-
 	a := utils.CreateSlice(seqlen)
-	for i := int64(0); i < seqlen; i++ {
-		temp := "1"
-		for j := int64(1); j <= i; j++ {
-			temp += "1"
-		}
-		n := new(big.Int)
-		n, ok := n.SetString(temp, 10)
-		if !ok {
-			utils.HandleError(errors.New("error in A000042: cannot convert string to big.Int"))
-		}
-		a[i] = n
+	a[0] = inew(1)
+	for i := int64(1); i < seqlen; i++ {
+		a[i] = add(mul(a[i-1], inew(10)), inew(1))
 	}
 	return a, 1
 }
 
 /**
  * A000043 generates the Mersenne exponents.
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000043
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000043
  */
 func A000043(seqlen int64) ([]int64, int64) {
-	if seqlen > OVERFLOW_A000043 {
-		utils.BigIntWarning("A000043 (which computes 2^p-1)", OVERFLOW_A000043)
-	}
-	if seqlen > LONG_A000043 {
-		utils.LongCalculationWarning("A000043", LONG_A000043)
-	}
+	utils.LongCalculationWarning("A000043")
+
 	a := make([]int64, seqlen)
 	prime := int64(0)
 	i := int64(0)
@@ -460,10 +389,9 @@ func A000043(seqlen int64) ([]int64, int64) {
  */
 func A000044(seqlen int64) ([]*big.Int, int64) {
 	if seqlen <= 12 {
-		utils.PrintWarning("for best results, sequence A000044 should have more than 12 elements")
-	} else if seqlen > OVERFLOW_A000044 {
-		utils.BigIntWarning("A000044", OVERFLOW_A000044)
+		utils.PrintWarning("For best results, sequence A000044 should have more than 12 elements")
 	}
+
 	a := utils.CreateSlice(seqlen+1)
 	a[0] = inew(1)
 
@@ -489,8 +417,8 @@ func A000044(seqlen int64) ([]*big.Int, int64) {
 
 /**
  * A000045 returns the Fibonacci numbers, of len seqlen
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000045
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000045
  */
 func A000045(seqlen int64) ([]*big.Int, int64) {
 	a := utils.CreateSlice(seqlen)
@@ -504,13 +432,11 @@ func A000045(seqlen int64) ([]*big.Int, int64) {
 
 /**
  * A000047 computes the # of positive integers <= 2^n of form x^2 + 2y^2
- * Date: December 12, 2021	Confirmed working: December 12, 2021
- * Link: https://oeis.org/A000047
+ * Date		December 12, 2021	Confirmed working: December 12, 2021
+ * Link		https://oeis.org/A000047
  */
 func A000047(seqlen int64) ([]*big.Int, int64) {
-	if seqlen > LONG_A000047 {
-		utils.LongCalculationWarning("A000047", LONG_A000047)
-	}
+	utils.LongCalculationWarning("A000047")
 
 	a := utils.Repr(seqlen, 1, -2, 1)
 	return a, 0
@@ -522,38 +448,28 @@ func A000047(seqlen int64) ([]*big.Int, int64) {
  * Link: https://oeis.org/A000049
  */
  func A000049(seqlen int64) ([]*big.Int, int64) {
-	if seqlen > LONG_A000049 {
-		utils.LongCalculationWarning("A000049", LONG_A000049)
-	}
-
+	utils.LongCalculationWarning("A000049")
 	a := utils.Repr(seqlen, 3, 4, 0)
 	return a, 0
 }
 
 /**
  * A000050 computes the # of positive integers <= 2^n of form x^2 + y^2
- * Date: December 12, 2021	Confirmed working: December 12, 2021
- * Link: https://oeis.org/A000050
+ * Date		December 12, 2021	Confirmed working: December 12, 2021
+ * Link		https://oeis.org/A000050
  */
 func A000050(seqlen int64) ([]*big.Int, int64) {
-	if seqlen > LONG_A000050 {
-		utils.LongCalculationWarning("A000050", LONG_A000050)
-	}
-
+	utils.LongCalculationWarning("A000050")
 	a := utils.Repr(seqlen, 1, 1, 1)
 	return a, 0
 }
 
 /**
  * A000051 computes a(n)=2^n + 1
- * Date: December 12, 2021	Confirmed working: December 12, 2021
- * Link: https://oeis.org/A000051
+ * Date		December 12, 2021	Confirmed working: December 12, 2021
+ * Link		https://oeis.org/A000051
  */
 func A000051(seqlen int64) ([]*big.Int, int64) {
-	if seqlen > OVERFLOW_A000051 {
-		utils.BigIntWarning("A000051", OVERFLOW_A000051)
-	}
-
 	a, _ := A000079(seqlen)
 	for i := int64(0); i < seqlen; i++ {
 		a[i] = add(a[i], inew(1))
@@ -563,14 +479,10 @@ func A000051(seqlen int64) ([]*big.Int, int64) {
 
 /**
  * A000058 returns Sylvester's sequence: a(n+1) = a(n)^2 - a(n) + 1
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000058
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000058
  */
 func A000058(seqlen int64) ([]*big.Int, int64) {
-	if seqlen > OVERFLOW_A000058 {
-		utils.BigIntWarning("A000058", OVERFLOW_A000058)
-	}
-
 	a := utils.CreateSlice(seqlen)
 	a[0] = inew(2)
 	for i := int64(0); i < seqlen - 1; i++ {
@@ -583,8 +495,8 @@ func A000058(seqlen int64) ([]*big.Int, int64) {
 
 /**
  * A000059 returns the sequence a(n) such that (2n)^4 + 1 is prime
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000059
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000059
  */
 func A000059(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -602,8 +514,8 @@ func A000059(seqlen int64) ([]int64, int64) {
 
 /**
  * A000062 generates a Beatty sequence; where a(n) = floor(n/(e-2)).
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000062
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000062
  */
 func A000062(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -615,8 +527,8 @@ func A000062(seqlen int64) ([]int64, int64) {
 
 /**
  * A000064 generates the partial sums of A000008
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000064
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000064
  */
 func A000064(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -629,8 +541,8 @@ func A000064(seqlen int64) ([]int64, int64) {
 
 /**
  * A000065 computes -1 + the # of partitions of n
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000065
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000065
  */
 func A000065(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -643,8 +555,8 @@ func A000065(seqlen int64) ([]int64, int64) {
 
 /**
  * A000068 returns a sequence such that n^4 + 1 is prime.
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000068
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000068
  */
 func A000068(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -662,8 +574,8 @@ func A000068(seqlen int64) ([]int64, int64) {
 
 /**
  * A000069: the Odious numbers; #s with an odd # of ones in their binary expansion
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000069
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000069
  */
 func A000069(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -688,8 +600,8 @@ func A000069(seqlen int64) ([]int64, int64) {
 /**
  * A000070: Series of the number of partitions, i.e.
  * 	a[n] = Sum(p[:i]), where p[k] = # of partitions of k
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000070
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000070
  */
 func A000070(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -703,8 +615,8 @@ func A000070(seqlen int64) ([]int64, int64) {
 /**
  * A000071 generates a(n), where a(n) = Fibonacci(n) - 1.
  * 		For some reason, the offset is 1 here, but 0 for A000045
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000071
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000071
  */
 func A000071(seqlen int64) ([]*big.Int, int64) {
 	a := utils.CreateSlice(seqlen)
@@ -718,14 +630,10 @@ func A000071(seqlen int64) ([]*big.Int, int64) {
 /**
  * A000073: Tribonacci #s: a[n] = a[n-1] + a[n-2] + a[n-3]
  *	a[0] = a[1] = 0 and a[2] = 1
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000073
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000073
  */
 func A000073(seqlen int64) ([]*big.Int, int64) {
-	if seqlen > OVERFLOW_A000073 {
-		utils.BigIntWarning("A000073", OVERFLOW_A000073)
-	}
-
 	a := utils.CreateSlice(seqlen)
 	a[0], a[1], a[2] = inew(0), inew(0), inew(1)
 	for i := int64(3); i < seqlen; i++ {
@@ -738,14 +646,10 @@ func A000073(seqlen int64) ([]*big.Int, int64) {
 /**
  * A000078: Tetranacci #s: a(n) = a(n-1) + a(n-2) + a(n-3) + a(n-4)
  *  for n >= 4 with a(0) = a(1) = a(2) = 0 and a(3) = 1.
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000078
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000078
  */
 func A000078(seqlen int64) ([]*big.Int, int64) {
-	if seqlen > OVERFLOW_A000078 {
-		utils.BigIntWarning("A000078", OVERFLOW_A000078)
-	}
-
 	a := utils.InitBslice(seqlen, []*big.Int{inew(0), inew(0), inew(0), inew(1)})
 	for i := int64(4); i < seqlen; i++ {
 		a[i].Add(a[i-1], a[i-2])
@@ -757,14 +661,10 @@ func A000078(seqlen int64) ([]*big.Int, int64) {
 
 /**
  * A000079: Powers of 2: a(n) = 2^n
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000079
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000079
  */
 func A000079(seqlen int64) ([]*big.Int, int64) {
-	if seqlen > OVERFLOW_A000079 {
-		utils.BigIntWarning("A000079", OVERFLOW_A000079)
-	}
-
 	a := utils.CreateSlice(seqlen)
 	a[0] = inew(1)
 	for i := int64(1); i < seqlen; i++ {
@@ -775,9 +675,9 @@ func A000079(seqlen int64) ([]*big.Int, int64) {
 
 /**
  * A000082: a(n) = n^2*Product_{p|n} (1 + 1/p)
- * Note: There may be some rounding error due to float64 <-> int64 conversions
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000082
+ * Note		There may be some rounding error due to float64 <-> int64 conversions
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000082
  */
 func A000082(seqlen int64) ([]int64, int64) {
 	// this computes the Product_{p|n} (1 + 1/p) part
@@ -803,8 +703,8 @@ func A000082(seqlen int64) ([]int64, int64) {
 
 /**
  * A000086 returns the # of solutions to x^2 - x + 1 == 0 (mod n)
- * Date: December 12, 2021	Confirmed working: December 12, 2021
- * Link: https://oeis.org/A000086
+ * Date		December 12, 2021	Confirmed working: December 12, 2021
+ * Link		https://oeis.org/A000086
  */
 func A000086(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -824,8 +724,8 @@ func A000086(seqlen int64) ([]int64, int64) {
 
 /**
  * A000093 calculates a(n) = floor(n^(3/2))
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000093
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000093
  */
 func A000093(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -838,8 +738,8 @@ func A000093(seqlen int64) ([]int64, int64) {
 /**
  * A000094 computes the # of trees of diameter 4
  *  Or: a(n+1) = A000041(n) - n, n > 0
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000094
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000094
  */
 func A000094(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -852,8 +752,8 @@ func A000094(seqlen int64) ([]int64, int64) {
 
 /**
  * A000096 computes a(n) = n*(n+3)/2
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000096
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000096
  */
 func A000096(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -866,8 +766,8 @@ func A000096(seqlen int64) ([]int64, int64) {
 /**
  * A000097 computes the # of partitions of n if there are two kinds of 1s and
  *  two kinds of 2s
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000097
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000097
  */
 func A000097(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -884,8 +784,8 @@ func A000097(seqlen int64) ([]int64, int64) {
 /**
  * A000098 computes the # of partitions of n if there are two kinds of 1s,
  *  two kinds of 2s, and two kinds of 3s
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000098
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000098
  */
 func A000098(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
@@ -901,21 +801,16 @@ func A000098(seqlen int64) ([]int64, int64) {
 
 /**
  * A000100 computes the # of compositions of n in which the maximal part is 3
- * Date: December 07, 2021	
- * Link: https://oeis.org/A000100
+ * Date		December 07, 2021	
+ * Link		https://oeis.org/A000100
  */
-func A000100(seqlen int64) ([]int64, int64) {
-	if seqlen > OVERFLOW_A000100 {
-		utils.OverflowError("A000100", OVERFLOW_A000100)
-	}
-
-	a := make([]int64, seqlen)
+func A000100(seqlen int64) ([]*big.Int, int64) {
+	a := utils.CreateSlice(seqlen)
 	Fib, _ := A000045(seqlen)
-	F := utils.ToIntSlice(Fib)
-	a[0], a[1], a[2] = 0, 0, 0
-	a[3], a[4] = 1, 2
+	a[0], a[1], a[2] = zero(), zero(), zero()
+	a[3], a[4] = inew(1), inew(2)
 	for i := int64(5); i < seqlen; i++ {
-		a[i] = F[i - 2] + (a[i-3] + a[i-2] + a[i-1])
+		a[i] = addall(Fib[i - 2], a[i-3], a[i-2], a[i-1])
 	}
 	return a, 0
 }

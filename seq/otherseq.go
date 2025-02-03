@@ -89,10 +89,7 @@ func A002061(seqlen int64) ([]int64, int64) {
  * Link: https://oeis.org/A002386
  */
 func A002386(seqlen int64) ([]int64, int64) {
-	// warn user of long calculation times
-	if seqlen > LONG_A000101 {
-		utils.LongCalculationWarning("A002386", LONG_A000101)
-	}
+	utils.LongCalculationWarning("A002386")
 
 	// init
 	getPrimeCount := func(n int64) int64 {
@@ -276,7 +273,7 @@ func A052614(seqlen int64) ([]*big.Int, int64) {
 		nf := float64(n)
 		sum := fnew(0)
 		for k := float64(0); k <= nf/4.0; k++ {
-			sum = fadd(sum, fnew(math.Exp(-1/4)))
+			sum = fadd(sum, fnew(math.Exp(-1.0/4.0)))
 		}
 		a[n] = floor(fmul(tofloat(utils.Fact(inew(n))), sum))
 	}

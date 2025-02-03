@@ -182,12 +182,31 @@ func EulerTotient(num int64) int64 {
 	return val
 }
 
+// computes Euler's Totient, but with arbitrary precision
+func EulerTotientBig(num *big.Int) *big.Int {
+	val := gb.Zero()
+	for i := gb.Zero(); gb.Less(i, num); i = gb.Add(i, gb.New(1)) {
+		if gb.Equals(GCD_big(i, num), gb.New(1)) {
+			val = gb.Add(val, gb.New(1))
+		}
+	}
+	return val
+}
+
 // given two numbers, it will calculate the greatest common divisor
 func GCD(a, b int64) int64 {
 	if b == 0 {
 		return a
 	}
 	return GCD(b, a % b)
+}
+
+// given two numbers, compute the greatest common divisor (with big.int!)
+func GCD_big(a, b *big.Int) *big.Int {
+	if gb.Equals(b, gb.Zero()) {
+		return a
+	}
+	return GCD_big(b, gb.Mod(a, b))
 }
 
 // Compute the number of digits of the given number

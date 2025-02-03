@@ -19,14 +19,10 @@ const (
 
 /**
  * A000301 a(n) = a(n-1)*a(n-2) with a(0) = 1, a(1) = 2; also a(n) = 2^Fibonacci(n)
- * Date: 2025.01.26
- * Link: https://oeis.org/A000301
+ * Date		2025.01.26
+ * Link		https://oeis.org/A000301
  */
  func A000301(seqlen int64) ([]*big.Int, int64) {
-	if seqlen > LONG_A000301 {
-		utils.LongCalculationWarning("A000205", LONG_A000301)
-	}
-
 	fib, _ := A000045(seqlen)
 	a := utils.CreateSlice(seqlen)
 
@@ -40,8 +36,8 @@ const (
 
 /**
  * A000302 Powers of 4: a(n) = 4^n.
- * Date: 2025.01.26
- * Link: https://oeis.org/A000302
+ * Date		2025.01.26
+ * Link		https://oeis.org/A000302
  */
  func A000302(seqlen int64) ([]*big.Int, int64) {
 	a := utils.CreateSlice(seqlen)
@@ -56,8 +52,8 @@ const (
 
 /**
  * A000304 a(n) = a(n-1)*a(n-2)
- * Date: 2025.01.27
- * Link: https://oeis.org/A000304
+ * Date		2025.01.27
+ * Link		https://oeis.org/A000304
  */
  func A000304(seqlen int64) ([]*big.Int, int64) {
 	a := utils.CreateSlice(seqlen)
@@ -74,8 +70,8 @@ const (
 
 /**
  * A000308 a(n) = a(n-1)*a(n-2)
- * Date: 2025.01.27
- * Link: https://oeis.org/A000308
+ * Date		2025.01.27
+ * Link		https://oeis.org/A000308
  */
  func A000308(seqlen int64) ([]*big.Int, int64) {
 	a := utils.CreateSlice(seqlen)
@@ -93,8 +89,8 @@ const (
 
 /**
  * A000309 Number of rooted planar bridgeless cubic maps with 2n nodes.
- * Date: 2025.01.27
- * Link: https://oeis.org/A000309
+ * Date		2025.01.27
+ * Link		https://oeis.org/A000309
  */
  func A000309(seqlen int64) ([]*big.Int, int64) {
 	a := utils.CreateSlice(seqlen)
@@ -111,8 +107,8 @@ const (
 
 /**
  * A000312 a(n) = n^n; number of labeled mappings from n points to themselves (endofunctions)
- * Date: 2025.01.27
- * Link: https://oeis.org/A000312
+ * Date		2025.01.27
+ * Link		https://oeis.org/A000312
  */
  func A000312(seqlen int64) ([]*big.Int, int64) {
 	a := utils.CreateSlice(seqlen)
@@ -127,8 +123,8 @@ const (
 
 /**
  * A000313 Number of permutations of length n with 3 consecutive ascending pairs. 
- * Date: 2025.01.27
- * Link: https://oeis.org/A000313
+ * Date		2025.01.27
+ * Link		https://oeis.org/A000313
  */
  func A000313(seqlen int64) ([]*big.Int, int64) {
 	a := utils.CreateSlice(seqlen)
@@ -151,8 +147,8 @@ const (
 
 /**
  * A000317 Number of permutations of length n with 3 consecutive ascending pairs. 
- * Date: 2025.01.27
- * Link: https://oeis.org/A000317
+ * Date		2025.01.27
+ * Link		https://oeis.org/A000317
  */
  func A000317(seqlen int64) ([]*big.Int, int64) {
 	a := utils.CreateSlice(seqlen+1)
@@ -169,8 +165,8 @@ const (
 
 /**
  * A000318 Number of permutations of length n with 3 consecutive ascending pairs. 
- * Date: 2025.01.27
- * Link: https://oeis.org/A000318
+ * Date		2025.01.27
+ * Link		https://oeis.org/A000318
  */
  func A000318(seqlen int64) ([]*big.Int, int64) {
 	a := utils.CreateSlice(seqlen)
@@ -187,8 +183,8 @@ const (
 
 /**
  * A000319 a(n) = floor(b(n)), where b(n) = tan(b(n-1)), b(0)=1. 
- * Date: 2025.01.27
- * Link: https://oeis.org/A000319
+ * Date		2025.01.27
+ * Link		https://oeis.org/A000319
  */
  func A000319(seqlen int64) ([]int64, int64) {
 	utils.PrintWarning("Due to the implementation of tan() in Go, this sequence is inaccurate for n > 14. More precision is necessary, but tan is not available for arbitrary precision floats.")
@@ -211,8 +207,8 @@ const (
 
 /**
  * A000321 H_n(-1/2), where H_n(x) is Hermite polynomial of degree n.
- * Date: 2025.01.30
- * Link: https://oeis.org/A000321
+ * Date		2025.01.30
+ * Link		https://oeis.org/A000321
  */
  func A000321(seqlen int64) ([]*big.Int, int64) {
 	// init
@@ -232,8 +228,8 @@ const (
 
 /**
  * A000322 Pentanacci numbers: a(n) = a(n-1) + a(n-2) + a(n-3) + a(n-4) + a(n-5) with a(0) = a(1) = a(2) = a(3) = a(4) = 1.
- * Date: 2025.01.30
- * Link: https://oeis.org/A000322
+ * Date		2025.01.30
+ * Link		https://oeis.org/A000322
  */
  func A000322(seqlen int64) ([]*big.Int, int64) {
 	// init
@@ -254,8 +250,8 @@ const (
 
 /**
  * A000324 A nonlinear recurrence: a(0) = 1, a(1) = 5, a(n) = a(n-1)^2 - 4*a(n-1) + 4 for n>1.
- * Date: 2025.01.30
- * Link: https://oeis.org/A000324
+ * Date		2025.01.30
+ * Link		https://oeis.org/A000324
  */
  func A000324(seqlen int64) ([]*big.Int, int64) {
 	// init

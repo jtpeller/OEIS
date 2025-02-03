@@ -68,9 +68,14 @@ func TooSmallError(seqname string, seqlen int64) {
 // ############################ WARNINGS ###########################
 // used to issue a warning about sequence lengths that will take a long time to compute
 // a "long time" is typically more than 5 seconds (which isn't that long, but users are impatient)
-func LongCalculationWarning(seqname string, seqlen int64) {
+func LongCalculationWarningWithLength(seqname string, seqlen int64) {
 	slen := strconv.FormatInt(seqlen, 10)
-	msg := "Warning: Sequence " + seqname + " with a seqlen > " + slen + " will take time to compute"
+	msg := "Warning: Sequence " + seqname + " with a seqlen > " + slen + " will take time to compute!"
+	PrintWarning(msg)
+}
+
+func LongCalculationWarning(seqname string) {
+	msg := "Warning: Sequence " + seqname + " will take a non-trivial time to compute!"
 	PrintWarning(msg)
 }
 

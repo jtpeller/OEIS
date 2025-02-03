@@ -29,6 +29,14 @@ func add(a, b *big.Int) *big.Int {
 	return gb.Add(a, b)
 }
 
+func addall(nums ...*big.Int) *big.Int {
+	sum := zero()
+	for _, n := range nums {
+		sum = add(sum, n)
+	}
+	return sum
+}
+
 func sub(a, b *big.Int) *big.Int {
 	return gb.Sub(a, b)
 }
@@ -47,6 +55,10 @@ func pow(a *big.Int, e *big.Int) *big.Int {
 
 func sqrt(a *big.Int) *big.Int {
 	return gb.Sqrt(a)
+}
+
+func neg(a *big.Int) *big.Int {
+	return mul(inew(-1), a)
 }
 
 // ### comparisons
@@ -117,4 +129,12 @@ func tofloat(a *big.Int) *big.Float {
 
 func round(a *big.Float) *big.Int {
 	return gb.Round(a)
+}
+
+func faddall(nums ...*big.Float) *big.Float {
+	sum := fzero()
+	for _, n := range nums {
+		sum = fadd(sum, n)
+	}
+	return sum
 }
