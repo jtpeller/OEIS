@@ -18,10 +18,6 @@ import (
 	"time"
 )
 
-// TODO: make variadic versions of some bignum functions (e.g., add, sub, mul, div)
-// TODO: use the variadic versions.
-// TODO: simplify printing framework / LONG_A###### consts
-
 func main() {
 	// program initialization (flags)
 	seqid := flag.String("seq", "", "Which sequence to run. Example: -seq A000042")

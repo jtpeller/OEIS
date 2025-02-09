@@ -8,7 +8,6 @@ package utils
 
 import (
 	"math"
-	"math/big"
 )
 
 // ############################### CHECKERS ###################################
@@ -16,11 +15,11 @@ import (
 
 // IsPrime returns true if num is prime. False otherwise.
 func IsPrime(num int64) bool {
-	return big.NewInt(num).ProbablyPrime(20)
+	return probablyPrime(inew(num), 20)
 }
 
 // IsBigPrime returns true if num is prime. False otherwise.
-func IsBigPrime(num *big.Int) bool {
+func IsBigPrime(num *bint) bool {
 	return num.ProbablyPrime(20)
 }
 

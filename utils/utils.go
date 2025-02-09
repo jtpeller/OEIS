@@ -9,7 +9,6 @@ package utils
 import (
 	"errors"
 	"fmt"
-	"math/big"
 	"os"
 	"strconv"
 )
@@ -125,7 +124,7 @@ func PrintSequence(seqid string, a []int64, startidx int64) {
 	}
 }
 
-func PrintBigSequence(seqid string, a []*big.Int, startidx int64) {
+func PrintBigSequence(seqid string, a []*bint, startidx int64) {
 	if a == nil {
 		return
 	}

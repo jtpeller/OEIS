@@ -9,39 +9,11 @@ package utils
 import (
 	"errors"
 	"math"
-	"math/big"
-
-	gb "github.com/jtpeller/gobig"
 )
 
 // ####################### COMMON CALCULATIONS #########################
 // ### this section contains any common calculations
 // ### Examples: Summation, Product, Factorials etc.
-
-// compute the factorial of a num (big.Int)
-func Fact(num *big.Int) *big.Int {
-	if gb.Less(num, gb.Zero()) {
-		HandleError(errors.New("factorial of a negative number is undefined"))
-	}
-
-	prod := gb.New(1)
-	for i := gb.New(1); i.Cmp(num) == -1 || i.Cmp(num) == 0; i.Add(i, gb.New(1)) {
-		prod.Mul(prod, i)
-	}
-	return prod
-}
-
-// computes the factorial of num (int64)
-func IFact(num int64) int64 {
-	if num < 0 {
-		HandleError(errors.New("factorial of a negative number is undefined"))
-	}
-	prod := int64(1)
-	for i := int64(1); i < num; i++ {
-		prod *= i
-	}
-	return prod
-}
 
 // calculate the integer log of a number & the given base
 func ILog(num int64, base int64) int64 {
@@ -54,8 +26,8 @@ func Isqrt(num int64) (int64) {
 }
 
 // computes the product of the terms in the array, like Sum(), but for multiplication
-func Prod(a []*big.Int) *big.Int {
-	prod := gb.New(1)
+func Prod(a []*bint) *bint {
+	prod := inew(1)
 	for i := 0; i < len(a); i++ {
 		prod.Mul(prod, a[i])
 	}
@@ -71,9 +43,9 @@ func Sum(a []int64) int64 {
 	return sum
 }
 
-// computes Sum(), except with *big.Int
-func SumBig(a []*big.Int) *big.Int {
-	sum := gb.New(0)
+// computes Sum(), except with *bint
+func SumBig(a []*bint) *bint {
+	sum := zero()
 	for i := 0; i < len(a); i++ {
 		sum.Add(sum, a[i])
 	}
@@ -82,13 +54,13 @@ func SumBig(a []*big.Int) *big.Int {
 
 // this computes Sigma_e(n), which computes the sum of the divisors of n
 // where the divisors are raised to the power of e
-func Sigma(n, e int64) *big.Int {
+func Sigma(n, e int64) *bint {
 	divisors := Factors(n)
-	bigdiv := CreateSlice(int64(len(divisors)))
+	bigdiv := iSlice(int64(len(divisors)))
 	
 	// raise each divisor to the power of e
 	for i := 0; i < len(divisors); i++ {
-		bigdiv[i] = gb.Pow(gb.New(divisors[i]), gb.New(e))
+		bigdiv[i] = pow(inew(divisors[i]), inew(e))
 	}
 
 	return SumBig(bigdiv)
@@ -119,53 +91,19 @@ func Binomial(n, r int64) int64 {
 }
 
 // computes all combinations of n (0 <= k <= n)
-func Combinations(n *big.Int) []*big.Int {
-	a := CreateSlice(0)
-	for k := gb.New(0); k.Cmp(n) == -1 || k.Cmp(n) == 0; k.Add(k, gb.New(1)) {
-		a = append(a, C(n, k))
+func Combinations(n *bint) []*bint {
+	a := iSlice(0)
+	for k := zero(); k.Cmp(n) == -1 || k.Cmp(n) == 0; k.Add(k, inew(1)) {
+		a = append(a, nCr(n, k))
 	}
 	return a
 }
 
-// performs the same calculation as Binomial(n, k), except
-// this uses big.Int instead of int64
-func C(n, k *big.Int) *big.Int {
-	// C(n,r) = n!/((n-r)!r!)
-	if gb.Less(n, gb.New(0)) || gb.Less(k, gb.New(0)) {
-		HandleError(errors.New("can't be negative"))
-	} else if gb.Less(n, k) {
-		HandleError(errors.New("n cannot be less than k"))
-	}
-
-	// do the shortcut, where you can modify k based on n
-	if gb.Greater(k, gb.Div(n, gb.New(2))) {	// k > n/2
-		k = gb.New(0).Sub(n, k)	// k = n - k
-	}
-	c := gb.New(1)
-	for i := gb.New(1); i.Cmp(k) == -1 || i.Cmp(k) == 0; i.Add(i, gb.New(1)) {
-		// c = (n - k + i) * c / i
-		foo := gb.New(0).Sub(n, k)
-		foo.Add(foo, i)
-		c.Mul(c, foo)
-		c.Div(c, i)
-	}
-	return c
-}
-
-// computes k-permutations of n (P(n, k) or nPr(n, r))
-func P(n, k *big.Int) *big.Int {
-	if gb.Greater(k, n) {
-		return gb.New(0)
-	}
-	// returns n!/(n-k)!
-	return gb.Div(Fact(n), Fact(gb.Sub(n, k)))
-}
-
 // computes all permutations of n (0 <= k <= n)
-func Permutation(n *big.Int) []*big.Int {
-	a := CreateSlice(0)
-	for k := gb.New(0); gb.LessEqual(k, n); k.Add(k, gb.New(1)) {
-		a = append(a, P(n, k))
+func Permutation(n *bint) []*bint {
+	a := iSlice(0)
+	for k := zero(); lteq(k, n); inc(k) {
+		a = append(a, nPr(n, k))
 	}
 	return a
 }
@@ -183,11 +121,11 @@ func EulerTotient(num int64) int64 {
 }
 
 // computes Euler's Totient, but with arbitrary precision
-func EulerTotientBig(num *big.Int) *big.Int {
-	val := gb.Zero()
-	for i := gb.Zero(); gb.Less(i, num); i = gb.Add(i, gb.New(1)) {
-		if gb.Equals(GCD_big(i, num), gb.New(1)) {
-			val = gb.Add(val, gb.New(1))
+func EulerTotientBig(num *bint) *bint {
+	val := zero()
+	for i := zero(); lt(i, num); inc(i) {
+		if equals(GCD_big(i, num), inew(1)) {
+			val = add(val, inew(1))
 		}
 	}
 	return val
@@ -202,11 +140,11 @@ func GCD(a, b int64) int64 {
 }
 
 // given two numbers, compute the greatest common divisor (with big.int!)
-func GCD_big(a, b *big.Int) *big.Int {
-	if gb.Equals(b, gb.Zero()) {
+func GCD_big(a, b *bint) *bint {
+	if equals(b, zero()) {
 		return a
 	}
-	return GCD_big(b, gb.Mod(a, b))
+	return GCD_big(b, mod(a, b))
 }
 
 // Compute the number of digits of the given number
@@ -313,17 +251,17 @@ func PrimeFloor(arr []int64, n int64) int64 {
 // Computes the Bernoulli Numbers using an explicit definition
 // uses big.Rat b/c OEIS has a sequence of the numerators & of the denominators
 // plus, there's no nonsense about float precision
-func Bernoulli(n int64) *big.Rat {
-	var f big.Rat
-	a := make([]big.Rat, n+1)
+func Bernoulli(n int64) *brat {
+	var f *brat
+	a := rSlice(n+1)
 	for m := range a {
 		a[m].SetFrac64(1, int64(m+1))
 		for j := m; j >= 1; j-- {
-			d := &a[j-1]
-			d.Mul(f.SetInt64(int64(j)), d.Sub(d, &a[j]))
+			d := a[j-1]
+			d.Mul(f.SetInt64(int64(j)), d.Sub(d, a[j]))
 		}
 	}
-	return f.Set(&a[0])
+	return f.Set(a[0])
 }
 
 // counts the partitions of a given integer n
@@ -369,7 +307,7 @@ func CountParts(n int64) int64 {
 }
 
 // Computes the Harmonic Number of n (i.e., H_n)
-func Harmonic(n int64) *big.Float {
+func Harmonic(n int64) *bfloat {
 	sum := fzero()
 	for k := int64(1); k <= n; k++ {
 		kf := itof(inew(k))
@@ -380,7 +318,7 @@ func Harmonic(n int64) *big.Float {
 
 
 // Computes the Harmonic Number of n of order k (i.e., H^(k)_n)
-func HarmonicOrder(n, k int64) *big.Float {
+func HarmonicOrder(n, k int64) *bfloat {
 	binom := nCr(inew(n+k-1), inew(k-1))
 	kth_order_H := fmul(itof(binom), fsub(Harmonic(n+k-1), Harmonic(k-1)))
 	return kth_order_H
@@ -437,7 +375,7 @@ func MakeChange(len int64, val int64, denom []int64) int64 {
 }
 
 // computes the stirling numbers of the first kind (i.e., s(n, k))
-func Stirling1(n, k int64) *big.Int {
+func Stirling1(n, k int64) *bint {
 	// handle instances for s(n, 0)
 	if k == 0 {
 		if n > 0 { 
@@ -455,7 +393,7 @@ func Stirling1(n, k int64) *big.Int {
 }
 
 // Computes the stirling numbers of the second kind for n, k
-func Stirling2(n, k int64) *big.Int {
+func Stirling2(n, k int64) *bint {
 	nb := inew(n)
 	stir := fzero()
 	for i := int64(0); i <= k; i++ {
