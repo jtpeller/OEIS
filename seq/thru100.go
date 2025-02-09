@@ -111,7 +111,7 @@ func A000011(seqlen int64) ([]*big.Int, int64) {
 	euler, _ := A000010(seqlen*2)
 
 	// generate a sequence
-	a := utils.CreateSlice(seqlen)
+	a := iSlice(seqlen)
 	a[0] = inew(1)
 	for n := int64(1); n < seqlen; n++ {
 		divisors := utils.Factors(n)
@@ -120,14 +120,14 @@ func A000011(seqlen int64) ([]*big.Int, int64) {
 		// use the divisors to calculate the sequence
 		for _, d := range divisors {
 			// phi(2*d) (-1 for 0 indexing)
-			phi := tofloat(inew(euler[2 * d - 1]))
+			phi := itof(inew(euler[2 * d - 1]))
 			
 			// 2^(n/d)
 			b := fnew(math.Pow(2, float64(n)/float64(d)))
 
 			// (phi*b) / (2*n)
 			numer := fmul(phi, b)
-			frac := fdiv(numer, fmul(fnew(2), tofloat(inew(n))))
+			frac := fdiv(numer, fmul(fnew(2), itof(inew(n))))
 
 			// sum += frac
 			sum = fadd(sum, frac)
@@ -161,7 +161,7 @@ func A000012(seqlen int64) ([]int64, int64) {
  * Link		https://oeis.org/A000013
  */
 func A000013(seqlen int64) ([]*big.Int, int64) {
-	a := utils.CreateSlice(seqlen)
+	a := iSlice(seqlen)
 	a[0] = inew(1)
 	phi, _ := A000010(seqlen*2)
 	for n := int64(1); n < seqlen; n++ {
@@ -169,11 +169,11 @@ func A000013(seqlen int64) ([]*big.Int, int64) {
 		sum := fnew(0)
 		for d := int64(1); d <= n; d++ {
 			if n % d == 0 {		// d divides n
-				temp := tofloat(inew(phi[2*d-1]))
+				temp := itof(inew(phi[2*d-1]))
 				pow := math.Pow(2, float64(n)/float64(d))
 				numer := fmul(temp, fnew(pow))
 				n2 := mul(inew(2), inew(n))
-				bigDiv := fdiv(numer, tofloat(n2))
+				bigDiv := fdiv(numer, itof(n2))
 				// the following computes a[n] = Sum_{d divides n} (phi(2*d)*2^(n/d))/(2*n)
 				sum = fadd(sum, bigDiv)
 			}
@@ -249,7 +249,7 @@ func A000030(seqlen int64) ([]int64, int64) {
  * Link		https://oeis.org/A000032
  */
 func A000032(seqlen int64) ([]*big.Int, int64) {
-	a := utils.CreateSlice(seqlen)
+	a := iSlice(seqlen)
 	a[0] = inew(2)	// a(0)=2
 	a[1] = inew(1)	// a(1)=1
 	for i := int64(2); i < seqlen; i++ {
@@ -348,7 +348,7 @@ func A000041(seqlen int64) ([]int64, int64) {
  * Link		https://oeis.org/A000042
  */
 func A000042(seqlen int64) ([]*big.Int, int64) {
-	a := utils.CreateSlice(seqlen)
+	a := iSlice(seqlen)
 	a[0] = inew(1)
 	for i := int64(1); i < seqlen; i++ {
 		a[i] = add(mul(a[i-1], inew(10)), inew(1))
@@ -392,7 +392,7 @@ func A000044(seqlen int64) ([]*big.Int, int64) {
 		utils.PrintWarning("For best results, sequence A000044 should have more than 12 elements")
 	}
 
-	a := utils.CreateSlice(seqlen+1)
+	a := iSlice(seqlen+1)
 	a[0] = inew(1)
 
 	// for [1:12], a(n) = Fibonacci(n)
@@ -421,7 +421,7 @@ func A000044(seqlen int64) ([]*big.Int, int64) {
  * Link		https://oeis.org/A000045
  */
 func A000045(seqlen int64) ([]*big.Int, int64) {
-	a := utils.CreateSlice(seqlen)
+	a := iSlice(seqlen)
 	a[0] = inew(0)
 	a[1] = inew(1)
 	for i := int64(2); i < seqlen; i++ {
@@ -483,7 +483,7 @@ func A000051(seqlen int64) ([]*big.Int, int64) {
  * Link		https://oeis.org/A000058
  */
 func A000058(seqlen int64) ([]*big.Int, int64) {
-	a := utils.CreateSlice(seqlen)
+	a := iSlice(seqlen)
 	a[0] = inew(2)
 	for i := int64(0); i < seqlen - 1; i++ {
 		a[i+1].Exp(a[i], inew(2), inew(0))
@@ -619,7 +619,7 @@ func A000070(seqlen int64) ([]int64, int64) {
  * Link		https://oeis.org/A000071
  */
 func A000071(seqlen int64) ([]*big.Int, int64) {
-	a := utils.CreateSlice(seqlen)
+	a := iSlice(seqlen)
 	F, _ := A000045(seqlen+1)
 	for i := int64(1); i <= seqlen; i++ {
 		a[i-1].Sub(F[i], inew(1))
@@ -634,7 +634,7 @@ func A000071(seqlen int64) ([]*big.Int, int64) {
  * Link		https://oeis.org/A000073
  */
 func A000073(seqlen int64) ([]*big.Int, int64) {
-	a := utils.CreateSlice(seqlen)
+	a := iSlice(seqlen)
 	a[0], a[1], a[2] = inew(0), inew(0), inew(1)
 	for i := int64(3); i < seqlen; i++ {
 		a[i].Add(a[i-1], a[i-2])
@@ -665,7 +665,7 @@ func A000078(seqlen int64) ([]*big.Int, int64) {
  * Link		https://oeis.org/A000079
  */
 func A000079(seqlen int64) ([]*big.Int, int64) {
-	a := utils.CreateSlice(seqlen)
+	a := iSlice(seqlen)
 	a[0] = inew(1)
 	for i := int64(1); i < seqlen; i++ {
 		a[i].Lsh(a[i-1], 1)
@@ -805,7 +805,7 @@ func A000098(seqlen int64) ([]int64, int64) {
  * Link		https://oeis.org/A000100
  */
 func A000100(seqlen int64) ([]*big.Int, int64) {
-	a := utils.CreateSlice(seqlen)
+	a := iSlice(seqlen)
 	Fib, _ := A000045(seqlen)
 	a[0], a[1], a[2] = zero(), zero(), zero()
 	a[3], a[4] = inew(1), inew(2)

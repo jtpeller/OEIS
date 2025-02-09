@@ -88,7 +88,7 @@ func BigIntWarning(seqid string, seqlen int64) {
 
 // used to issue a warning about the accuracy of a sequence using big.Float fields
 func AccuracyWarning(seqid string) {
-	msg := "Warning: Calculation for sequence " + seqid + " relies on decimal rounding, which will probably lead to some accuracy issues"
+	msg := "Warning: Calculation for sequence " + seqid + " may be inaccurate. This is usually due to limited accuracy of float values which are then rounded."
 	PrintWarning(msg)
 }
 

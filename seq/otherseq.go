@@ -121,7 +121,7 @@ func A002386(seqlen int64) ([]int64, int64) {
  * Link: https://oeis.org/A003048
  */
 func A003048(seqlen int64) ([]*big.Int, int64) {
-	a := utils.CreateSlice(seqlen)
+	a := iSlice(seqlen)
 	a[0] = inew(1)
 	for i := int64(1); i < seqlen; i++ {
 		a[i] = sub(mul(inew(i), a[i - 1]), pow(inew(-1), inew(i)))
@@ -189,7 +189,7 @@ func A011858(seqlen int64) ([]int64, int64) {
  * Link: https://oeis.org/A027641
  */
 func A027641(seqlen int64) ([]*big.Int, int64) {
-	a := utils.CreateSlice(seqlen)
+	a := iSlice(seqlen)
 	for i := int64(0); i < seqlen; i++ {
 		a[i] = utils.Bernoulli(i).Num()
 	}
@@ -202,7 +202,7 @@ func A027641(seqlen int64) ([]*big.Int, int64) {
  * Link: https://oeis.org/A027642
  */
  func A027642(seqlen int64) ([]*big.Int, int64) {
-	a := utils.CreateSlice(seqlen)
+	a := iSlice(seqlen)
 	for i := int64(0); i < seqlen; i++ {
 		a[i] = utils.Bernoulli(i).Denom()
 	}
@@ -268,14 +268,14 @@ func A038040(seqlen int64) ([]int64, int64) {
  * Link: https://oeis.org/A052614
  */
 func A052614(seqlen int64) ([]*big.Int, int64) {
-	a := utils.CreateSlice(seqlen)
+	a := iSlice(seqlen)
 	for n := int64(0); n < seqlen; n++ {
 		nf := float64(n)
 		sum := fnew(0)
 		for k := float64(0); k <= nf/4.0; k++ {
 			sum = fadd(sum, fnew(math.Exp(-1.0/4.0)))
 		}
-		a[n] = floor(fmul(tofloat(utils.Fact(inew(n))), sum))
+		a[n] = floor(fmul(itof(utils.Fact(inew(n))), sum))
 	}
 	return a, 0
 }
@@ -286,7 +286,7 @@ func A052614(seqlen int64) ([]*big.Int, int64) {
  * Link: https://oeis.org/A088218
  */
 func A088218(seqlen int64) ([]*big.Int, int64) {
-	a := utils.CreateSlice(seqlen)
+	a := iSlice(seqlen)
 	for i := int64(0); i < seqlen; i++ {
 		a[i] = div(utils.Fact(inew(2*i)), mul(utils.Fact(inew(i)), utils.Fact(inew(i+1))))
 	}
