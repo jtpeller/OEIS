@@ -421,12 +421,7 @@ func A000044(seqlen int64) ([]*big.Int, int64) {
  * Link		https://oeis.org/A000045
  */
 func A000045(seqlen int64) ([]*big.Int, int64) {
-	a := iSlice(seqlen)
-	a[0] = inew(0)
-	a[1] = inew(1)
-	for i := int64(2); i < seqlen; i++ {
-		a[i].Add(a[i-1], a[i-2])
-	}
+	a := utils.Nacci(seqlen, 2, true)
 	return a, 0
 }
 
@@ -665,11 +660,7 @@ func A000078(seqlen int64) ([]*big.Int, int64) {
  * Link		https://oeis.org/A000079
  */
 func A000079(seqlen int64) ([]*big.Int, int64) {
-	a := iSlice(seqlen)
-	a[0] = inew(1)
-	for i := int64(1); i < seqlen; i++ {
-		a[i].Lsh(a[i-1], 1)
-	}
+	a := utils.Powers(seqlen, inew(2))
 	return a, 0
 }
 

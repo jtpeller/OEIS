@@ -107,7 +107,7 @@ func A000207(seqlen int64) ([]*big.Int, int64) {
 		[]*big.Int{inew(1), inew(1)})
 	
 	C, _ := A000108(seqlen+3)		// catalan numbers
-	C = utils.ShiftBig(C, 2)	// C(n)=A000108(n-2)
+	C = utils.ShiftBigSliceRight(C, 2)	// C(n)=A000108(n-2)
 	for n := int64(3); n <= seqlen+2; n++ {
 		k := (n+1)/2		// n is odd
 		if n % 2 == 0 {		// n is even
@@ -520,7 +520,7 @@ func A000253(seqlen int64) ([]*big.Int, int64) {
 
 /**
  * A000254 computes unsigned Stirling numbers of first kind, s(n+1,2):
- *  a(n+1) = (n+1)*a(n) + n!. 
+ *  a(n+1) = (n+1)*a(n) + n!.
  * Date		December 14, 2021
  * Link		https://oeis.org/A000254
  */
@@ -1027,12 +1027,7 @@ func A000287(seqlen int64) ([]*big.Int, int64) {
  * Link		https://oeis.org/A000288
  */
 func A000288(seqlen int64) ([]*big.Int, int64) {
-	a := utils.InitBslice(seqlen, []*big.Int{inew(1), inew(1), inew(1), inew(1)})
-	for i := int64(4); i < seqlen; i++ {
-		a[i].Add(a[i-1], a[i-2])
-		a[i].Add(a[i], a[i-3])
-		a[i].Add(a[i], a[i-4])
-	}
+	a := utils.Nacci(seqlen, 4, false)
 	return a, 0
 }
 
@@ -1055,7 +1050,7 @@ func A000289(seqlen int64) ([]*big.Int, int64) {
  * Link		https://oeis.org/A000290
  */
 func A000290(seqlen int64) ([]*big.Int, int64) {
-	a := utils.Power(seqlen, inew(2))
+	a := utils.Exponents(seqlen, inew(2))
 	return a, 0
 }
 

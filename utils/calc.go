@@ -368,6 +368,24 @@ func CountParts(n int64) int64 {
 	}
 }
 
+// Computes the Harmonic Number of n (i.e., H_n)
+func Harmonic(n int64) *big.Float {
+	sum := fzero()
+	for k := int64(1); k <= n; k++ {
+		kf := itof(inew(k))
+		sum = fadd(sum, fdiv(fnew(1), kf))
+	}
+	return sum
+}
+
+
+// Computes the Harmonic Number of n of order k (i.e., H^(k)_n)
+func HarmonicOrder(n, k int64) *big.Float {
+	binom := nCr(inew(n+k-1), inew(k-1))
+	kth_order_H := fmul(itof(binom), fsub(Harmonic(n+k-1), Harmonic(k-1)))
+	return kth_order_H
+}
+
 // Generates the Kolakoski sequence of length seqlen
 func Kolakoski(seqlen int64, numcount int64) []int64 {
 	// declarations n stuff
@@ -416,4 +434,35 @@ func MakeChange(len int64, val int64, denom []int64) int64 {
 		return 0			// combo doesn't work
 	}
 	return MakeChange(len - 1, val, denom) + MakeChange(len, val - denom[len - 1], denom)
+}
+
+// computes the stirling numbers of the first kind (i.e., s(n, k))
+func Stirling1(n, k int64) *big.Int {
+	// handle instances for s(n, 0)
+	if k == 0 {
+		if n > 0 { 
+			return zero() 
+		} else if n == 0 {
+			return inew(1)
+		}
+	}
+	if k > n {
+		return zero()
+	} else {
+		// otherwise, compute s(n, k) = (n-1)*s(n-1, k) + s(n-1, k-1)
+		return add(mul(inew(n-1), Stirling1(n-1, k)), Stirling1(n-1, k-1))
+	}
+}
+
+// Computes the stirling numbers of the second kind for n, k
+func Stirling2(n, k int64) *big.Int {
+	nb := inew(n)
+	stir := fzero()
+	for i := int64(0); i <= k; i++ {
+		ib := inew(i)
+		numer := mul(pow(inew(-1), inew(k-i)), pow(ib, nb))
+		denom := mul(fact(inew(k-i)), fact(ib))
+		stir = fadd(stir, fdiv(itof(numer), itof(denom)))
+	}
+	return round(stir)
 }
