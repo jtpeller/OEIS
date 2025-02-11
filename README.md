@@ -1,5 +1,9 @@
 # OEIS
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/jtpeller/oeis)](https://goreportcard.com/report/github.com/jtpeller/oeis)
+[![Release](https://img.shields.io/github/release/jtpeller/oeis.svg?style=flat-square)](https://github.com/jtpeller/oeis/releases)
+![GitHub License](https://img.shields.io/github/license/jtpeller/oeis)
+
 ## Overview
 
 The ongoing quest to program every sequence in the OEIS database (in Golang)
