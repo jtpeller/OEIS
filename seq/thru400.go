@@ -21,7 +21,7 @@ import (
  * Date		2025.01.26
  * Link		https://oeis.org/A000301
  */
- func A000301(seqlen int64) ([]*bint, int64) {
+func A000301(seqlen int64) ([]*bint, int64) {
 	fib, _ := A000045(seqlen)
 	a := iSlice(seqlen)
 
@@ -38,7 +38,7 @@ import (
  * Date		2025.01.26
  * Link		https://oeis.org/A000302
  */
- func A000302(seqlen int64) ([]*bint, int64) {
+func A000302(seqlen int64) ([]*bint, int64) {
 	a := utils.Powers(seqlen, inew(4))
 	return a, 0
 }
@@ -48,7 +48,7 @@ import (
  * Date		2025.01.27
  * Link		https://oeis.org/A000304
  */
- func A000304(seqlen int64) ([]*bint, int64) {
+func A000304(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	a[0] = inew(2)
 	a[1] = inew(3)
@@ -66,7 +66,7 @@ import (
  * Date		2025.01.27
  * Link		https://oeis.org/A000308
  */
- func A000308(seqlen int64) ([]*bint, int64) {
+func A000308(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	a[0] = inew(1)
 	a[1] = inew(2)
@@ -85,11 +85,11 @@ import (
  * Date		2025.01.27
  * Link		https://oeis.org/A000309
  */
- func A000309(seqlen int64) ([]*bint, int64) {
+func A000309(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	a139, _ := A000139(seqlen)
 	a[0] = inew(1)
-	
+
 	// compute a
 	for n := int64(1); n < seqlen; n++ {
 		a[n] = mul(pow(inew(2), inew(n-1)), a139[n])
@@ -103,9 +103,9 @@ import (
  * Date		2025.01.27
  * Link		https://oeis.org/A000312
  */
- func A000312(seqlen int64) ([]*bint, int64) {
+func A000312(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
-	
+
 	// compute a
 	for n := int64(0); n < seqlen; n++ {
 		a[n] = pow(inew(n), inew(n))
@@ -115,14 +115,14 @@ import (
 }
 
 /**
- * A000313 Number of permutations of length n with 3 consecutive ascending pairs. 
+ * A000313 Number of permutations of length n with 3 consecutive ascending pairs.
  * Date		2025.01.27
  * Link		https://oeis.org/A000313
  */
- func A000313(seqlen int64) ([]*bint, int64) {
+func A000313(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
-	f, _ := A000142(seqlen+2)
-	
+	f, _ := A000142(seqlen + 2)
+
 	// compute a
 	for n := int64(0); n < seqlen; n++ {
 		left := fdiv(fmul(itof(inew(n)), itof(f[n+1])), fnew(6))
@@ -139,15 +139,15 @@ import (
 }
 
 /**
- * A000317 Number of permutations of length n with 3 consecutive ascending pairs. 
+ * A000317 Number of permutations of length n with 3 consecutive ascending pairs.
  * Date		2025.01.27
  * Link		https://oeis.org/A000317
  */
- func A000317(seqlen int64) ([]*bint, int64) {
-	a := iSlice(seqlen+1)
+func A000317(seqlen int64) ([]*bint, int64) {
+	a := iSlice(seqlen + 1)
 	a[0] = inew(1)
 	a[1] = inew(2)
-	
+
 	// compute a
 	for n := int64(1); n < seqlen; n++ {
 		a[n+1] = add(sub(pow(a[n], inew(2)), mul(a[n], a[n-1])), pow(a[n-1], inew(2)))
@@ -157,14 +157,14 @@ import (
 }
 
 /**
- * A000318 Number of permutations of length n with 3 consecutive ascending pairs. 
+ * A000318 Number of permutations of length n with 3 consecutive ascending pairs.
  * Date		2025.01.27
  * Link		https://oeis.org/A000318
  */
- func A000318(seqlen int64) ([]*bint, int64) {
+func A000318(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	a182, _ := A000182(seqlen)
-	
+
 	// compute a
 	for n := int64(1); n <= seqlen; n++ {
 		// -1 due to indexing starting at zero!
@@ -175,11 +175,11 @@ import (
 }
 
 /**
- * A000319 a(n) = floor(b(n)), where b(n) = tan(b(n-1)), b(0)=1. 
+ * A000319 a(n) = floor(b(n)), where b(n) = tan(b(n-1)), b(0)=1.
  * Date		2025.01.27
  * Link		https://oeis.org/A000319
  */
- func A000319(seqlen int64) ([]int64, int64) {
+func A000319(seqlen int64) ([]int64, int64) {
 	utils.PrintWarning("Due to the implementation of tan() in Go, this sequence is inaccurate for n > 14. More precision is necessary, but tan is not available for arbitrary precision floats.")
 
 	// first generate b
@@ -203,7 +203,7 @@ import (
  * Date		2025.01.30
  * Link		https://oeis.org/A000321
  */
- func A000321(seqlen int64) ([]*bint, int64) {
+func A000321(seqlen int64) ([]*bint, int64) {
 	// init
 	a := iSlice(seqlen)
 	a[0] = inew(1)
@@ -212,7 +212,7 @@ import (
 	// compute a
 	for n := int64(2); n < seqlen; n++ {
 		t1 := sub(zero(), a[n-1])
-		t2:= mul( mul(inew(2), inew(n-1)), a[n-2])
+		t2 := mul(mul(inew(2), inew(n-1)), a[n-2])
 		a[n] = sub(t1, t2)
 	}
 
@@ -224,7 +224,7 @@ import (
  * Date		2025.01.30
  * Link		https://oeis.org/A000322
  */
- func A000322(seqlen int64) ([]*bint, int64) {
+func A000322(seqlen int64) ([]*bint, int64) {
 	// init
 	a := iSlice(seqlen)
 	a[0] = inew(1)
@@ -247,7 +247,7 @@ import (
  * Date		2025.01.30
  * Link		https://oeis.org/A000324
  */
- func A000324(seqlen int64) ([]*bint, int64) {
+func A000324(seqlen int64) ([]*bint, int64) {
 	// init
 	a := iSlice(seqlen)
 	a[0] = inew(1)
@@ -266,7 +266,7 @@ import (
  * Date		2025.02.08
  * Link		https://oeis.org/A000325
  */
- func A000325(seqlen int64) ([]*bint, int64) {
+func A000325(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 
 	for n := int64(0); n < seqlen; n++ {
@@ -281,28 +281,28 @@ import (
  * Date		2025.02.08
  * Link		https://oeis.org/A000326
  */
- func A000326(seqlen int64) ([]int64, int64) {
+func A000326(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 
 	for n := int64(0); n < seqlen; n++ {
-		a[n] = n*(3*n-1)/2
+		a[n] = n * (3*n - 1) / 2
 	}
 
 	return a, 0
 }
 
 /**
- * A000327 Number of partitions into non-integral powers. 
+ * A000327 Number of partitions into non-integral powers.
  * Date		2025.02.08
  * Link		https://oeis.org/A000327
  */
- func A000327(seqlen int64) ([]int64, int64) {
+func A000327(seqlen int64) ([]int64, int64) {
 	offset := int64(3)
 	a := make([]int64, seqlen+offset)
-	a148, a148_off := A000148(seqlen+offset)
+	a148, a148_off := A000148(seqlen + offset)
 
 	for n := int64(3); n < seqlen+offset; n++ {
-		a[n-offset] = a148[n-a148_off] - int64(math.Floor( math.Pow( float64(n)/2.0, 3.0/2.0 ) ))
+		a[n-offset] = a148[n-a148_off] - int64(math.Floor(math.Pow(float64(n)/2.0, 3.0/2.0)))
 	}
 
 	return a, 0
@@ -313,14 +313,14 @@ import (
  * Date		2025.02.08
  * Link		https://oeis.org/A000328
  */
- func A000328(seqlen int64) ([]int64, int64) {
+func A000328(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 
 	for n := int64(0); n < seqlen; n++ {
 		sum := int64(0)
 
 		nsqr := math.Pow(float64(n), 2)
-		for j := int64(0); j <= int64(nsqr) / 4; j++ {
+		for j := int64(0); j <= int64(nsqr)/4; j++ {
 			fj := float64(j)
 
 			f1 := int64(nsqr / (4.0*fj + 1.0))
@@ -329,18 +329,18 @@ import (
 			sum += f1 - f2
 		}
 
-		a[n] = 1 + 4 * sum
+		a[n] = 1 + 4*sum
 	}
 
 	return a, 0
 }
 
 /**
- * A000329: Nearest integer to b(n), where b(n) = tan(b(n-1)), b(0) = 1. 
+ * A000329: Nearest integer to b(n), where b(n) = tan(b(n-1)), b(0) = 1.
  * Date		2025.02.08
  * Link		https://oeis.org/A000329
  */
- func A000329(seqlen int64) ([]int64, int64) {
+func A000329(seqlen int64) ([]int64, int64) {
 	utils.AccuracyWarning("A000329")
 
 	a := make([]int64, seqlen)
@@ -356,11 +356,11 @@ import (
 }
 
 /**
- * A000330: Square pyramidal numbers: a(n) = 0^2 + 1^2 + 2^2 + ... + n^2 = n*(n+1)*(2*n+1)/6. 
+ * A000330: Square pyramidal numbers: a(n) = 0^2 + 1^2 + 2^2 + ... + n^2 = n*(n+1)*(2*n+1)/6.
  * Date		2025.02.08
  * Link		https://oeis.org/A000330
  */
- func A000330(seqlen int64) ([]int64, int64) {
+func A000330(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 
 	for n := int64(0); n < seqlen; n++ {
@@ -371,11 +371,11 @@ import (
 }
 
 /**
- * A000332: Binomial coefficient binomial(n,4) = n*(n-1)*(n-2)*(n-3)/24. 
+ * A000332: Binomial coefficient binomial(n,4) = n*(n-1)*(n-2)*(n-3)/24.
  * Date		2025.02.08
  * Link		https://oeis.org/A000332
  */
- func A000332(seqlen int64) ([]*bint, int64) {
+func A000332(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 
 	for n := int64(0); n < seqlen; n++ {
@@ -386,11 +386,11 @@ import (
 }
 
 /**
- * A000336: a(n) = a(n-1)*a(n-2)*a(n-3)*a(n-4); for n < 5, a(n) = n. 
+ * A000336: a(n) = a(n-1)*a(n-2)*a(n-3)*a(n-4); for n < 5, a(n) = n.
  * Date		2025.02.08
  * Link		https://oeis.org/A000336
  */
- func A000336(seqlen int64) ([]*bint, int64) {
+func A000336(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 
 	for n := int64(0); n < seqlen; n++ {
@@ -405,11 +405,11 @@ import (
 }
 
 /**
- * A000337: a(n) = a(n-1)*a(n-2)*a(n-3)*a(n-4); for n < 5, a(n) = n. 
+ * A000337: a(n) = a(n-1)*a(n-2)*a(n-3)*a(n-4); for n < 5, a(n) = n.
  * Date		2025.02.08
  * Link		https://oeis.org/A000337
  */
- func A000337(seqlen int64) ([]*bint, int64) {
+func A000337(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 
 	for n := int64(0); n < seqlen; n++ {
@@ -422,11 +422,11 @@ import (
 }
 
 /**
- * A000339: Number of partitions into non-integral powers. 
+ * A000339: Number of partitions into non-integral powers.
  * Date		2025.02.09
  * Link		https://oeis.org/A000339
  */
- func A000339(seqlen int64) ([]int64, int64) {
+func A000339(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	offset := int64(2)
 
@@ -436,9 +436,9 @@ import (
 		sum := int64(0)
 		for x1 := int64(1); x1 <= nsqr; x1++ {
 			x1sqrt := math.Sqrt(float64(x1))
-			x2 := int64(math.Pow(fn - x1sqrt, 2.0))
-			if (x2 >= x1) {
-				sum += int64(x2-x1+1)
+			x2 := int64(math.Pow(fn-x1sqrt, 2.0))
+			if x2 >= x1 {
+				sum += int64(x2 - x1 + 1)
 			}
 		}
 		a[n-offset] = sum
@@ -448,27 +448,27 @@ import (
 }
 
 /**
- * A000340: a(0)=1, a(n) = 3*a(n-1) + n + 1 
+ * A000340: a(0)=1, a(n) = 3*a(n-1) + n + 1
  * Date		2025.02.09
  * Link		https://oeis.org/A000340
  */
- func A000340(seqlen int64) ([]int64, int64) {
+func A000340(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	a[0] = 1
 
 	for n := int64(1); n < seqlen; n++ {
-		a[n] = 3 * a[n-1] + n + 1
+		a[n] = 3*a[n-1] + n + 1
 	}
 
 	return a, 0
 }
 
 /**
- * A000344: a(n) = 5*binomial(2n, n-2)/(n+3). 
+ * A000344: a(n) = 5*binomial(2n, n-2)/(n+3).
  * Date		2025.02.09
  * Link		https://oeis.org/A000344
  */
- func A000344(seqlen int64) ([]*bint, int64) {
+func A000344(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	offset := int64(2)
 
@@ -487,7 +487,7 @@ import (
  * Date		2025.02.09
  * Link		https://oeis.org/A000346
  */
- func A000346(seqlen int64) ([]*bint, int64) {
+func A000346(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 
 	for n := int64(0); n < seqlen; n++ {
@@ -500,13 +500,13 @@ import (
 }
 
 /**
- * A000350: Numbers m such that Fibonacci(m) ends with m. 
+ * A000350: Numbers m such that Fibonacci(m) ends with m.
  * Date		2025.02.09
  * Link		https://oeis.org/A000350
  */
- func A000350(seqlen int64) ([]int64, int64) {
+func A000350(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
-	fib, _ := A000045(seqlen*seqlen)
+	fib, _ := A000045(seqlen * seqlen)
 
 	n := int64(0)
 	for m := int64(0); n < seqlen; m++ {
@@ -527,30 +527,30 @@ import (
 }
 
 /**
- * A000351: Powers of 5: a(n) = 5^n. 
+ * A000351: Powers of 5: a(n) = 5^n.
  * Date		2025.02.09
  * Link		https://oeis.org/A000351
  */
- func A000351(seqlen int64) ([]*bint, int64) {
+func A000351(seqlen int64) ([]*bint, int64) {
 	a := utils.Powers(seqlen, inew(5))
 	return a, 0
 }
 
 /**
- * A000352: One half of the number of permutations of [n] such 
+ * A000352: One half of the number of permutations of [n] such
 	that the differences have three runs with the same signs.
  * Date		2025.02.09
  * Link		https://oeis.org/A000352
- */
- func A000352(seqlen int64) ([]*bint, int64) {
+*/
+func A000352(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	offset := int64(4)
 
 	for n := offset; n < seqlen+offset; n++ {
 		nb := inew(n)
-		three_n := pow(inew(3), nb)					// 3^n
-		fourpow := mul(inew(4), pow(inew(2), nb))	// 4*2^n
-		twon := mul(inew(2), nb)					// 2*n
+		three_n := pow(inew(3), nb)               // 3^n
+		fourpow := mul(inew(4), pow(inew(2), nb)) // 4*2^n
+		twon := mul(inew(2), nb)                  // 2*n
 		a[n-offset] = div(add(suball(three_n, fourpow, twon), inew(11)), inew(4))
 	}
 
@@ -558,19 +558,19 @@ import (
 }
 
 /**
- * A000353: Primes p == 7, 19, 23 (mod 40) such that (p-1)/2 is also prime. 
+ * A000353: Primes p == 7, 19, 23 (mod 40) such that (p-1)/2 is also prime.
  * Date		2025.02.09
  * Link		https://oeis.org/A000353
  */
- func A000353(seqlen int64) ([]int64, int64) {
+func A000353(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	primes := []int64{7, 19, 23}
 	const MODVAL = 40
 
 	n := int64(0)
 	for p := int64(1); n < seqlen; p++ {
-		if utils.IsPrime(p) && slices.Contains(primes, p % int64(MODVAL)) {
-			if utils.IsPrime((p-1)/2) {
+		if utils.IsPrime(p) && slices.Contains(primes, p%int64(MODVAL)) {
+			if utils.IsPrime((p - 1) / 2) {
 				a[n] = p
 				n++
 			}
@@ -585,7 +585,7 @@ import (
  * Date		2025.02.09
  * Link		https://oeis.org/A000354
  */
- func A000354(seqlen int64) ([]*bint, int64) {
+func A000354(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 
 	for n := int64(0); n < seqlen; n++ {
@@ -593,7 +593,7 @@ import (
 		sum := inew(0)
 		for k := int64(0); k <= n; k++ {
 			kb := inew(k)
-			pow1 := pow(inew(-1), add(nb, kb))	// (-1)^(n+k)
+			pow1 := pow(inew(-1), add(nb, kb)) // (-1)^(n+k)
 			binom := nCr(nb, kb)
 			kfact := fact(kb)
 			twok := pow(inew(2), kb)
@@ -610,15 +610,15 @@ import (
  * Date		2025.02.09
  * Link		https://oeis.org/A000355
  */
- func A000355(seqlen int64) ([]int64, int64) {
+func A000355(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	primes := []int64{3, 9, 11}
 	const MODVAL = 20
 
 	n := int64(0)
 	for p := int64(1); n < seqlen; p++ {
-		if utils.IsPrime(p) && slices.Contains(primes, p % int64(MODVAL)) {
-			if utils.IsPrime(2*p+1) {
+		if utils.IsPrime(p) && slices.Contains(primes, p%int64(MODVAL)) {
+			if utils.IsPrime(2*p + 1) {
 				a[n] = p
 				n++
 			}
@@ -629,21 +629,21 @@ import (
 }
 
 /**
- * A000356: Number of rooted cubic maps with 2n nodes and a 
+ * A000356: Number of rooted cubic maps with 2n nodes and a
  *		distinguished Hamiltonian cycle: (2n)!(2n+1)! / (n!^2*(n+1)!(n+2)!)
  * Date		2025.02.09
  * Link		https://oeis.org/A000356
  */
- func A000356(seqlen int64) ([]*bint, int64) {
+func A000356(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	offset := int64(1)
 
 	for n := offset; n <= seqlen; n++ {
-		twofact := fact(inew(2*n))
+		twofact := fact(inew(2 * n))
 		twofact1 := fact(add(inew(2*n), inew(1)))
 		nfactsqr := pow(fact(inew(n)), inew(2))
-		nfact1 := fact(inew(n+1))
-		nfact2 := fact(inew(n+2))
+		nfact1 := fact(inew(n + 1))
+		nfact2 := fact(inew(n + 2))
 		numer := mul(twofact, twofact1)
 		denom := mulall(nfactsqr, nfact1, nfact2)
 		a[n-offset] = div(numer, denom)
@@ -653,22 +653,22 @@ import (
 }
 
 /**
- * A000358: Number of binary necklaces of length n with no subsequence 00, 
- *		excluding the necklace "0". 
+ * A000358: Number of binary necklaces of length n with no subsequence 00,
+ *		excluding the necklace "0".
  * Date		2025.02.09
  * Link		https://oeis.org/A000358
  */
- func A000358(seqlen int64) ([]*bint, int64) {
+func A000358(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	offset := int64(1)
-	fib, _ := A000045(seqlen+offset*2)
+	fib, _ := A000045(seqlen + offset*2)
 
 	for n := offset; n <= seqlen; n++ {
 		nb := inew(n)
 		sum := inew(0)
 		for d := offset; d <= n; d++ {
-			if n % d == 0 {
-				tot := utils.EulerTotientBig(inew(n/d))
+			if n%d == 0 {
+				tot := utils.EulerTotientBig(inew(n / d))
 				fibs := add(fib[d-1], fib[d+1])
 				sum = add(sum, mul(tot, fibs))
 			}
@@ -680,12 +680,12 @@ import (
 }
 
 /**
- * A000363: Number of permutations of [n] with exactly 2 increasing 
- *		runs of length at least 2. 
+ * A000363: Number of permutations of [n] with exactly 2 increasing
+ *		runs of length at least 2.
  * Date		2025.02.09
  * Link		https://oeis.org/A000363
  */
- func A000363(seqlen int64) ([]*bint, int64) {
+func A000363(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	offset := int64(4)
 
@@ -708,7 +708,7 @@ import (
  * Date		2025.02.09
  * Link		https://oeis.org/A000371
  */
- func A000371(seqlen int64) ([]*bint, int64) {
+func A000371(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	offset := int64(0)
 
@@ -733,31 +733,31 @@ import (
  * Date		2025.02.09
  * Link		https://oeis.org/A000381
  */
- func A000381(seqlen int64) ([]*bint, int64) {
-	a1611, _ := A001611(seqlen+2)
+func A000381(seqlen int64) ([]*bint, int64) {
+	a1611, _ := A001611(seqlen + 2)
 	a := utils.ShiftBigSliceLeft(a1611, 2)
 	return a, 0
 }
 
 /**
- * A000383: Hexanacci numbers with a(0) = ... = a(5) = 1. 
+ * A000383: Hexanacci numbers with a(0) = ... = a(5) = 1.
  * Date		2025.02.09
  * Link		https://oeis.org/A000383
  */
- func A000383(seqlen int64) ([]*bint, int64) {
+func A000383(seqlen int64) ([]*bint, int64) {
 	a := utils.Nacci(seqlen, 6, false)
 	return a, 0
 }
 
 /**
- * A000384: Hexagonal numbers: a(n) = n*(2*n-1). 
+ * A000384: Hexagonal numbers: a(n) = n*(2*n-1).
  * Date		2025.02.09
  * Link		https://oeis.org/A000384
  */
- func A000384(seqlen int64) ([]int64, int64) {
+func A000384(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	for n := int64(0); n < seqlen; n++ {
-		a[n] = n*(2*n-1)
+		a[n] = n * (2*n - 1)
 	}
 	return a, 0
 }
@@ -767,9 +767,9 @@ import (
  * Date		2025.02.09
  * Link		https://oeis.org/A000385
  */
- func A000385(seqlen int64) ([]int64, int64) {
+func A000385(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
-	a203, offset203 := A000203(seqlen+1)
+	a203, offset203 := A000203(seqlen + 1)
 	offset := int64(1)
 	for n := offset; n < seqlen+offset; n++ {
 		sum := int64(0)
@@ -782,23 +782,23 @@ import (
 }
 
 /**
- * A000387: Rencontres numbers: number of permutations of [n] with 
- *		exactly two fixed points. 
+ * A000387: Rencontres numbers: number of permutations of [n] with
+ *		exactly two fixed points.
  * Date		2025.02.09
  * Link		https://oeis.org/A000387
  */
- func A000387(seqlen int64) ([]*bint, int64) {
+func A000387(seqlen int64) ([]*bint, int64) {
 	a := utils.Recontres(seqlen, 2)
 	return a, 0
 }
 
 /**
- * A000389: Rencontres numbers: number of permutations of [n] with 
- *		exactly two fixed points. 
+ * A000389: Rencontres numbers: number of permutations of [n] with
+ *		exactly two fixed points.
  * Date		2025.02.09
  * Link		https://oeis.org/A000389
  */
- func A000389(seqlen int64) ([]*bint, int64) {
+func A000389(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	big5 := inew(5)
 	for n := int64(0); n < seqlen; n++ {
@@ -808,11 +808,11 @@ import (
 }
 
 /**
- * A000392: Stirling numbers of second kind S(n,3). 
+ * A000392: Stirling numbers of second kind S(n,3).
  * Date		2025.02.09
  * Link		https://oeis.org/A000392
  */
- func A000392(seqlen int64) ([]*bint, int64) {
+func A000392(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	for n := int64(0); n < seqlen; n++ {
 		a[n] = utils.Stirling2(n, 3)
@@ -821,11 +821,11 @@ import (
 }
 
 /**
- * A000396: Perfect numbers k: k is equal to the sum of the proper divisors of k. 
+ * A000396: Perfect numbers k: k is equal to the sum of the proper divisors of k.
  * Date		2025.02.09
  * Link		https://oeis.org/A000396
  */
- func A000396(seqlen int64) ([]*bint, int64) {
+func A000396(seqlen int64) ([]*bint, int64) {
 	utils.LongCalculationWarning("A000396")
 	offset := int64(1)
 	a := iSlice(seqlen)
@@ -844,11 +844,11 @@ import (
 }
 
 /**
- * A000399: Unsigned Stirling numbers of first kind s(n,3). 
+ * A000399: Unsigned Stirling numbers of first kind s(n,3).
  * Date		2025.02.09
  * Link		https://oeis.org/A000399
  */
- func A000399(seqlen int64) ([]*bint, int64) {
+func A000399(seqlen int64) ([]*bint, int64) {
 	utils.AccuracyWarning("A000399")
 	a := iSlice(seqlen)
 	offset := int64(3)
@@ -861,11 +861,11 @@ import (
 }
 
 /**
- * A000400: Unsigned Stirling numbers of first kind s(n,3). 
+ * A000400: Unsigned Stirling numbers of first kind s(n,3).
  * Date		2025.02.09
  * Link		https://oeis.org/A000399
  */
- func A000400(seqlen int64) ([]*bint, int64) {
+func A000400(seqlen int64) ([]*bint, int64) {
 	a := utils.Powers(seqlen, inew(6))
 	return a, 0
 }

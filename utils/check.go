@@ -27,7 +27,7 @@ func IsBigPrime(num *bint) bool {
 func IsPrimePower(n int64, k int64) bool {
 	nf := float64(n)
 	kf := float64(k)
-	return (math.Log(nf) / math.Log(kf) == math.Floor(math.Log(nf) / math.Log(kf)))
+	return (math.Log(nf)/math.Log(kf) == math.Floor(math.Log(nf)/math.Log(kf)))
 }
 
 // IsSquare returns true if the num is a perfect square. False otherwise.
@@ -43,7 +43,7 @@ func IsRepr(k, a, b int64) bool {
 		xf := float64(x)
 		for y := int64(0); y <= k; y++ {
 			yf := float64(y)
-			if k == a*int64(math.Pow(xf, 2)) + b*int64(math.Pow(yf, 2)) {
+			if k == a*int64(math.Pow(xf, 2))+b*int64(math.Pow(yf, 2)) {
 				return true
 			}
 		}

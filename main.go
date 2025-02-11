@@ -23,19 +23,19 @@ func main() {
 	seqid := flag.String("seq", "", "Which sequence to run. Example: -seq A000042")
 	seqlen := flag.Int64("seqlen", 5, "How many elements to generate. Most sequences will have restrictions on the # of elements to generate.")
 	comptime := flag.Bool("time", true, "True if you want approximate time-of-computation information printed. False otherwise")
-	
-	flag.Parse()		// remember to parse!
+
+	flag.Parse() // remember to parse!
 
 	_, exists := StubStorage[*seqid]
 
 	// check for invalid inputs
-	if *seqid == "" {				// user must specify a sequence to generate
+	if *seqid == "" { // user must specify a sequence to generate
 		utils.HandleError(errors.New("you need to specify a sequence to generate! "))
-	} else if *seqlen <= 0 {		// check for invalid lengths
-		utils.HandleError(errors.New("you need to specify a positive sequence length! "))		
+	} else if *seqlen <= 0 { // check for invalid lengths
+		utils.HandleError(errors.New("you need to specify a positive sequence length! "))
 	} else if *seqlen < 5 {
 		utils.HandleError(errors.New("sequence length should be at least 5. "))
-	} else if !exists {				// user must specify a sequence that exists
+	} else if !exists { // user must specify a sequence that exists
 		utils.HandleError(errors.New("either this sequence has not been implemented yet, or your id is invalid! "))
 	}
 

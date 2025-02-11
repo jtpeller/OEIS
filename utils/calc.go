@@ -21,7 +21,7 @@ func ILog(num int64, base int64) int64 {
 }
 
 // Calculate the integer square root of a number
-func Isqrt(num int64) (int64) {
+func Isqrt(num int64) int64 {
 	return int64(math.Floor(math.Sqrt(float64(num))))
 }
 
@@ -57,7 +57,7 @@ func SumBig(a []*bint) *bint {
 func Sigma(n, e int64) *bint {
 	divisors := Factors(n)
 	bigdiv := iSlice(int64(len(divisors)))
-	
+
 	// raise each divisor to the power of e
 	for i := 0; i < len(divisors); i++ {
 		bigdiv[i] = pow(inew(divisors[i]), inew(e))
@@ -136,7 +136,7 @@ func GCD(a, b int64) int64 {
 	if b == 0 {
 		return a
 	}
-	return GCD(b, a % b)
+	return GCD(b, a%b)
 }
 
 // given two numbers, compute the greatest common divisor (with big.int!)
@@ -162,7 +162,7 @@ func GetFactorCount(num int64) int64 {
 	// calculate factor count
 	count := int64(0)
 	for i := int64(1); i <= num; i++ {
-		if num % i == 0 {
+		if num%i == 0 {
 			count++
 		}
 	}
@@ -171,7 +171,7 @@ func GetFactorCount(num int64) int64 {
 
 // finds the first digit of the number
 func GetFirstDigit(n int64) int64 {
-	return int64(float64(n) / math.Pow(10, float64(GetDigits(n) - 1)))
+	return int64(float64(n) / math.Pow(10, float64(GetDigits(n)-1)))
 }
 
 // ##################### PRIME CALCULATIONS #########################
@@ -184,15 +184,15 @@ func PrimeFactorization(num int64) []int64 {
 	primefact := make([]int64, 0)
 
 	// the number of 2s
-	for num % 2 == 0 {
+	for num%2 == 0 {
 		primefact = append(primefact, 2)
 		num /= 2
 	}
 
 	// num is now odd. check 3s and beyond
-	for i := int64(3); i * i <= num; i += 2 {
+	for i := int64(3); i*i <= num; i += 2 {
 		// get factors until n is zero
-		for num % i == 0 {
+		for num%i == 0 {
 			primefact = append(primefact, i)
 			num /= i
 		}
@@ -241,7 +241,7 @@ func PrimeFloor(arr []int64, n int64) int64 {
 	if IsPrime(n) {
 		return n
 	} else {
-		return PrimeFloor(arr, n + 1)
+		return PrimeFloor(arr, n+1)
 	}
 }
 
@@ -253,7 +253,7 @@ func PrimeFloor(arr []int64, n int64) int64 {
 // plus, there's no nonsense about float precision
 func Bernoulli(n int64) *brat {
 	var f *brat
-	a := rSlice(n+1)
+	a := rSlice(n + 1)
 	for m := range a {
 		a[m].SetFrac64(1, int64(m+1))
 		for j := m; j >= 1; j-- {
@@ -271,27 +271,27 @@ func CountParts(n int64) int64 {
 	}
 
 	// init
-	p := make([]int64, n)	// stores the partitions
-	k := 0					// index of last element in a partition
-	p[k] = n				// first partition is n
+	p := make([]int64, n) // stores the partitions
+	k := 0                // index of last element in a partition
+	p[k] = n              // first partition is n
 
 	// loop to compute
 	count := int64(0)
 	for {
 		// update count
 		count++
-		remval := int64(0)		// holds how much val can be changed
+		remval := int64(0) // holds how much val can be changed
 
 		for k >= 0 && p[k] == 1 {
 			remval += p[k]
 			k--
 		}
 
-		if k < 0 {	// all vals = 1 if k < 0; no more parts
+		if k < 0 { // all vals = 1 if k < 0; no more parts
 			return count
 		}
-		p[k]--			// decr; found non-one value
-		remval++		// adjust remval
+		p[k]--   // decr; found non-one value
+		remval++ // adjust remval
 
 		// resort array & modify remval based on the sort
 		for remval > p[k] {
@@ -316,7 +316,6 @@ func Harmonic(n int64) *bfloat {
 	return sum
 }
 
-
 // Computes the Harmonic Number of n of order k (i.e., H^(k)_n)
 func HarmonicOrder(n, k int64) *bfloat {
 	binom := nCr(inew(n+k-1), inew(k-1))
@@ -330,7 +329,7 @@ func Kolakoski(seqlen int64, numcount int64) []int64 {
 	a := make([]int64, seqlen)
 	nums := make([]int64, numcount)
 	for i := int64(1); i <= numcount; i++ {
-		nums[i - 1] = i
+		nums[i-1] = i
 	}
 
 	// special cases
@@ -342,7 +341,7 @@ func Kolakoski(seqlen int64, numcount int64) []int64 {
 	// compute other values
 	numidx := int64(1)
 	count := int64(1)
-	for i, j := 1 + nums[0], a[count]; i < seqlen; i, j = i+1, j-1 {
+	for i, j := 1+nums[0], a[count]; i < seqlen; i, j = i+1, j-1 {
 		// checks for when to reset counters/indexes
 		if j <= 0 {
 			i--
@@ -356,7 +355,7 @@ func Kolakoski(seqlen int64, numcount int64) []int64 {
 		}
 
 		// assign the value
-		a[i - 1] = nums[numidx]
+		a[i-1] = nums[numidx]
 	}
 	return a
 }
@@ -367,19 +366,19 @@ func MakeChange(len int64, val int64, denom []int64) int64 {
 	if val < 0 {
 		return 0
 	} else if val == 0 {
-		return 1			// 1 way to make 0 change
+		return 1 // 1 way to make 0 change
 	} else if len <= 0 && val >= 1 {
-		return 0			// combo doesn't work
+		return 0 // combo doesn't work
 	}
-	return MakeChange(len - 1, val, denom) + MakeChange(len, val - denom[len - 1], denom)
+	return MakeChange(len-1, val, denom) + MakeChange(len, val-denom[len-1], denom)
 }
 
 // computes the stirling numbers of the first kind (i.e., s(n, k))
 func Stirling1(n, k int64) *bint {
 	// handle instances for s(n, 0)
 	if k == 0 {
-		if n > 0 { 
-			return zero() 
+		if n > 0 {
+			return zero()
 		} else if n == 0 {
 			return inew(1)
 		}

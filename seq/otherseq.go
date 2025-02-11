@@ -35,7 +35,7 @@ func A001065(seqlen int64) ([]int64, int64) {
  */
 func A001223(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
-	a40, _ := A000040(seqlen+1)
+	a40, _ := A000040(seqlen + 1)
 	for n := int64(0); n < seqlen; n++ {
 		a[n] = a40[n+1] - a40[n]
 	}
@@ -79,7 +79,7 @@ func A001622(seqlen int64) ([]int64, int64) {
 func A001840(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	for n := int64(0); n < seqlen; n++ {
-		a[n] = int64(math.Floor( float64((n+1)) * float64(n+2)/6.0))
+		a[n] = int64(math.Floor(float64((n + 1)) * float64(n+2) / 6.0))
 	}
 	return a, 0
 }
@@ -107,7 +107,7 @@ func A002386(seqlen int64) ([]int64, int64) {
 
 	// init
 	getPrimeCount := func(n int64) int64 {
-		return int64(1.5 * math.Exp(0.65 * float64(n)))
+		return int64(1.5 * math.Exp(0.65*float64(n)))
 	}
 	a := make([]int64, seqlen)
 	primes := utils.Primes(getPrimeCount(seqlen))
@@ -138,14 +138,14 @@ func A003048(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	a[0] = inew(1)
 	for i := int64(1); i < seqlen; i++ {
-		a[i] = sub(mul(inew(i), a[i - 1]), pow(inew(-1), inew(i)))
+		a[i] = sub(mul(inew(i), a[i-1]), pow(inew(-1), inew(i)))
 	}
 	return a, 0
 }
 
 /**
  * A007947 computes the largest squarefree number dividing n: the
- *  squarefree kernel of n, rad(n), radical of n. 
+ *  squarefree kernel of n, rad(n), radical of n.
  * Date		December 16, 2021
  * Link		https://oeis.org/A007947
  */
@@ -179,7 +179,7 @@ func A007947(max int64) ([]int64, int64) {
 func A011848(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	for n := int64(2); n < seqlen; n++ {
-		a[n] = int64(math.Floor(float64(utils.Binomial(n, 2))/2.0))
+		a[n] = int64(math.Floor(float64(utils.Binomial(n, 2)) / 2.0))
 	}
 	return a, 0
 }
@@ -192,7 +192,7 @@ func A011848(seqlen int64) ([]int64, int64) {
 func A011858(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	for n := int64(0); n < seqlen; n++ {
-		a[n] = int64(math.Floor(float64(n*(n-1))/5.0))
+		a[n] = int64(math.Floor(float64(n*(n-1)) / 5.0))
 	}
 	return a, 0
 }
@@ -212,10 +212,10 @@ func A027641(seqlen int64) ([]*bint, int64) {
 
 /**
  * A027642 computes the denominator of Bernoulli number B_n
- * Date		December 12, 2021	Confirmed working: December 
+ * Date		December 12, 2021	Confirmed working: December
  * Link		https://oeis.org/A027642
  */
- func A027642(seqlen int64) ([]*bint, int64) {
+func A027642(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	for i := int64(0); i < seqlen; i++ {
 		a[i] = utils.Bernoulli(i).Denom()
@@ -224,17 +224,17 @@ func A027641(seqlen int64) ([]*bint, int64) {
 }
 
 /**
- * A032346 essentially shifts 1 place right under inverse binomial transform. 
+ * A032346 essentially shifts 1 place right under inverse binomial transform.
  *  essentially the same as A000108, except row starts at 1 instead of 0
  * Date		December 07, 2021
  * Link		https://oeis.org/A032346
  */
- func A032346(seqlen int64) ([]int64, int64) {
+func A032346(seqlen int64) ([]int64, int64) {
 	// init
-	a := make([]int64, seqlen)		// the seq
+	a := make([]int64, seqlen) // the seq
 	a[0] = 1
-	old := make([]int64, seqlen)	// last row
-	new := make([]int64, seqlen)	// new row
+	old := make([]int64, seqlen) // last row
+	new := make([]int64, seqlen) // new row
 	old[0] = 1
 
 	// compute each row & store into a
@@ -243,27 +243,27 @@ func A027641(seqlen int64) ([]*bint, int64) {
 		col = 0
 
 		// calculate new row
-		for  ; col < row; col++ {
-			new[col + 1] = new[col] + old[col]
+		for ; col < row; col++ {
+			new[col+1] = new[col] + old[col]
 		}
 
 		// copy down
 		if col > 0 {
-			for i := int64(0); i < col + 1; i++ {
+			for i := int64(0); i < col+1; i++ {
 				old[i] = new[i]
-				new[i] = 0		// erase new row
+				new[i] = 0 // erase new row
 			}
 		}
 
 		// copy the last element
-		new[0] = old[col]		// overwrite first elem
-		a[row] = old[col]		// copy last elem of old
+		new[0] = old[col] // overwrite first elem
+		a[row] = old[col] // copy last elem of old
 	}
 	return a, 0
 }
 
 /**
- * A038040 computes a(n) = n*d(n), where d(n) = number of divisors of n (A000005). 
+ * A038040 computes a(n) = n*d(n), where d(n) = number of divisors of n (A000005).
  * Date		December 16, 2021
  * Link		https://oeis.org/A038040
  */
@@ -271,13 +271,13 @@ func A038040(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	d, _ := A000005(seqlen)
 	for n := int64(0); n < seqlen; n++ {
-		a[n] = (n+1)*d[n]
+		a[n] = (n + 1) * d[n]
 	}
 	return a, 1
 }
 
 /**
- * A052614 computes E.g.f. 1/((1-x)(1-x^4)). 
+ * A052614 computes E.g.f. 1/((1-x)(1-x^4)).
  * Date		December 16, 2021
  * Link		https://oeis.org/A052614
  */
@@ -308,14 +308,14 @@ func A088218(seqlen int64) ([]*bint, int64) {
 }
 
 /**
- * A128422 computes projective plane crossing number of K_{4,n}. 
+ * A128422 computes projective plane crossing number of K_{4,n}.
  * Date		December 16, 2021
  * Link		https://oeis.org/A128422
  */
 func A128422(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	for n := int64(0); n < seqlen; n++ {
-		a[n] = n*(n-1)/3
+		a[n] = n * (n - 1) / 3
 	}
 	return a, 1
 }
@@ -349,8 +349,8 @@ func A164514(seqlen int64) ([]int64, int64) {
 }
 
 /**
- * A168014 computes the sum of all parts of all partitions of n 
- *  into equal parts that do not contain 1 as a part. 
+ * A168014 computes the sum of all parts of all partitions of n
+ *  into equal parts that do not contain 1 as a part.
  * Date		December 16, 2021
  * Link		https://oeis.org/A168014
  */
@@ -358,7 +358,7 @@ func A168014(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	a5, _ := A000005(seqlen)
 	for n := int64(1); n < seqlen; n++ {
-		a[n] = n*(a5[n-1] - 1)
+		a[n] = n * (a5[n-1] - 1)
 	}
 	return a, 0
 }
