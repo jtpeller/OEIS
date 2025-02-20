@@ -2,7 +2,7 @@
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/jtpeller/oeis)](https://goreportcard.com/report/github.com/jtpeller/oeis)
 [![Release](https://img.shields.io/github/release/jtpeller/oeis.svg?style=flat-square)](https://github.com/jtpeller/oeis/releases)
-![GitHub License](https://img.shields.io/github/license/jtpeller/oeis)
+[![GitHub License](https://img.shields.io/github/license/jtpeller/oeis)](https://github.com/jtpeller/oeis/blob/main/LICENSE)
 
 ## Overview
 
