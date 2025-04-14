@@ -13,12 +13,14 @@ import (
 	"strconv"
 )
 
+type SeqFuncs struct{}
+
 /**
  * A000002 returns the Kolakoski sequence, given a sequence length
  * Date		October 08, 2021
  * Link		https://oeis.org/A000002
  */
-func A000002(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000002(seqlen int64) ([]int64, int64) {
 	return utils.Kolakoski(seqlen+1, 2)[:seqlen], 1
 }
 
@@ -27,7 +29,7 @@ func A000002(seqlen int64) ([]int64, int64) {
  * Date		October 08, 2021
  * Link		https://oeis.org/A000004
  */
-func A000004(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000004(seqlen int64) ([]int64, int64) {
 	return make([]int64, seqlen), 0
 }
 
@@ -36,7 +38,7 @@ func A000004(seqlen int64) ([]int64, int64) {
  * Date		October 08, 2021
  * Link		https://oeis.org/A000005
  */
-func A000005(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000005(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	for i := int64(0); i < seqlen; i++ {
 		count := utils.GetFactorCount(i + 1)
@@ -50,7 +52,7 @@ func A000005(seqlen int64) ([]int64, int64) {
  * Date		October 08, 2021
  * Link		https://oeis.org/A000006
  */
-func A000006(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000006(seqlen int64) ([]int64, int64) {
 	primes := utils.Primes(seqlen)
 	a := utils.Isqrtarray(primes)
 	return a, 1
@@ -61,7 +63,7 @@ func A000006(seqlen int64) ([]int64, int64) {
  * Date		October 08, 2021
  * Link		https://oeis.org/A000007
  */
-func A000007(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000007(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	a[0] = 1
 	return a, 0
@@ -72,7 +74,7 @@ func A000007(seqlen int64) ([]int64, int64) {
  * Date		October 08, 2021
  * Link		https://oeis.org/A000008
  */
-func A000008(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000008(seqlen int64) ([]int64, int64) {
 	utils.LongCalculationWarning("A000008")
 
 	denoms := []int64{1, 2, 5, 10}
@@ -91,7 +93,7 @@ func A000008(seqlen int64) ([]int64, int64) {
  * Date		October 08, 2021
  * Link		https://oeis.org/A000010
  */
-func A000010(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000010(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	for i := int64(1); i <= seqlen; i++ {
 		a[i-1] = utils.EulerTotient(i)
@@ -105,9 +107,9 @@ func A000010(seqlen int64) ([]int64, int64) {
  * Fixed  	2025.02.01
  * Link 	https://oeis.org/A000011
  */
-func A000011(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000011(seqlen int64) ([]*bint, int64) {
 	// generate euler phi
-	euler, _ := A000010(seqlen * 2)
+	euler, _ := s.A000010(seqlen * 2)
 
 	// generate a sequence
 	a := iSlice(seqlen)
@@ -144,7 +146,7 @@ func A000011(seqlen int64) ([]*bint, int64) {
  * Date		October 08, 2021
  * Link		https://oeis.org/A000012
  */
-func A000012(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000012(seqlen int64) ([]int64, int64) {
 	a := make([]int64, 0)
 	for i := int64(0); i < seqlen; i++ {
 		a = append(a, 1)
@@ -159,10 +161,10 @@ func A000012(seqlen int64) ([]int64, int64) {
  * Fix		2025.02.01
  * Link		https://oeis.org/A000013
  */
-func A000013(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000013(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	a[0] = inew(1)
-	phi, _ := A000010(seqlen * 2)
+	phi, _ := s.A000010(seqlen * 2)
 	for n := int64(1); n < seqlen; n++ {
 		// calculate the sum
 		sum := fnew(0)
@@ -187,7 +189,7 @@ func A000013(seqlen int64) ([]*bint, int64) {
  * Date		December 12, 2021	Confirmed working: December 12, 2021
  * Link		https://oeis.org/A000018
  */
-func A000018(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000018(seqlen int64) ([]*bint, int64) {
 	utils.LongCalculationWarning("A000018")
 	a := utils.Repr(seqlen, 1, 16, 1)
 	return a, 0
@@ -198,7 +200,7 @@ func A000018(seqlen int64) ([]*bint, int64) {
  * Date		December 12, 2021	Confirmed working: December 12, 2021
  * Link		https://oeis.org/A000021
  */
-func A000021(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000021(seqlen int64) ([]*bint, int64) {
 	utils.LongCalculationWarning("A000021")
 	a := utils.Repr(seqlen, 1, 12, 1)
 	return a, 0
@@ -209,7 +211,7 @@ func A000021(seqlen int64) ([]*bint, int64) {
  * Date		December 12, 2021	Confirmed working: December 12, 2021
  * Link		https://oeis.org/A000024
  */
-func A000024(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000024(seqlen int64) ([]*bint, int64) {
 	utils.LongCalculationWarning("A000024")
 	a := utils.Repr(seqlen, 1, 10, 1)
 	return a, 0
@@ -220,7 +222,7 @@ func A000024(seqlen int64) ([]*bint, int64) {
  * Date		October 09, 2021
  * Link		https://oeis.org/
  */
-func A000027(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000027(seqlen int64) ([]int64, int64) {
 	a := make([]int64, 0)
 	for i := int64(0); i < seqlen+1; i++ {
 		a = append(a, i+1)
@@ -233,7 +235,7 @@ func A000027(seqlen int64) ([]int64, int64) {
  * Date		October 09, 2021
  * Link		https://oeis.org/A000030
  */
-func A000030(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000030(seqlen int64) ([]int64, int64) {
 	a := make([]int64, 0)
 	for i := int64(0); i < seqlen; i++ {
 		a = append(a, utils.GetFirstDigit(i))
@@ -247,7 +249,7 @@ func A000030(seqlen int64) ([]int64, int64) {
  * Date		October 09, 2021
  * Link		https://oeis.org/A000032
  */
-func A000032(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000032(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	a[0] = inew(2) // a(0)=2
 	a[1] = inew(1) // a(1)=1
@@ -262,7 +264,7 @@ func A000032(seqlen int64) ([]*bint, int64) {
  * Date		October 08, 2021
  * Link		https://oeis.org/A000034
  */
-func A000034(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000034(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	for i := int64(0); i < seqlen; i++ {
 		a[i] = i%2 + 1
@@ -275,7 +277,7 @@ func A000034(seqlen int64) ([]int64, int64) {
  * Date		October 09, 2021
  * Link		https://oeis.org/A000035
  */
-func A000035(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000035(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	for i := int64(0); i < seqlen; i++ {
 		a[i] = i % 2
@@ -288,7 +290,7 @@ func A000035(seqlen int64) ([]int64, int64) {
  * Date		October 09, 2021
  * Link		https://oeis.org/A000037
  */
-func A000037(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000037(seqlen int64) ([]int64, int64) {
 	a := make([]int64, 0)
 	for i := int64(1); i < seqlen; i++ {
 		// a(n) = n + floor(1/2 + sqrt(n))
@@ -302,7 +304,7 @@ func A000037(seqlen int64) ([]int64, int64) {
  * Date		October 09, 2021
  * Link		https://oeis.org/A000038
  */
-func A000038(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000038(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	a[0] = 2
 	return a, 0
@@ -313,7 +315,7 @@ func A000038(seqlen int64) ([]int64, int64) {
  * Date		October 09, 2021
  * Link		https://oeis.org/A000040
  */
-func A000040(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000040(seqlen int64) ([]int64, int64) {
 	a := make([]int64, 0)
 	prime := int64(0)
 	for i := int64(0); i < seqlen; {
@@ -331,7 +333,7 @@ func A000040(seqlen int64) ([]int64, int64) {
  * Date		October 09, 2021
  * Link		https://oeis.org/A000041
  */
-func A000041(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000041(seqlen int64) ([]int64, int64) {
 	utils.LongCalculationWarning("A000041")
 
 	a := make([]int64, seqlen)
@@ -346,7 +348,7 @@ func A000041(seqlen int64) ([]int64, int64) {
  * Date		October 09, 2021
  * Link		https://oeis.org/A000042
  */
-func A000042(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000042(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	a[0] = inew(1)
 	for i := int64(1); i < seqlen; i++ {
@@ -360,7 +362,7 @@ func A000042(seqlen int64) ([]*bint, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000043
  */
-func A000043(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000043(seqlen int64) ([]int64, int64) {
 	utils.LongCalculationWarning("A000043")
 
 	a := make([]int64, seqlen)
@@ -386,7 +388,7 @@ func A000043(seqlen int64) ([]int64, int64) {
  * Date December 07, 2021
  * Link: https://oeis.org/A000044
  */
-func A000044(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000044(seqlen int64) ([]*bint, int64) {
 	if seqlen <= 12 {
 		utils.PrintWarning("For best results, sequence A000044 should have more than 12 elements")
 	}
@@ -419,7 +421,7 @@ func A000044(seqlen int64) ([]*bint, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000045
  */
-func A000045(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000045(seqlen int64) ([]*bint, int64) {
 	a := utils.Nacci(seqlen, 2, true)
 	return a, 0
 }
@@ -429,7 +431,7 @@ func A000045(seqlen int64) ([]*bint, int64) {
  * Date		December 12, 2021	Confirmed working: December 12, 2021
  * Link		https://oeis.org/A000047
  */
-func A000047(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000047(seqlen int64) ([]*bint, int64) {
 	utils.LongCalculationWarning("A000047")
 
 	a := utils.Repr(seqlen, 1, -2, 1)
@@ -441,7 +443,7 @@ func A000047(seqlen int64) ([]*bint, int64) {
  * Date: December 12, 2021	Confirmed working: December 12, 2021
  * Link: https://oeis.org/A000049
  */
-func A000049(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000049(seqlen int64) ([]*bint, int64) {
 	utils.LongCalculationWarning("A000049")
 	a := utils.Repr(seqlen, 3, 4, 0)
 	return a, 0
@@ -452,7 +454,7 @@ func A000049(seqlen int64) ([]*bint, int64) {
  * Date		December 12, 2021	Confirmed working: December 12, 2021
  * Link		https://oeis.org/A000050
  */
-func A000050(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000050(seqlen int64) ([]*bint, int64) {
 	utils.LongCalculationWarning("A000050")
 	a := utils.Repr(seqlen, 1, 1, 1)
 	return a, 0
@@ -463,8 +465,8 @@ func A000050(seqlen int64) ([]*bint, int64) {
  * Date		December 12, 2021	Confirmed working: December 12, 2021
  * Link		https://oeis.org/A000051
  */
-func A000051(seqlen int64) ([]*bint, int64) {
-	a, _ := A000079(seqlen)
+func (s SeqFuncs) A000051(seqlen int64) ([]*bint, int64) {
+	a, _ := s.A000079(seqlen)
 	for i := int64(0); i < seqlen; i++ {
 		a[i] = add(a[i], inew(1))
 	}
@@ -476,7 +478,7 @@ func A000051(seqlen int64) ([]*bint, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000058
  */
-func A000058(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000058(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	a[0] = inew(2)
 	for i := int64(0); i < seqlen-1; i++ {
@@ -492,7 +494,7 @@ func A000058(seqlen int64) ([]*bint, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000059
  */
-func A000059(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000059(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	prime := int64(0)
 	for i := int64(0); i < seqlen; {
@@ -511,7 +513,7 @@ func A000059(seqlen int64) ([]int64, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000062
  */
-func A000062(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000062(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	for i := int64(1); i <= seqlen; i++ {
 		a[i-1] = int64(math.Floor(float64(i) / (float64(math.E) - 2)))
@@ -524,9 +526,9 @@ func A000062(seqlen int64) ([]int64, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000064
  */
-func A000064(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000064(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
-	a8, _ := A000008(seqlen)
+	a8, _ := s.A000008(seqlen)
 	for i := int64(1); i <= seqlen; i++ {
 		a[i-1] = utils.Sum(a8[:i])
 	}
@@ -538,9 +540,9 @@ func A000064(seqlen int64) ([]int64, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000065
  */
-func A000065(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000065(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
-	a10, _ := A000041(seqlen)
+	a10, _ := s.A000041(seqlen)
 	for i := int64(0); i < seqlen; i++ {
 		a[i] = a10[i] - 1
 	}
@@ -552,7 +554,7 @@ func A000065(seqlen int64) ([]int64, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000068
  */
-func A000068(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000068(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	prime := int64(0)
 	for i := int64(0); i < seqlen; {
@@ -571,7 +573,7 @@ func A000068(seqlen int64) ([]int64, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000069
  */
-func A000069(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000069(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	num := int64(0)
 	for i := int64(0); i < seqlen; {
@@ -597,9 +599,9 @@ func A000069(seqlen int64) ([]int64, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000070
  */
-func A000070(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000070(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
-	p, _ := A000041(seqlen)
+	p, _ := s.A000041(seqlen)
 	for i := int64(1); i <= seqlen; i++ {
 		a[i-1] = utils.Sum(p[:i])
 	}
@@ -612,9 +614,9 @@ func A000070(seqlen int64) ([]int64, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000071
  */
-func A000071(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000071(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
-	F, _ := A000045(seqlen + 1)
+	F, _ := s.A000045(seqlen + 1)
 	for i := int64(1); i <= seqlen; i++ {
 		a[i-1].Sub(F[i], inew(1))
 	}
@@ -627,7 +629,7 @@ func A000071(seqlen int64) ([]*bint, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000073
  */
-func A000073(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000073(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
 	a[0], a[1], a[2] = inew(0), inew(0), inew(1)
 	for i := int64(3); i < seqlen; i++ {
@@ -643,7 +645,7 @@ func A000073(seqlen int64) ([]*bint, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000078
  */
-func A000078(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000078(seqlen int64) ([]*bint, int64) {
 	a := utils.InitBslice(seqlen, []*bint{inew(0), inew(0), inew(0), inew(1)})
 	for i := int64(4); i < seqlen; i++ {
 		a[i].Add(a[i-1], a[i-2])
@@ -658,7 +660,7 @@ func A000078(seqlen int64) ([]*bint, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000079
  */
-func A000079(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000079(seqlen int64) ([]*bint, int64) {
 	a := utils.Powers(seqlen, inew(2))
 	return a, 0
 }
@@ -669,7 +671,7 @@ func A000079(seqlen int64) ([]*bint, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000082
  */
-func A000082(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000082(seqlen int64) ([]int64, int64) {
 	// this computes the Product_{p|n} (1 + 1/p) part
 	gen := func(num int64) float64 {
 		prod := 1.0
@@ -696,7 +698,7 @@ func A000082(seqlen int64) ([]int64, int64) {
  * Date		December 12, 2021	Confirmed working: December 12, 2021
  * Link		https://oeis.org/A000086
  */
-func A000086(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000086(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	for n := int64(1); n < seqlen; n++ {
 		// count soln's to x^2 - x + 1 == 0
@@ -717,7 +719,7 @@ func A000086(seqlen int64) ([]int64, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000093
  */
-func A000093(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000093(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	for i := int64(0); i < seqlen; i++ {
 		a[i] = int64(math.Floor(math.Pow(float64(i), 1.5)))
@@ -731,9 +733,9 @@ func A000093(seqlen int64) ([]int64, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000094
  */
-func A000094(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000094(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
-	a41, _ := A000041(seqlen)
+	a41, _ := s.A000041(seqlen)
 	for i := int64(1); i < seqlen; i++ {
 		a[i] = a41[i] - i
 	}
@@ -745,7 +747,7 @@ func A000094(seqlen int64) ([]int64, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000096
  */
-func A000096(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000096(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
 	for i := int64(0); i < seqlen; i++ {
 		a[i] = int64(i * (i + 3.0) / 2.0)
@@ -759,9 +761,9 @@ func A000096(seqlen int64) ([]int64, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000097
  */
-func A000097(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000097(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
-	a70, _ := A000070(seqlen)
+	a70, _ := s.A000070(seqlen)
 	for i := int64(0); i < seqlen; i++ {
 		bound := int64(math.Floor(float64(i) / 2.0))
 		for j := int64(0); j <= bound; j++ {
@@ -777,9 +779,9 @@ func A000097(seqlen int64) ([]int64, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000098
  */
-func A000098(seqlen int64) ([]int64, int64) {
+func (s SeqFuncs) A000098(seqlen int64) ([]int64, int64) {
 	a := make([]int64, seqlen)
-	a97, _ := A000097(seqlen)
+	a97, _ := s.A000097(seqlen)
 	for i := int64(0); i < seqlen; i++ {
 		bound := int64(math.Floor(float64(i) / 3.0))
 		for j := int64(0); j <= bound; j++ {
@@ -794,9 +796,9 @@ func A000098(seqlen int64) ([]int64, int64) {
  * Date		December 07, 2021
  * Link		https://oeis.org/A000100
  */
-func A000100(seqlen int64) ([]*bint, int64) {
+func (s SeqFuncs) A000100(seqlen int64) ([]*bint, int64) {
 	a := iSlice(seqlen)
-	Fib, _ := A000045(seqlen)
+	Fib, _ := s.A000045(seqlen)
 	a[0], a[1], a[2] = zero(), zero(), zero()
 	a[3], a[4] = inew(1), inew(2)
 	for i := int64(5); i < seqlen; i++ {
